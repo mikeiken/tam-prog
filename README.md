@@ -8,7 +8,7 @@
 - PostgreSQL
 - Swagger
 - Rabbit
-- Redis
+- ~Redis~
 - NGINX
 - Docker
 
