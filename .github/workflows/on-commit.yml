@@ -42,7 +42,7 @@ jobs:
 
   spellcheck:
     runs-on: ubuntu-latest
-    if: "needs.check-no-ci.outputs.no_ci == 'false'"
+    if: needs.check-no-ci.outputs.no_ci == 'false'
     steps:
       - name: checkout repository
         uses: actions/checkout@v4
