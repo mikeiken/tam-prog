@@ -1,0 +1,54 @@
+services:
+  nginx:
+    build: ./nginx
+    image: tam-prog-nginx:latest
+    container_name: nginx
+    networks:
+      - gateway
+    ports:
+      - '80:80'
+      - '443:443'
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  psql:
+    container_name: psql
+    build: ./psql
+    image: tam-prog-psql:latest
+    # command:
+    #   - "sh"
+    #   - "./run.sh"
+    environment:
+      #  TODO: впихнуть это в .env! Это сейчас только для теста
+      POSTGRES_DB: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "root"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+    # TODO: это тоже в .env (?)
+      - /mnt/d/ydb/yat-db-init:/docker-entrypoint-initdb.d
+      - /mnt/d/ydb/yat-db:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 4G
+    networks:
+      - gateway
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+networks:
+  gateway: {}
