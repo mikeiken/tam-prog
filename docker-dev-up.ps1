@@ -23,4 +23,4 @@ function Load-DotEnv {
 Load-DotEnv
 
 # Run docker-compose up
-docker-compose up -d
+docker-compose -f docker-compose-dev.yml -p "tam-prog-dev" up -d
