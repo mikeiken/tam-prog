@@ -10,7 +10,7 @@
   - **React**
 - **PostgreSQL** - СУБД
   - **Redis** - LRU-кэш для PostgerSQL
-- **Swagger** - генерация документаиции для REST API
+- **Swagger** - генерация документации для REST API
 - **RabbitMQ** - брокер сообщений
 - **NGINX** - HTTP-сервер и обратный прокси-сервер
 - **Docker**
