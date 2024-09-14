@@ -8,9 +8,9 @@ services:
     ports:
       - '80:80'
       - '443:443'
-    restart: unless-stopped
+    restart: always
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
+      test: ["CMD", "service", "nginx", "status"]
       interval: 1m30s
       timeout: 10s
       retries: 3
@@ -31,11 +31,11 @@ services:
       PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
     # TODO: это тоже в .env (?)
-      - /mnt/d/ydb/yat-db-init:/docker-entrypoint-initdb.d
-      - /mnt/d/ydb/yat-db:/var/lib/postgresql/data
+      - /usr/tamprog/db-init:/docker-entrypoint-initdb.d
+      - /usr/tamprog/db:/var/lib/postgresql/data
     ports:
       - "5432:5432"
-    restart: unless-stopped
+    restart: always
     deploy:
       resources:
         limits:
@@ -49,6 +49,29 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+
+  rabbitmq:
+    image: rabbitmq:3.10.7-management
+    container_name: rabbitmq
+    hostname: rabbitmq
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=rmuser
+      - RABBITMQ_DEFAULT_PASS=rmpassword
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{connection,error},{default,error}] disk_free_limit 2147483648
+    volumes:
+      - /usr/tamprog/rabbitmq:/var/lib/rabbitmq
+    ports:
+      - 15672:15672
+      - 5672:5672
+    networks:
+      - gateway
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmqctl start_app && rabbitmqctl status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
 
 networks:
   gateway: {}
