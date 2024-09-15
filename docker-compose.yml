@@ -121,6 +121,5 @@ services:
     volumes:
       - /usr/tamprog/swagger.json:/swagger.json:ro
 
-
 networks:
   gateway: {}
