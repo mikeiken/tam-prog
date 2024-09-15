@@ -3,6 +3,8 @@ temp/
 tmp/
 .env
 .vscode
+*.bkp
+*.dtmp
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
