@@ -12,6 +12,6 @@ changelog:
       labels:
         - feature
         - enhancement
-    - title: Other Changes
+    - title: Misc
       labels:
         - "*"
