@@ -1,17 +1,75 @@
 # .github/release.yml
 
-changelog:
-  exclude:
+name-template: 'Tamprog $RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+categories:
+  - title: Breaking Changes 🛠
     labels:
-      - ignore-for-release
-  categories:
-    - title: Breaking Changes 🛠
-      labels:
-        - major-change
-    - title: New Features 🎉
-      labels:
-        - feature
-        - enhancement
-    - title: Misc
-      labels:
-        - "*"
+      - 'major'
+  - title: New Features 🎉
+    labels:
+      - 'feature'
+      - 'enhancement'
+  - title: '🐛 Bug Fixes'
+    labels:
+      - 'fix'
+      - 'patch'
+      - 'bugfix'
+      - 'bug'
+  - title: '🧰 Maintenance'
+    label: 'chore'
+  - title: Misc
+    labels:
+      - "*"
+change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+change-title-escapes: '\<*_&'
+version-resolver:
+  major:
+    labels:
+      - 'major'
+      - 'breaking'
+  minor:
+    labels:
+      - 'minor'
+      - 'feature'
+      - 'enhancement'
+  patch:
+    labels:
+      - 'patch'
+      - 'fix'
+      - 'bugfix'
+  default: patch
+sort-by: 'title'
+exclude-labels:
+  - 'skip-changelog'
+  - 'no-changelog'
+  - 'ignore-for-release'
+autolabeler:
+  - label: 'chore'
+    files:
+      - '*.md'
+    title:
+      - '(?i)\b(chore|cleanup)\b'
+  - label: 'bug'
+    branch:
+      - '/fix\/.+/'
+    title:
+      - '(?i)\b(fix|bug|bugfix|patch)\b'
+  - label: 'enhancement'
+    branch:
+      - '/feature\/.+/'
+    title:
+      - '(?i)\b(add|feature|enhancement)\b'
+  - label: 'major'
+    branch:
+      - '/breaking\/.+/'
+    title:
+      - '(?i)\b(breaking|major)\b'
+template: |
+  ## Changes
+
+  $CHANGES
+
+  ### Contributors
+
+  $CONTRIBUTORS
