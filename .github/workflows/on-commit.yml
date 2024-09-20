@@ -73,6 +73,9 @@ jobs:
       id: version
       run: |
         VERSION=$(git tag --list --sort=-v:refname | head -n 1 | sed 's/v//')
+        if [ -z "$VERSION" ]; then
+          VERSION="0.0.0"
+        fi
         echo "current_version=$VERSION" >> $GITHUB_ENV
 
     - name: Determine new version
@@ -104,7 +107,7 @@ jobs:
       with:
         tag_name: v${{ env.new_version }}
         release_name: Release v${{ env.new_version }}
-        generate_release_notes: true
+        body: "This release was automatically generated."
 
     - name: Push tag
       run: |
