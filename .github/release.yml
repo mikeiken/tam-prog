@@ -3,24 +3,22 @@
 name-template: 'Tamprog $RESOLVED_VERSION'
 tag-template: 'v$RESOLVED_VERSION'
 categories:
-  - title: Breaking Changes 🛠
+  - title: 'Major Changes 🛠️'
     labels:
       - 'major'
-  - title: New Features 🎉
+  - title: 'New Features 🎉'
     labels:
       - 'feature'
       - 'enhancement'
-  - title: '🐛 Bug Fixes'
+  - title: 'Fixes 🐛'
     labels:
       - 'fix'
       - 'patch'
       - 'bugfix'
       - 'bug'
-  - title: '🧰 Maintenance'
-    label: 'chore'
-  - title: Misc
-    labels:
-      - "*"
+  - title: 'Maintenance 🧰'
+    labels: 
+      - 'chore'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: '\<*_&'
 version-resolver:
@@ -38,12 +36,15 @@ version-resolver:
       - 'patch'
       - 'fix'
       - 'bugfix'
+      - 'chore'
   default: patch
 sort-by: 'title'
+sort-direction: 'ascending'
 exclude-labels:
   - 'skip-changelog'
   - 'no-changelog'
   - 'ignore-for-release'
+  - 'duplicate'
 autolabeler:
   - label: 'chore'
     files:
@@ -66,10 +67,4 @@ autolabeler:
     title:
       - '(?i)\b(breaking|major)\b'
 template: |
-  ## Changes
-
   $CHANGES
-
-  ### Contributors
-
-  $CONTRIBUTORS
