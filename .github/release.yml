@@ -46,6 +46,7 @@ exclude-labels:
   - 'skip-changelog'
   - 'no-changelog'
   - 'ignore-for-release'
+  - 'duplicate'
 autolabeler:
   - label: 'chore'
     files:
