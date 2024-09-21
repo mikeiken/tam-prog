@@ -61,6 +61,7 @@ jobs:
         run: codespell --skip "./frontend/yarn.lock"
 
   update-release-draft:
+    needs: spellcheck
     permissions:
       # write permission is required to create a github release
       contents: write
