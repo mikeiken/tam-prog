@@ -41,6 +41,7 @@ version-resolver:
       - 'chore'
   default: patch
 sort-by: 'title'
+sort-direction: 'ascending'
 exclude-labels:
   - 'skip-changelog'
   - 'no-changelog'
