@@ -6,8 +6,8 @@ export default function AuthFormBackgroundComponent() {
   return (
     <div className='intro'>
       <div className='video'>
-        <video autoPlay muted loop className="background-video">
-          <source src={process.env.PUBLIC_URL + '/background.mp4'} type="video/mp4" />
+        <video autoPlay muted loop='loop' className="background-video">
+          <source src={process.env.PUBLIC_URL + '/background1.mp4'} type="video/mp4" />
         </video>
       </div>
       <div className='main-wrapper'>

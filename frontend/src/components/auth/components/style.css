@@ -99,3 +99,10 @@
 .register-link a:hover {
   text-decoration: underline;
 }
+
+@media only screen and (max-width: 425px) {
+  .wrapper {
+    margin: 0 20px; /* Добавляет отступы по бокам */
+    max-width: 100%; /* Убирает ограничение по ширине */
+  }
+}
