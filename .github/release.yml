@@ -1,0 +1,70 @@
+# .github/release.yml
+
+name-template: 'Tamprog $RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+categories:
+  - title: 'Major Changes 🛠️'
+    labels:
+      - 'major'
+  - title: 'New Features 🎉'
+    labels:
+      - 'feature'
+      - 'enhancement'
+  - title: 'Fixes 🐛'
+    labels:
+      - 'fix'
+      - 'patch'
+      - 'bugfix'
+      - 'bug'
+  - title: 'Maintenance 🧰'
+    labels: 
+      - 'chore'
+change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+change-title-escapes: '\<*_&'
+version-resolver:
+  major:
+    labels:
+      - 'major'
+      - 'breaking'
+  minor:
+    labels:
+      - 'minor'
+      - 'feature'
+      - 'enhancement'
+  patch:
+    labels:
+      - 'patch'
+      - 'fix'
+      - 'bugfix'
+      - 'chore'
+  default: patch
+sort-by: 'title'
+sort-direction: 'ascending'
+exclude-labels:
+  - 'skip-changelog'
+  - 'no-changelog'
+  - 'ignore-for-release'
+  - 'duplicate'
+autolabeler:
+  - label: 'chore'
+    files:
+      - '*.md'
+    title:
+      - '(?i)\b(chore|cleanup)\b'
+  - label: 'bug'
+    branch:
+      - '/fix\/.+/'
+    title:
+      - '(?i)\b(fix|bug|bugfix|patch)\b'
+  - label: 'enhancement'
+    branch:
+      - '/feature\/.+/'
+    title:
+      - '(?i)\b(add|feature|enhancement)\b'
+  - label: 'major'
+    branch:
+      - '/breaking\/.+/'
+    title:
+      - '(?i)\b(breaking|major)\b'
+template: |
+  $CHANGES
