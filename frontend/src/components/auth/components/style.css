@@ -37,7 +37,7 @@
   z-index: 3;
   background-color: rgba(255, 255, 255, 0.9);
   padding: 40px;
-  border-radius: 10px;
+  border-radius: 20px;
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
   max-width: 400px;
   width: 100%;
@@ -52,13 +52,42 @@
 /* Поле ввода */
 .input-box input {
   width: 100%; /* Поле ввода занимает всю ширину */
-  padding: 10px;
+  padding: 15px 10px;
   padding-left: 40px; /* Оставляем место для иконки */
   border: 1px solid #ccc;
   border-radius: 5px;
   box-sizing: border-box; /* Учитываем padding в общей ширине */
+  background: transparent;
+  z-index: 0;
+  transition: background-color 0.3s ease; /* Плавный переход для затемнения */
+  outline: none; 
 }
 
+.input-box input:focus {
+  background-color: rgba(0, 0, 0, 0.05); /* Легкое затемнение при фокусе */
+}
+
+.input-box label{
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  transform: translateY(-50%);
+  color: #282528;
+  font-size: 13px;
+  pointer-events: none;
+  transition: .3s;
+}
+
+input:focus ~ label,
+input:valid ~ label{
+  top:0;
+  font-size: 10px;
+  padding: 0 10px;
+  background-color: #dadcdd;
+  border: 1px solid #ccc;
+
+  border-radius: 5px;
+}
 /* Иконка внутри input */
 .input-box i {
   position: absolute;
@@ -69,23 +98,45 @@
   color: #333;
 }
 
-/* Кнопка входа */
 .btn {
+  position: relative;
   margin-top: 10px;
   width: 100%;
   padding: 10px;
-  background-color: #007BFF;
   color: white;
   border: none;
   border-radius: 5px;
+  overflow: hidden;
+  background-color: #007BFF; /* Цвет фона */
   cursor: pointer;
+  transition: color 0.3s;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3); 
+    transform: translateX(-100%); 
+    transition: transform 0.4s; 
+    z-index: 0; 
+    border-radius: 5px;
+  }
+
+  &:hover {
+    color: white;
+
+    &::before {
+      transform: translateX(0); /* Сдвигаем на 0, чтобы появилось затемнение */
+    }
+  }
 }
 
-.btn:hover {
-  background-color: #0056b3;
-}
 
 .remember, .register-link {
+  font-size: 13px;
   display: flex;
   justify-content: space-between;
   align-items: center;

@@ -5,24 +5,30 @@ export default function Form() {
     <div className='wrapper'>
       <form action=''>
         <h1>Login</h1>
-
         <div className='input-box'>
-          <input className='' placeholder='name' type='text' required />
+          <input className='' type='text' required />
+          <label>Enter your name</label>
           <img style={{
             position: 'absolute', left: '10px', top: '50%',
-            transform: 'translateY(-50%)'
+            transform: 'translateY(-50%)',
+            width: '24px',  // Задаем ширину
+            height: '24px'
           }}
-            src={process.env.PUBLIC_URL + '/user-24.png'}></img>
+            src={process.env.PUBLIC_URL + '/user.png'}></img>
         </div>
 
         <div className='input-box'>
-          <input className='' placeholder='password' type='password' required />
+          <input className='' type='password' required />
+          <label>Enter your password</label>
           <img
             style={{
               position: 'absolute', left: '10px', top: '50%',
-              transform: 'translateY(-50%)'
+              transform: 'translateY(-50%)',
+              width: '24px',  // Задаем ширину
+              height: '24px'
             }}
-            src={process.env.PUBLIC_URL + '/lock-24.png'}></img>
+            src={process.env.PUBLIC_URL + '/lock.png'}>
+          </img>
         </div>
 
         <div className='remember'>
