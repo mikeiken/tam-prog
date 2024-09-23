@@ -2,11 +2,11 @@
 .intro {
   height: 100vh;
   position: relative;
-  overflow: hidden;
 }
 
 /* Видео */
 .video {
+  overflow: hidden;
   position: absolute;
   width: 100vw;
   height: 100vh;
