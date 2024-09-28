@@ -79,7 +79,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'garden',
-        'HOST': '127.0.0.1',
+        'HOST': 'psql',
         'PORT': '5432',
         'PASSWORD': 'root',
         'USER': 'agronom',
