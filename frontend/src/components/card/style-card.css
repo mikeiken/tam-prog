@@ -1,0 +1,39 @@
+.card-wrapper {
+    margin: 20px;
+    padding: 15px;
+    width: 200px !important;
+    height: 290px !important;
+    border-radius: 20px;
+    background-color: aquamarine;
+    background-image: url(../../../public/TropicalRainforest.png);
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer !important;
+}
+
+.card-wrapper:hover {
+    transform: scale(1.05); 
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7); 
+}
+
+.card-wrapper img {
+    width: 130px !important;
+    filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
+    
+    padding: 0;
+}
+
+.card-wrapper h1, p {
+    padding: 7px;
+    margin: 0;
+}
+
+.card-wrapper button {
+    margin-top: 10px;
+    width: 100%;
+    border-radius: 50px;
+    cursor: pointer;
+}
