@@ -146,5 +146,10 @@ services:
       - redis
       - psql
 
+  # # for celery:
+  # depends_on:
+  #   django:
+  #     condition: service_healthy
+
 networks:
   gateway: {}
