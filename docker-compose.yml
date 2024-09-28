@@ -31,22 +31,17 @@ services:
     ports:
       - "${POSTGRES_PORT}:5432"
     restart: always
-    deploy:
-      resources:
-        limits:
-          cpus: '${POSTGRES_CPUS}'
-          memory: ${POSTGRES_MEMORY}
     networks:
       - gateway
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_HEALTHCHECK_USER} -d ${POSTGRES_DB}" ]
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
 
   rabbitmq:
-    image: rabbitmq:3.10.7-management
+    image: rabbitmq:3.10-management-alpine
     container_name: rabbitmq
     hostname: rabbitmq
     restart: always
@@ -69,7 +64,7 @@ services:
       start_period: 30s
 
   redis:
-    image: redis:latest
+    image: redis:7.4-alpine
     container_name: redis
     hostname: redis
     restart: always
@@ -108,7 +103,7 @@ services:
       - redis
 
   swagger:
-    image: swaggerapi/swagger-ui
+    image: swaggerapi/swagger-ui:v5.17.14
     container_name: swagger
     networks:
       - gateway
@@ -130,6 +125,26 @@ services:
     ports:
       - "${NODEJS_PORT}:3000"
     restart: always
+
+  django:
+    build: ./django
+    image: tam-prog-django:latest
+    container_name: django
+    networks:
+      - gateway
+    ports:
+      - "${DJANGO_PORT}:8000"
+    restart: always
+    environment:
+      - DJANGO_SETTINGS_MODULE=tamprog.settings
+    depends_on:
+      - redis
+      - psql
+
+  # # for celery:
+  # depends_on:
+  #   django:
+  #     condition: service_healthy
 
 networks:
   gateway: {}
