@@ -10,7 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +25,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-sihuf!9sq3^(+b2=z5taf$^6mszw^$e=1k%-dzj_*#bt3p9*(6'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-sihuf!9sq3^(+b2=z5taf$^6mszw^$e=1k%-dzj_*#bt3p9*(6')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
 
 
 # Application definition
@@ -78,12 +83,11 @@ WSGI_APPLICATION = 'tamprog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'garden',
-        'HOST': 'psql',
-        'PORT': '5432',
-        'PASSWORD': 'root',
-        'USER': 'agronom',
-
+        'NAME': os.getenv('POSTGRES_DB', 'garden'),
+        'HOST': os.getenv('DJANGO_DB_HOST', '127.0.0.1'),
+        'PORT': os.getenv('POSTGRES_PORT', '5432'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'root'),
+        'USER': os.getenv('POSTGRES_USER', 'agronom'),
     },
     # 'test': {
     #     'ENGINE': 'django.db.backends.sqlite3',
