@@ -1,0 +1,118 @@
+.modal {
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.4);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.3s;
+}
+
+.modal-content {
+    padding: 20px;
+    border-radius: 25px;
+    background-color: antiquewhite;
+    background-image: url('../../../../public/TropicalRainforest.png');
+    background-size: cover;
+    background-position: center;
+    height: 90vh;
+    width: 60vw;
+    max-width: 600px;
+    max-height: 900px;
+    transform: scale(0.5);
+    transition: 0.4s all;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-content img {
+    margin: 20px;
+    width: 400px;
+}
+
+.modal-content p {
+    text-align: left;
+    width: 100%;
+}
+
+.modal-content.active {
+    transform: scale(1);
+}
+
+.modal.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* Медиазапросы для адаптивности */
+@media (max-width: 768px) {
+    .modal-content {
+        width: 80vw;
+        height: 40vh;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        width: 90vw;
+        height: 50vh;
+    }
+}
+
+.horizontal-direction {
+    margin-top: auto;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.horizontal-direction button {
+    width: 150px;
+    height: 30px;
+    border-radius: 20px;
+    cursor: pointer;
+    border: none;
+    font-weight: 800;
+}
+
+.btn-1 {
+    background-color: #90ee90;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    transition: 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-1:hover {
+    transform: scale(1.05);
+    background-color: #4f9e4f;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7); 
+}
+
+.btn-2 {
+    background-color: #add8e6;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    transition: 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-2:hover {
+    transform: scale(1.05);
+    background-color: #6194a4;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7); 
+}
+
+.btn-3 {
+    background-color: #ffb6c1;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    transition: 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-3:hover{
+    transform: scale(1.05);
+    background-color: #b56975;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+}

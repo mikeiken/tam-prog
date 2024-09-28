@@ -121,5 +121,15 @@ services:
     volumes:
       - /usr/tamprog/swagger.json:/swagger.json:ro
 
+  frontend:
+    build: ./frontend
+    image: tam-prog-frontend:latest
+    container_name: frontend
+    networks:
+      - gateway
+    ports:
+      - "${NODEJS_PORT}:3000"
+    restart: always
+
 networks:
   gateway: {}

@@ -5,6 +5,10 @@ tmp/
 .vscode
 *.bkp
 *.dtmp
+db.sqlite3
+*.pyc
+*.pyo
+.logs/
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
@@ -15,15 +19,15 @@ __pycache__/
 
 #NodeJS
 # dependencies
-/node_modules
-/.pnp
+*/node_modules
+*/.pnp
 .pnp.js
 
 # testing
-/coverage
+*/coverage
 
 # production
-/build
+*/build
 
 # misc
 .DS_Store
