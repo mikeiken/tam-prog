@@ -8,21 +8,27 @@
     background-image: url(../../../public/TropicalRainforest.png);
     display: flex;
     flex-direction: column;
-    align-items: center; 
+    align-items: center;
     box-shadow: 0 0 5px rgba(0,0,0,0.5);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer !important;
 }
 
+/* Эффект при наведении */
 .card-wrapper:hover {
-    transform: scale(1.05); 
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7); 
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+}
+
+/* Эффект при нажатии */
+.click-active:active {
+    transform: scale(0.78);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
 }
 
 .card-wrapper img {
     width: 130px !important;
     filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
-    
     padding: 0;
 }
 

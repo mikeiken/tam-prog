@@ -1,6 +1,7 @@
 import React from 'react'
 import Header from '../header/Header'
 import Footer from '../footer/Footer'
+import Card from '../card/Card'
 import './style.css'
 
 export default function MainPage() {
@@ -12,7 +13,7 @@ export default function MainPage() {
                     apgpapgna
                 </div>
                 <div className='box2'>
-                    lamma[lm[lmab]]
+                    <Card />
                 </div>
             </div>
             <Footer />
