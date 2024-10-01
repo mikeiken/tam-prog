@@ -1,27 +1,26 @@
 .card-wrapper {
-    margin-right: 15px;
-    margin-bottom: 15px;
+    margin: 0;
     padding: 15px;
-    width: 200px !important;
-    height: 290px !important;
+    flex: 1 1 20%;
+    min-width: 100px;
+    max-width: 220px;
+    height: 350px;
     border-radius: 20px;
-    background-color: aquamarine;
     background-image: url(../../../public/TropicalRainforest.png);
+    background-color: aquamarine;
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer !important;
 }
 
-/* Эффект при наведении */
 .card-wrapper:hover {
     transform: scale(1.05);
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
 }
 
-/* Эффект при нажатии */
 .card-wrapper:active {
     transform: scale(0.78);
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
