@@ -1,0 +1,22 @@
+.add-button {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-image: url('../../../public/plus.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    border: none;
+    transition: background-color 0.5s ease, transform 0.3s ease;
+    cursor: pointer;
+}
+
+/* Увеличение при наведении */
+.add-button:hover {
+    transform: scale(1.05);
+    background-color: cadetblue;
+}
+
+.add-button:active {
+    transform: scale(0.78);
+}
