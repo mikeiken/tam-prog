@@ -4,7 +4,7 @@ import './style.css'
 export default function Header() {
     return (
         <>
-            <header className='header'>
+            <div className='header'>
                 <img className='logo' src={process.env.PUBLIC_URL + '/logo.png'}></img>
                 <nav className='navbar'>
                     <a href='#'>Участки</a>
@@ -13,7 +13,7 @@ export default function Header() {
                     <a href='#'>О нас</a>
                 </nav>
                 <button className='login-btn'>Войти</button>
-            </header>
+            </div>
         </>
     )
 }

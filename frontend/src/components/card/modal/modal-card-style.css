@@ -11,6 +11,7 @@
     opacity: 0;
     pointer-events: none;
     transition: 0.3s;
+    z-index: 777;
 }
 
 .modal-content {
@@ -44,6 +45,7 @@
 .modal-content.active {
     transform: scale(1);
 }
+
 
 .modal.active {
     opacity: 1;
@@ -93,6 +95,12 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.7); 
 }
 
+.btn-1:active{
+    transform: scale(0.78);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+}
+
+
 .btn-2 {
     background-color: #add8e6;
     box-shadow: 0 0 5px rgba(0,0,0,0.5);
@@ -105,6 +113,11 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.7); 
 }
 
+.btn-2:active{
+    transform: scale(0.78);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+}
+
 .btn-3 {
     background-color: #ffb6c1;
     box-shadow: 0 0 5px rgba(0,0,0,0.5);
@@ -115,4 +128,9 @@
     transform: scale(1.05);
     background-color: #b56975;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+}
+
+.btn-3:active{
+    transform: scale(0.78);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
 }
