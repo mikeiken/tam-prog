@@ -1,10 +1,11 @@
+/* card.css */
 .card-wrapper {
     margin: 0;
     padding: 15px;
     flex: 1 1 20%;
     min-width: 100px;
     max-width: 220px;
-    height: 350px;
+    height: 350px !important;
     border-radius: 20px;
     background-image: url(../../../public/TropicalRainforest.png);
     background-color: aquamarine;
@@ -12,8 +13,16 @@
     flex-direction: column;
     align-items: center;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.5s ease;
     cursor: pointer !important;
+    opacity: 0; 
+    transform: translateY(20px); 
+}
+
+
+.card-wrapper.fade-in {
+    opacity: 1; 
+    transform: translateY(0);
 }
 
 .card-wrapper:hover {

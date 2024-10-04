@@ -1,27 +1,81 @@
-.h-container{
-    margin-top: 10lvh;
+.h-container {
+    margin-top: 7vh;
     display: flex;
-    justify-content: space-between;
-    
+    margin-top: 100px;
 }
 
-.box2 {
-    width: 100%; 
-    height: 81vh; 
-    background-color: #f5a299;
-    padding: 15px;
-    display: flex;
-    flex-wrap: wrap; 
-    justify-content: flex-start; 
-    position: relative; 
-    gap: 15px; 
-    overflow-y: auto; 
-}
-
-.box1{
+.box1 {
     padding: 20px;
-    width: 25vh !important;
-    height: 80vh !important;
+    width: 25%;
+    min-width: 200px;
     background-color: #d5ac9e;
 }
 
+.box2 {
+    width: 75%;
+    height: 79.9vh;
+    background-color: #f5a299;
+    padding: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    position: relative;
+    gap: 30px;
+    overflow-y: auto;
+}
+
+@media (max-width: 3440px) {
+    .box1 {
+        width: 20%;
+        height: 82.65vh;
+    }
+
+    .box2 {
+        width: 80%;
+        height: 83.4vh;
+    }
+}
+
+@media (max-width: 1920px) {
+    .box1 {
+        width: 20%;
+        height: 78.9vh;
+    }
+
+    .box2 {
+        width: 80%;
+        height: 79.9vh;
+    }
+}
+
+@media (max-width: 768px) {
+    .box1 {
+        width: 40%;
+        height: auto;
+    }
+
+    .box2 {
+        width: 60%;
+        /* Box2 занимает 60% на экранах меньше 768px */
+    }
+}
+
+@media (max-width: 480px) {
+    .h-container {
+        flex-direction: column;
+        /* Переключаемся на вертикальное расположение для мобильных */
+    }
+
+    .box1 {
+        width: 100%;
+        /* Box1 занимает полную ширину на маленьких экранах */
+    }
+
+    .box2 {
+        margin-top: 20vh;
+        width: 100%;
+        /* Box2 также занимает полную ширину */
+        height: 70vh;
+        /* Изменение высоты для box2 на маленьких экранах */
+    }
+}
