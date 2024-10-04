@@ -17,7 +17,7 @@ export default function Card(props) {
     return (
         <>
             <div className={`card-wrapper ${isVisible ? 'fade-in' : ''}`} onClick={() => setModalActive(true)}>
-                <img src={process.env.PUBLIC_URL + '/CannibalPirate.png'} alt='Placeholder' />
+                <img src={process.env.PUBLIC_URL + '/man.jpg'} alt='Placeholder' />
                 <h1>{props.label}</h1>
                 <p>{props.description}</p>
             </div>

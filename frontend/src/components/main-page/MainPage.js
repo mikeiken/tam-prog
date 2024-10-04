@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import Header from '../header/Header';
-import Footer from '../footer/Footer';
 import Card from '../card/Card';
 import AddItemButton from '../add-item/AddItemButton';
 import './style.css';
 
 export default function MainPage() {
-    const [cards, setCards] = useState([{ label: 'картошка', description: 'омерзительная тварь (нет)' }]);
+    const [cards, setCards] = useState([{ label: 'АГУРЭЦ', description: 'ВКУСНАЯЪ' }]);
 
     const addCard = () => {
         // Добавляем новую карточку, можно сделать динамичнее
@@ -14,7 +13,7 @@ export default function MainPage() {
     };
 
     return (
-        <div>
+        <div className='main-container'>
             <Header />
             <div className='h-container'>
                 <div className='box1'>
@@ -27,7 +26,6 @@ export default function MainPage() {
                     <AddItemButton onAdd={addCard} />
                 </div>
             </div>
-            <Footer />
         </div>
     );
 }
