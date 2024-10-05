@@ -1,5 +1,5 @@
 import React from 'react'
-import './style.css'
+import './auth-style.css'
 import Form from './form'
 
 export default function AuthFormBackgroundComponent() {

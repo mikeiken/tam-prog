@@ -34,6 +34,8 @@
 
 /* Стиль для формы */
 .wrapper {
+  position: absolute;
+  right: 4vh;
   z-index: 3;
   background-color: rgba(255, 255, 255, 0.9);
   padding: 40px;
@@ -46,7 +48,7 @@
 .input-box {
   position: relative;
   margin-bottom: 20px;
-  width: 100%; /* Добавляем ширину для контейнера */
+  width: 100%; 
 }
 
 /* Поле ввода */
