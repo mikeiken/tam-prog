@@ -14,14 +14,16 @@ export default function Header() {
                     <Link to='#'>Подрядчики</Link>
                     <Link to='#'>Лицензия</Link>
                     <Link to='#'>О нас</Link>
-                    {/* <Link to='/login'> */}
-                        <button className='login-btn'>Войти</button>
-                    {/* </Link> */}
+
                 </nav>
-                {/* <Routes> */}
-                    {/* <Route path='/login' element={<AuthForm />} /> */}
-                {/* </Routes> */}
+                <Link to='/login'>
+                    <button className='login-btn'>Войти</button>
+                </Link>
+
             </div>
+            <Routes>
+                <Route path='/login' element={<AuthForm />} />
+            </Routes>
         </>
     )
 }
