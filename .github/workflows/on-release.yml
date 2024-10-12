@@ -2,6 +2,9 @@
 name: Create and publish a Docker image
 
 on:
+  push:
+    branches:
+      - pri59-docker-builds
   release:
     types: [published]
   workflow_dispatch:
