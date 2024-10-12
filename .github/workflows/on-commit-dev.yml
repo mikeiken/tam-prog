@@ -58,4 +58,4 @@ jobs:
           sudo apt-get update || true
           sudo apt-get install -y codespell
       - name: Run Spellchecker
-        run: codespell --skip "./frontend/yarn.lock"
+        run: codespell --skip "./frontend/yarn.lock,./papers"
