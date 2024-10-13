@@ -67,7 +67,7 @@ jobs:
       - name: Tag image as latest if release
         if: ${{ env.IS_RELEASE }}
         run: |
-          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.DJANGO_SUFFIX }}:${{ steps.meta.outputs.tags }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.DJANGO_SUFFIX }}:latest
+          docker tag ${{ steps.meta.outputs.tags }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.DJANGO_SUFFIX }}:latest
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.DJANGO_SUFFIX }}:latest
 
       - name: Tag image with latest release number
@@ -75,7 +75,7 @@ jobs:
         run: |
           RELEASE_TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
           STRIPPED_TAG=${RELEASE_TAG#v}
-          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.DJANGO_SUFFIX }}:${{ steps.meta.outputs.tags }} ${{ env.REGISTRY }}  ${{ env.IMAGE_NAME }}${{ env.DJANGO_SUFFIX }}:$STRIPPED_TAG
+          docker tag ${{ steps.meta.outputs.tags }} ${{ env.REGISTRY }}  ${{ env.IMAGE_NAME }}${{ env.DJANGO_SUFFIX }}:$STRIPPED_TAG
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.DJANGO_SUFFIX }}:$STRIPPED_TAG
 
   build-and-push-image-frontend:
@@ -123,7 +123,7 @@ jobs:
       - name: Tag image as latest if release
         if: ${{ env.IS_RELEASE }}
         run: |
-          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.FRONTEND_SUFFIX }}:${{ steps.meta.outputs.tags }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.FRONTEND_SUFFIX }}:latest
+          docker tag ${{ steps.meta.outputs.tags }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.FRONTEND_SUFFIX }}:latest
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.FRONTEND_SUFFIX }}:latest
 
       - name: Tag image with latest release number
@@ -131,6 +131,6 @@ jobs:
         run: |
           RELEASE_TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
           STRIPPED_TAG=${RELEASE_TAG#v}
-          docker tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.FRONTEND_SUFFIX }}:${{ steps.meta.outputs.tags }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.FRONTEND_SUFFIX }}:$STRIPPED_TAG
+          docker tag ${{ steps.meta.outputs.tags }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.FRONTEND_SUFFIX }}:$STRIPPED_TAG
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.FRONTEND_SUFFIX }}:$STRIPPED_TAG
 
