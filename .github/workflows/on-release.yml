@@ -2,9 +2,6 @@
 name: Create and publish a Docker images to GitHub Packages
 
 on:
-  push:
-    branches:
-      - pri59-docker-builds
   release:
     types: [published]
   workflow_dispatch:
