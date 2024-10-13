@@ -1,4 +1,4 @@
-# Load .env file and run docker-compose up
+# Load .env file and run a specified command
 
 # Function to load .env file and set environment variables
 function Load-DotEnv {
@@ -22,5 +22,12 @@ function Load-DotEnv {
 # Load the .env file
 Load-DotEnv
 
-# Run docker-compose up
-docker-compose -f docker-compose-dev.yml -p "tam-prog-dev" up -d
+# Check if a command is provided as arguments
+if ($args.Count -eq 0) {
+    Write-Error "No command provided. Please provide a command to run."
+    exit 1
+}
+
+# Join all arguments into a single command string
+$command = $args -join " "
+Invoke-Expression $command
