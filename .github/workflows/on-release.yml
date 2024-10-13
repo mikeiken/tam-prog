@@ -16,6 +16,8 @@ env:
   IS_RELEASE: Trues
   DJANGO_SUFFIX: -django
   FRONTEND_SUFFIX: -frontend
+  NGINX_SUFFIX: -nginx
+  PSQL_SUFFIX: -psql
 
 # There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
 jobs:
@@ -134,3 +136,114 @@ jobs:
           docker tag ${{ steps.meta.outputs.tags }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.FRONTEND_SUFFIX }}:$STRIPPED_TAG
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.FRONTEND_SUFFIX }}:$STRIPPED_TAG
 
+  build-and-push-image-nginx:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+      # 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+            registry: ${{ env.REGISTRY }}
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+            images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.NGINX_SUFFIX }}
+
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+            context: ./nginx
+            push: true
+            tags: ${{ steps.meta.outputs.tags }}
+            labels: ${{ steps.meta.outputs.labels }}
+        
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}${{ env.NGINX_SUFFIX }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
+
+      - name: Tag image as latest if release
+        if: ${{ env.IS_RELEASE }}
+        run: |
+          docker tag ${{ steps.meta.outputs.tags }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.NGINX_SUFFIX }}:latest
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.NGINX_SUFFIX }}:latest
+
+      - name: Tag image with latest release number
+        if: ${{ env.IS_RELEASE }}
+        run: |
+          RELEASE_TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
+          STRIPPED_TAG=${RELEASE_TAG#v}
+          docker tag ${{ steps.meta.outputs.tags }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.NGINX_SUFFIX }}:$STRIPPED_TAG
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.NGINX_SUFFIX }}:$STRIPPED_TAG
+
+  build-and-push-image-psql:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+      # 
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+            registry: ${{ env.REGISTRY }}
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+            images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.PSQL_SUFFIX }}
+
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+            context: ./psql
+            push: true
+            tags: ${{ steps.meta.outputs.tags }}
+            labels: ${{ steps.meta.outputs.labels }}
+        
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}${{ env.PSQL_SUFFIX }}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
+
+      - name: Tag image as latest if release
+        if: ${{ env.IS_RELEASE }}
+        run: |
+          docker tag ${{ steps.meta.outputs.tags }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.PSQL_SUFFIX }}:latest
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.PSQL_SUFFIX }}:latest
+
+      - name: Tag image with latest release number
+        if: ${{ env.IS_RELEASE }}
+        run: |
+          RELEASE_TAG=$(curl -s https://api.github.com/repos/${{ github.repository }}/releases/latest | jq -r .tag_name)
+          STRIPPED_TAG=${RELEASE_TAG#v}
+          docker tag ${{ steps.meta.outputs.tags }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.PSQL_SUFFIX }}:$STRIPPED_TAG
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.PSQL_SUFFIX }}:$STRIPPED_TAG
