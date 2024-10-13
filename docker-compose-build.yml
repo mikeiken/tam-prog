@@ -1,6 +1,7 @@
 services:
   nginx:
-    image: ghcr.io/mikeiken/tam-prog-nginx:latest
+    build: ./nginx
+    image: tam-prog-nginx:latest
     container_name: nginx
     networks:
       - gateway
@@ -11,7 +12,8 @@ services:
 
   psql:
     container_name: psql
-    image: ghcr.io/mikeiken/tam-prog-psql:latest
+    build: ./psql
+    image: tam-prog-psql:latest
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -95,7 +97,8 @@ services:
       - redis
 
   frontend:
-    image: ghcr.io/mikeiken/tam-prog-frontend:latest
+    build: ./frontend
+    image: tam-prog-frontend:latest
     container_name: frontend
     networks:
       - gateway
@@ -104,7 +107,8 @@ services:
     restart: always
 
   django:
-    image: ghcr.io/mikeiken/tam-prog-django:latest
+    build: ./django
+    image: tam-prog-django:latest
     container_name: django
     networks:
       - gateway
