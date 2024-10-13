@@ -34,7 +34,7 @@
 ```
 
 ### Windows:
-```Powershell
+```powershell
 ./docker-compose-up.ps1
 ```
 
@@ -46,6 +46,6 @@
 ```
 
 ### Windows:
-```Powershell
+```powershell
 ./docker-compose-build-up.ps1
 ```
