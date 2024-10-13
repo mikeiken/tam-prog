@@ -2,6 +2,10 @@
 name: Create and publish a Docker images to GitHub Packages
 
 on:
+  workflow_run:
+    workflows: ["CI-main"]
+    types:
+      - completed
   release:
     types: [created, published]
   push:

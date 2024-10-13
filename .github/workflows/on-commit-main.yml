@@ -1,5 +1,5 @@
 # run on commit
-name: CI
+name: CI-main
 permissions:
   contents: write
 
