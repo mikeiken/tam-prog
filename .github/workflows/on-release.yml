@@ -3,7 +3,7 @@ name: Create and publish a Docker images to GitHub Packages
 
 on:
   release:
-    types: [published]
+    types: [created, published]
   push:
     tags:
       - v*
