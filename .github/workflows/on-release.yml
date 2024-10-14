@@ -26,6 +26,7 @@ env:
 # There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
 jobs:
   build-and-push-image-django:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     # Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.
     permissions:
@@ -85,6 +86,7 @@ jobs:
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.DJANGO_SUFFIX }}:$STRIPPED_TAG
 
   build-and-push-image-frontend:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
 
     permissions:
@@ -141,6 +143,7 @@ jobs:
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.FRONTEND_SUFFIX }}:$STRIPPED_TAG
 
   build-and-push-image-nginx:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
 
     permissions:
@@ -197,6 +200,7 @@ jobs:
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.NGINX_SUFFIX }}:$STRIPPED_TAG
 
   build-and-push-image-psql:
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
 
     permissions:
