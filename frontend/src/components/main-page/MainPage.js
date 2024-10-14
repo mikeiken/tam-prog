@@ -1,33 +1,60 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../header/Header';
-import Footer from '../footer/Footer';
 import Card from '../card/Card';
 import AddItemButton from '../add-item/AddItemButton';
 import './style.css';
+import axios from 'axios';
 
 export default function MainPage() {
-    const [cards, setCards] = useState([{ label: 'картошка', description: 'омерзительная тварь (нет)' }]);
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const addCard = () => {
-        // Добавляем новую карточку, можно сделать динамичнее
-        setCards([...cards, { label: 'новая карточка', description: 'описание новой карточки' }]);
-    };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
+                const response = await axios.get('http://homelab.kerasi.ru/api/v1/plant/?format=json');
+                setData(response.data);
+            } catch (err) {
+                setError(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+
+        return () => {
+            console.log(data);
+        };
+    }, []);
 
     return (
-        <div>
+        <div className='max-height'>
             <Header />
             <div className='h-container'>
                 <div className='box1'>
-                    наверное выбор всякой всячины
+
                 </div>
                 <div className='box2'>
-                    {cards.map((card, index) => (
-                        <Card key={index} label={card.label + ` ${index}`} description={card.description} />
-                    ))}
-                    <AddItemButton onAdd={addCard} />
+                    {loading ? (
+                        <div className='centered-spinner'>
+                            <div className="spinner"></div>
+                        </div>
+                    ) : error ? (
+                        <p className='centered-spinner'>Error: {error.message}</p>
+                    ) : data.length === 0 ? (
+                        <p>Пусто</p>
+                    ) : (
+                        data.map(item => (
+                            <Card key={item.id} label={item.name} description={item.nutrients} />
+                        ))
+                    )}
+                    {/* <AddItemButton onAdd={''} /> */}
                 </div>
+
             </div>
-            <Footer />
         </div>
     );
 }

@@ -1,5 +1,7 @@
 import React from 'react'
 import './style.css'
+import { Routes, Route, Link } from 'react-router-dom';
+import AuthForm from '../auth/auth';
 
 export default function Header() {
     return (
@@ -7,13 +9,21 @@ export default function Header() {
             <div className='header'>
                 <img className='logo' src={process.env.PUBLIC_URL + '/logo.png'}></img>
                 <nav className='navbar'>
-                    <a href='#'>Участки</a>
-                    <a href='#'>Подрядчики</a>
-                    <a href='#'>Лицензия</a>
-                    <a href='#'>О нас</a>
+
+                    <Link to=''>Участки</Link>
+                    <Link to=''>Подрядчики</Link>
+                    <Link to=''>Лицензия</Link>
+                    <Link to=''>О нас</Link>
+
                 </nav>
-                <button className='login-btn'>Войти</button>
+                <Link to='/login'>
+                    <button className='login-btn'>Войти</button>
+                </Link>
+
             </div>
+            <Routes>
+                <Route path='/login' element={<AuthForm />} />
+            </Routes>
         </>
     )
 }
