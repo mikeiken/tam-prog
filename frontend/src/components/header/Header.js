@@ -10,10 +10,10 @@ export default function Header() {
                 <img className='logo' src={process.env.PUBLIC_URL + '/logo.png'}></img>
                 <nav className='navbar'>
 
-                    <Link to='#'>Участки</Link>
-                    <Link to='#'>Подрядчики</Link>
-                    <Link to='#'>Лицензия</Link>
-                    <Link to='#'>О нас</Link>
+                    <Link to=''>Участки</Link>
+                    <Link to=''>Подрядчики</Link>
+                    <Link to=''>Лицензия</Link>
+                    <Link to=''>О нас</Link>
 
                 </nav>
                 <Link to='/login'>

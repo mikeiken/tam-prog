@@ -16,8 +16,7 @@ export const Routes = {
         logout: '/logout',
     },
     PRODUCTS: {
-        potato: '/potato',
-        carrot: '/carrot',
+        plant: '/plant',
         
     },
 }
