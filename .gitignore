@@ -9,7 +9,8 @@ db.sqlite3
 *.pyc
 *.pyo
 .logs/
-staticfiles/
+django/*staticfiles/
+django/*static/
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
