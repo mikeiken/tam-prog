@@ -22,7 +22,7 @@ export default function MainPage() {
                 setLoading(false);
             }
         };
- 
+
         fetchData();
 
         return () => {
