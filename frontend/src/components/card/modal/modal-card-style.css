@@ -35,6 +35,7 @@
 .modal-content img {
     margin: 20px;
     width: 400px;
+    border-radius: 20px;
 }
 
 .modal-content p {

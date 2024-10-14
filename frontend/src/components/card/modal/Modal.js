@@ -6,7 +6,7 @@ export default function Modal(props) {
     <div className={props.active ? "modal active" : "modal"} onClick={() => props.setActive(false)}>
       <div className={props.active ? "modal-content active" : "modal-content"} onClick={e => e.stopPropagation()}>
         <h1>{props.label}</h1>
-        <img src={process.env.PUBLIC_URL + '/CannibalPirate.png'} alt={''}></img>
+        <img src={process.env.PUBLIC_URL + '/man.jpg'} alt={''}></img>
         <p>{props.description}</p>
         <div className='horizontal-direction'>
           <button className='btn-1'>Удобрить</button>
