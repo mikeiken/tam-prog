@@ -4,7 +4,6 @@
     top: 1vh;
     left: 1vh;
     right: 1vh;
-    /* Добавляем отступ справа */
     height: 100px;
     background-color: #ece4d3;
     display: flex;
@@ -15,10 +14,10 @@
     transition: .3s ease;
 }
 
-
 .header:hover {
     transform: scale(1.005);
 }
+
 .logo {
     max-width: 200px;
     height: 100px;
@@ -27,7 +26,7 @@
 
 .navbar {
     margin-top: 70px;
-    margin-left: 50%;
+    margin-left: 20%;
 }
 
 .navbar a {

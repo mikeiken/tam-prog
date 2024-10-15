@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../header/Header';
 import Card from '../card/Card';
-import AddItemButton from '../add-item/AddItemButton';
 import './style.css';
 import axios from 'axios';
 
@@ -24,18 +23,14 @@ export default function MainPage() {
         };
 
         fetchData();
-
-        return () => {
-            console.log(data);
-        };
     }, []);
 
     return (
-        <div className='max-height'>
+        <div className='main'>
             <Header />
-            <div className='h-container'>
+            <div className='content-container'>
                 <div className='box1'>
-
+                    {/* Контент для box1 */}
                 </div>
                 <div className='box2'>
                     {loading ? (
@@ -51,9 +46,7 @@ export default function MainPage() {
                             <Card key={item.id} label={item.name} description={item.nutrients} />
                         ))
                     )}
-                    {/* <AddItemButton onAdd={''} /> */}
                 </div>
-
             </div>
         </div>
     );
