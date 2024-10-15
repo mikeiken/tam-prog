@@ -36,7 +36,7 @@
 }
 
 .card-wrapper img {
-    width: 200px !important;
+    width: 110% !important;
     border-radius: 20px;
     filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
     padding: 0;

@@ -10,7 +10,6 @@ html {
     font-family: Arial, sans-serif;
 }
 
-/* Стили для Header */
 .header {
     display: flex;
     justify-content: space-between;
@@ -82,6 +81,7 @@ html {
     border-radius: 20px;
     padding: 20px;
     transition: transform 0.3s ease;
+    /* height: 100%; Установить фиксированную высоту при необходимости */
 
 }
 
@@ -96,9 +96,11 @@ html {
     padding: 20px;
     display: flex;
     flex-wrap: wrap;
-    gap: 30px;
+    gap: 40px;
     overflow-y: auto;
     transition: .3s ease;
+    height: 100%; /* Установить фиксированную высоту при необходимости */
+
 }
 
 /* Спиннер */
@@ -130,12 +132,6 @@ html {
 }
 
 /* Адаптивные стили */
-/* 
-@media (min-width: 1441px) {
-    .content-container{
-        height: 51vh;
-    }
-} */
 
 
 @media (max-width: 1200px) {
@@ -145,12 +141,23 @@ html {
         flex: 1 1 100%;
         margin-bottom: 20px;
     }
+
+    .box1{
+        height: 45%;
+    }
+
+    .box2{
+        height: 160%;
+    }
+
+    .content-container{
+        gap: 0;
+    }
 }
 
 @media (max-width: 768px) {
     .navbar {
         display: none;
-        /* Можно скрыть навбар на маленьких экранах или сделать бургер-меню */
     }
 
     .header {
