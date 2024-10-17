@@ -3,9 +3,10 @@
     margin: 0;
     padding: 15px;
     flex: 1 1 20%;
-    min-width: 100px;
+    min-width: 220px;
     max-width: 220px;
     height: 350px !important;
+    min-height: 350px !important;
     border-radius: 20px;
     background-image: url(../../../public/TropicalRainforest.png);
     background-color: aquamarine;
@@ -17,6 +18,7 @@
     cursor: pointer !important;
     opacity: 0; 
     transform: translateY(20px); 
+    
 }
 
 

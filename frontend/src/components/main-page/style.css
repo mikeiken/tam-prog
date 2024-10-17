@@ -96,11 +96,12 @@ html {
     padding: 20px;
     display: flex;
     flex-wrap: wrap;
-    gap: 40px; 
-    justify-content: flex-start;
+    gap: 40px;
     overflow-y: auto;
     transition: 0.3s ease;
     height: 100%;
+    justify-content: flex-start;
+    align-content: flex-start;
 }
 
 .box2 .card {
