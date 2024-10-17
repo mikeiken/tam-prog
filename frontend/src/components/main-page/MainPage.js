@@ -15,7 +15,7 @@ export default function MainPage() {
                 setLoading(true);
                 const response = await axios.get('http://homelab.kerasi.ru/api/v1/plant/?format=json');
                 setData(response.data);
-            } catch (err) {
+            } catch (err) { 
                 setError(err);
             } finally {
                 setLoading(false);
@@ -33,27 +33,6 @@ export default function MainPage() {
                     {/* Контент для box1 */}
                 </div>
                 <div className='box2'>
-                <Card label={'ЭЭЭЭЭЭЖИ'} description={'ВАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'} />
-                <Card label={'ЭЭЭЭЭЭЖИ'} description={'ВАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'} />
-                <Card label={'ЭЭЭЭЭЭЖИ'} description={'ВАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'} />
-                <Card label={'ЭЭЭЭЭЭЖИ'} description={'ВАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'} />
-                <Card label={'ЭЭЭЭЭЭЖИ'} description={'ВАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'} />
-                <Card label={'ЭЭЭЭЭЭЖИ'} description={'ВАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'} />
-                <Card label={'ЭЭЭЭЭЭЖИ'} description={'ВАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'} />
-                <Card label={'ЭЭЭЭЭЭЖИ'} description={'ВАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'} />
-                <Card label={'ЭЭЭЭЭЭЖИ'} description={'ВАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'} />
-                <Card label={'ЭЭЭЭЭЭЖИ'} description={'ВАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'} />
-                <Card label={'ЭЭЭЭЭЭЖИ'} description={'ВАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'} />
-                <Card label={'ЭЭЭЭЭЭЖИ'} description={'ВАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'} />
-                <Card label={'ЭЭЭЭЭЭЖИ'} description={'ВАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'} />
-                <Card label={'ЭЭЭЭЭЭЖИ'} description={'ВАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'} />
-                <Card label={'ЭЭЭЭЭЭЖИ'} description={'ВАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'} />
-                <Card label={'ЭЭЭЭЭЭЖИ'} description={'ВАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'} />
-                <Card label={'ЭЭЭЭЭЭЖИ'} description={'ВАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'} />
-                <Card label={'ЭЭЭЭЭЭЖИ'} description={'ВАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'} />
-                {/* <Card label={'ЭЭЭЭЭЭЖИ'} description={'ВАЯЯЯЯЯЯЯЯЯЯЯЯЯЯЯ'} /> */}
- 
-
                     {loading ? (
                         <div className='centered-spinner'>
                             <div className="spinner"></div>
