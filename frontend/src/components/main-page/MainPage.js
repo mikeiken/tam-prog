@@ -32,7 +32,14 @@ export default function MainPage() {
                     {/* Контент для box1 */}
                 </div>
                 <div className='box2'>
-                    {loading ? (
+                    <Card label={'агурчек'} description={'абоба'}/>
+                    <Card label={'агурчек'} description={'абоба'}/>
+                    <Card label={'агурчек'} description={'абоба'}/>
+                    <Card label={'агурчек'} description={'абоба'}/>
+                    <Card label={'агурчек'} description={'абоба'}/>
+                    <Card label={'агурчек'} description={'абоба'}/>
+                    <Card label={'агурчек'} description={'абоба'}/>
+                    {/* {loading ? (
                         <div className='centered-spinner'>
                             <div className="spinner"></div>
                         </div>
@@ -44,7 +51,7 @@ export default function MainPage() {
                         data.map(item => (
                             <Card key={item.id} label={item.name} description={item.nutrients} />
                         ))
-                    )}
+                    )} */}
                 </div>
             </div>
         </div>
