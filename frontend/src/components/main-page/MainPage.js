@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Header from '../header/Header';
 import Card from '../card/Card';
 import './style.css';
-import axios from 'axios';
-
+import Instance from '../api/instance'
 export default function MainPage() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -13,7 +12,7 @@ export default function MainPage() {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get('http://homelab.kerasi.ru/api/v1/plant/?format=json');
+                const response = await Instance.get('/plant/?format=json');
                 setData(response.data);
             } catch (err) { 
                 setError(err);
