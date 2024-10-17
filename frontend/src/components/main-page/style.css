@@ -70,7 +70,7 @@ html {
     flex-wrap: wrap;
     gap: 20px;
     padding: 20px;
-    height: 44vw;
+    height: 46.4vw;
 }
 
 /* Блоки контента */
@@ -141,7 +141,25 @@ html {
 
 /* Адаптивные стили */
 /* Ограничение размеров для широких экранов */
-@media (min-width: 1921px) {
+
+@media (min-width: 1718px) {
+    .box1 {
+        max-width: 20%; /* Ограничиваем максимальную ширину */
+    }
+
+    .box2 {
+        max-width: 80%;
+        max-height: 1300px;
+    }
+
+    .content-container {
+        justify-content: center;
+        height: 72.5vw;
+    }
+}
+
+
+@media (min-width: 1920px) {
     .box1 {
         max-width: 20%; /* Ограничиваем максимальную ширину */
     }
@@ -152,13 +170,14 @@ html {
 
     .content-container {
         justify-content: center;
+        height: 46vw;
     }
 }
 
 @media (min-width: 2560px) {
     .box1 {
         max-width: 10%; 
-        max-height: 1160px;
+        max-height: 1250px;
 
     }
 
@@ -166,11 +185,11 @@ html {
         gap: 24px; /* Уменьшаем промежуток между карточками */
 
         max-width: 80%; 
-        max-height: 1160px;
+        max-height: 1250px;
     }
 
     .content-container {
-        max-height: 1160px;
+        max-height: 1250px;
     }
 }
 
