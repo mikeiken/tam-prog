@@ -60,15 +60,29 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-#CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = True
 
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    r'^https?://homelab.kerasi.ru$',  # основной фронт
-    r'^https?://homelab.kerasi.ru/api/v1/.*$',  # API
-    r'^https?://homelab.kerasi.ru/api/swagger/.*$',  # Swagger
-    r'^https?://homelab.kerasi.ru/redis-commander/.*$',  # Redis Commander
-    r'^https?://homelab.kerasi.ru/rabbitmq/.*$',  # RabbitMQ
-]
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_HEADERS = \
+    ['Access-Control-Allow-Origin',
+     'Access-Control-Allow-Credentials',
+     'headers',
+     'content-type',
+     'x-csrftoken',]
+
+CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT',
+                      'DELETE', 'OPTIONS', 'PATCH', 'UPDATE', 'DESTROY']
+
+#CORS_ALLOWED_ORIGIN_REGEXES = [
+#    r'^https?://homelab.kerasi.ru$',  # основной фронт
+#    r'^https?://homelab.kerasi.ru/api/v1/.*$',  # API
+#    r'^https?://homelab.kerasi.ru/api/swagger/.*$',  # Swagger
+#    r'^https?://homelab.kerasi.ru/redis-commander/.*$',  # Redis Commander
+#    r'^https?://homelab.kerasi.ru/rabbitmq/.*$',  # RabbitMQ
+#]
 
 ROOT_URLCONF = 'tamprog.urls'
 
