@@ -4,7 +4,7 @@ import Card from '../card/Card';
 import AddItemButton from '../add-item/AddItemButton';
 import './style.css';
 import axios from 'axios';
-
+import Instance from '../api/Instance';
 export default function MainPage() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -14,7 +14,7 @@ export default function MainPage() {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get('http://homelab.kerasi.ru/api/v1/plant/?format=json');
+                const response = await Instance.get('/plant/?format=json');
                 setData(response.data);
             } catch (err) {
                 setError(err);
@@ -43,7 +43,7 @@ export default function MainPage() {
                             <div className="spinner"></div>
                         </div>
                     ) : error ? (
-                        <p className='centered-spinner'>Error: {error.message}</p>
+                        <p className='centered-spinner'>{error.message}</p>
                     ) : data.length === 0 ? (
                         <p>Пусто</p>
                     ) : (
@@ -51,9 +51,9 @@ export default function MainPage() {
                             <Card key={item.id} label={item.name} description={item.nutrients} />
                         ))
                     )}
-                    {/* <AddItemButton onAdd={''} /> */}
                 </div>
-
+                {/* <AddItemButton onAdd={''} /> */}
+                
             </div>
         </div>
     );
