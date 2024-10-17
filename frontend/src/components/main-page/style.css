@@ -21,7 +21,7 @@ html {
     transition: transform 0.3s ease-out;
     z-index: 1;
     margin: 15px 20px 0 20px;
-    height: 11vh;
+    height: 84px;
 }
 
 .header:hover {
