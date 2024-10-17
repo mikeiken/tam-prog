@@ -1,9 +1,26 @@
-#from django.urls import path
 from django.urls import path, include
 from rest_framework import routers
 
 from .views import *
 
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from django.conf import settings
+from django.conf.urls.static import static
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Your Project API",
+        default_version='v1',
+        description="Electronic agronomist",
+        terms_of_service="https://www.google.com/policies/terms/",
+        contact=openapi.Contact(email="zarembiczkiy@mail.ru"),
+        license=openapi.License(name="BSD License"),
+    ),
+    public=True,
+    permission_classes=(permissions.AllowAny,),
+)
 
 router_agronomist = routers.SimpleRouter()
 router_agronomist.register(r'agronomist', AgronomistViewSet)
@@ -43,4 +60,6 @@ urlpatterns = [
     path('', include(router_plant.urls)),
     path('', include(router_plot.urls)),
     path('', include(router_order.urls)),
-]
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

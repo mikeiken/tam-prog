@@ -27,7 +27,8 @@ class GardenBed(models.Model):
     size = models.FloatField()
 
 class Fertilizer(models.Model):
-    #состав
+    #название,состав
+    name = models.CharField(max_length=1024)
     compound = models.CharField(max_length=1024)
 
 class User(models.Model):
