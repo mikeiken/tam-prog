@@ -181,6 +181,15 @@ html {
         max-height: 1250px;
 
     }
+    
+    .logo{
+        margin-left: 1000px;
+    }
+
+    .login-btn{
+        margin-right: 1000px;
+    }
+
 
     .box2 {
         gap: 24px; /* Уменьшаем промежуток между карточками */
