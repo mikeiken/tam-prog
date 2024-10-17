@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+import re
 
 # Load environment variables from .env file
 load_dotenv()
@@ -45,9 +46,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'garden',
     'drf_yasg',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -56,6 +59,30 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_HEADERS = \
+    ['Access-Control-Allow-Origin',
+     'Access-Control-Allow-Credentials',
+     'headers',
+     'content-type',
+     'x-csrftoken',]
+
+CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT',
+                      'DELETE', 'OPTIONS', 'PATCH', 'UPDATE', 'DESTROY']
+
+#CORS_ALLOWED_ORIGIN_REGEXES = [
+#    r'^https?://homelab.kerasi.ru$',  # основной фронт
+#    r'^https?://homelab.kerasi.ru/api/v1/.*$',  # API
+#    r'^https?://homelab.kerasi.ru/api/swagger/.*$',  # Swagger
+#    r'^https?://homelab.kerasi.ru/redis-commander/.*$',  # Redis Commander
+#    r'^https?://homelab.kerasi.ru/rabbitmq/.*$',  # RabbitMQ
+#]
 
 ROOT_URLCONF = 'tamprog.urls'
 
@@ -147,3 +174,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static-dj')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 30
+}
