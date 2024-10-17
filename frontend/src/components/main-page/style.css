@@ -96,12 +96,20 @@ html {
     padding: 20px;
     display: flex;
     flex-wrap: wrap;
-    gap: 40px;
+    gap: 20px 0; /* Устанавливаем горизонтальный gap и убираем вертикальный */
+    justify-content: flex-start;
     overflow-y: auto;
-    transition: .3s ease;
-    height: 100%; /* Установить фиксированную высоту при необходимости */
-
+    transition: 0.3s ease;
+    height: 100%;
 }
+
+.box2 .card {
+    flex: 0 0 220px; /* Фиксированная ширина карточки */
+    max-width: 220px;
+    height: 300px; /* Фиксированная высота карточки */
+    margin-bottom: 0; /* Убираем нижний отступ между карточками */
+}
+
 
 /* Спиннер */
 .spinner {
@@ -132,6 +140,39 @@ html {
 }
 
 /* Адаптивные стили */
+/* Ограничение размеров для широких экранов */
+@media (min-width: 1921px) {
+    .box1 {
+        max-width: 20%; /* Ограничиваем максимальную ширину */
+    }
+
+    .box2 {
+        max-width: 1200px;
+    }
+
+    .content-container {
+        justify-content: center;
+    }
+}
+
+@media (min-width: 2560px) {
+    .box1 {
+        max-width: 10%; 
+        max-height: 1160px;
+
+    }
+
+    .box2 {
+        gap: 24px; /* Уменьшаем промежуток между карточками */
+
+        max-width: 80%; 
+        max-height: 1160px;
+    }
+
+    .content-container {
+        max-height: 1160px;
+    }
+}
 
 
 @media (max-width: 1200px) {
