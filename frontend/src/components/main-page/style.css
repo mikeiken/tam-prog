@@ -71,6 +71,7 @@ html {
     gap: 20px;
     padding: 20px;
     height: 46.4vw;
+    justify-content: center;
 }
 
 /* Блоки контента */
@@ -171,11 +172,40 @@ html {
 
     .content-container {
         justify-content: center;
-        height: 46vw;
+        height: 45vw;
     }
 }
 
 @media (min-width: 2560px) {
+    .box1 {
+        max-width: 10%; 
+        max-height: 1250px;
+
+    }
+    
+    .logo{
+        margin-left: 800px;
+    }
+
+    .login-btn{
+        margin-right: 800px;
+    }
+
+
+    .box2 {
+        gap: 24px; /* Уменьшаем промежуток между карточками */
+
+        max-width: 80%; 
+        max-height: 1250px;
+    }
+
+    .content-container {
+        justify-content: center;
+        max-height: 1250px;
+    }
+}
+
+@media (min-width: 3440px) {
     .box1 {
         max-width: 10%; 
         max-height: 1250px;
@@ -199,6 +229,7 @@ html {
     }
 
     .content-container {
+        justify-content: center;
         max-height: 1250px;
     }
 }
