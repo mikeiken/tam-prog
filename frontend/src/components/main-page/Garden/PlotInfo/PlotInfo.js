@@ -24,7 +24,14 @@ export default function PlotInfo() {
     }, []);
     return (
         <div className='box2'>
-            {loading ? (
+            <Card />
+            <Card />
+            <Card />
+            <Card />
+            <Card />
+            <Card />
+            <Card />
+            {/* {loading ? (
                 <div className='centered-spinner'>
                     <div className="spinner"></div>
                 </div>
@@ -42,7 +49,7 @@ export default function PlotInfo() {
                 data.map(item => (
                     <Card key={item.id} label={item.name} description={item.nutrients} />
                 ))
-            )}
+            )} */}
         </div>
     )
 }

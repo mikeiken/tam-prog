@@ -2,10 +2,6 @@
     box-sizing: border-box;
 }
 
-.main {
-    overflow: hidden;
-}
-
 body,
 html {
     margin: 0;
@@ -76,7 +72,8 @@ html {
 .navbar {
     display: flex;
     gap: 20px;
-    position: relative; /* Для размещения псевдоэлемента */
+    position: relative;
+    /* Для размещения псевдоэлемента */
 }
 
 .navbar a {
@@ -84,7 +81,8 @@ html {
     font-size: 18px;
     font-weight: bold;
     color: #96c2a8;
-    position: relative; /* Для позиционирования псевдоэлемента */
+    position: relative;
+    /* Для позиционирования псевдоэлемента */
 }
 
 .navbar a::before {
@@ -95,14 +93,14 @@ html {
     left: 0;
     right: 0;
     height: 2px;
-    background-color: #96c2a8; 
-    transform: scaleX(1); 
-    transform-origin: left; 
-    transition: transform 0.3s ease; 
+    background-color: #96c2a8;
+    transform: scaleX(1);
+    transform-origin: left;
+    transition: transform 0.3s ease;
 }
 
 .navbar a:hover::before {
-    transform: scaleX(0); 
+    transform: scaleX(0);
 }
 
 
@@ -114,7 +112,7 @@ html {
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
-    font-weight:800;
+    font-weight: 800;
     font-size: 15px;
 }
 
@@ -129,6 +127,7 @@ html {
     padding: 20px;
     height: 46.4vw;
     justify-content: center;
+    overflow: hidden;
 }
 
 .box1 {
@@ -278,8 +277,7 @@ html {
 
     .loading-container,
     .error-container,
-    .empty-container
-    {
+    .empty-container {
         margin-top: 16vw;
     }
 
@@ -302,15 +300,13 @@ html {
 
     .loading-container,
     .error-container,
-    .empty-container
-    {
+    .empty-container {
         margin-top: 18vw;
 
     }
 
     .box2 {
         gap: 24px;
-        /* Уменьшаем промежуток между карточками */
 
         max-width: 70%;
         max-height: 1250px;
@@ -339,16 +335,13 @@ html {
 
     .loading-container,
     .error-container,
-    .empty-container
-    {
+    .empty-container {
         margin-top: 15vw;
 
     }
 
     .box2 {
         gap: 24px;
-        /* Уменьшаем промежуток между карточками */
-
         max-width: 80%;
         max-height: 1250px;
     }
@@ -368,12 +361,45 @@ html {
         margin-bottom: 20px;
     }
 
+    .content-container {
+        justify-content: center;
+        max-height: 1150px;
+        overflow:inherit;
+    }
+
     .box1 {
         height: 45%;
     }
 
     .box2 {
-        height: 160%;
+        height: 140%;
+    }
+
+    .content-container {
+        gap: 0;
+    }
+}
+
+@media (max-width: 1280px) {
+
+    .box1,
+    .box2 {
+        flex: 1 1 100%;
+        margin-bottom: 20px;
+    }
+
+    .content-container {
+        justify-content: center;
+        max-height: 950px;
+        overflow:inherit;
+    }
+
+    .box1 {
+        height: 45%;
+    }
+
+    .box2 {
+        height: 119%;
     }
 
     .content-container {
