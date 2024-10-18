@@ -2,6 +2,9 @@
     box-sizing: border-box;
 }
 
+.main {
+    overflow: hidden;
+}
 body,
 html {
     margin: 0;
@@ -9,6 +12,37 @@ html {
     height: 90vh;
     font-family: Arial, sans-serif;
 }
+
+.main-enter-active{
+    animation: fade-rotate-scale-in 0.7s forwards;
+}
+
+.main-exit-active{
+    animation: fade-rotate-scale-out 0.7s forwards;
+}
+
+@keyframes fade-rotate-scale-in {
+    0%{
+        opacity: 0;
+        transform: translateX(100%) scale(0.8) rotate(10deg);
+    }
+    100%{
+        opacity: 1;
+        transform: translateX(0) scale(1) rotate(0deg);
+    }
+}
+
+@keyframes fade-rotate-scale-out {
+    0%{
+        opacity: 1;
+        transform: translateX(0) scale(1) rotate(0deg);
+    }
+    100%{
+        opacity: 0;
+        transform: translateX(100%) scale(0.8) rotate(-10deg);
+    }
+}
+
 
 .header {
     display: flex;
@@ -139,6 +173,39 @@ html {
     100% {
         transform: rotate(360deg);
     }
+}
+
+.about-wrapper{
+    padding: 20px;
+
+    width: 200px;
+    height: 200px;
+    background-color: #3498db;
+    margin: 2vh;
+    border-radius: 20px;
+
+}
+
+.license-wrapper{
+    padding: 20px;
+
+    width: 200px;
+    height: 200px;
+    background-color: purple;
+    margin: 2vh;
+    border-radius: 20px;
+
+}
+
+.contractor-wrapper{
+    padding: 20px;
+
+    width: 200px;
+    height: 200px;
+    background-color: #8a927a;
+    border-radius: 20px;
+    margin: 2vh;
+
 }
 
 /* Адаптивные стили */
