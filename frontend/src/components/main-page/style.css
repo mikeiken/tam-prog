@@ -240,27 +240,95 @@ html {
 }
 
 
-
 /* Адаптивные стили */
 /* Ограничение размеров для широких экранов */
-@media (min-width: 1718px) {
+
+@media (max-width: 1280px) and (min-height: 1440px) {
     .box1 {
         max-width: 20%;
-        /* Ограничиваем максимальную ширину */
     }
 
     .box2 {
         max-width: 80%;
-        max-height: 1300px;
+    }
+
+    .content-container {
+        display: flex;
+        flex-direction: 1 1 auto;
+        justify-content: center;
+        height: 111.5vw;
+        max-height: 900vh;
+    }
+}
+
+@media (max-width: 1920px) and (max-height: 1080px) {
+    .box1 {
+        max-width: 20%;
+    }
+
+    .box2 {
+        max-width: 80%;
     }
 
     .content-container {
         justify-content: center;
-        height: 72.5vw;
+        height: 172.5vw;
+        max-height: 90vh;
     }
 }
 
 
+@media (max-width: 1200px) and (max-height: 1080px) {
+    .box1 {
+        max-width: 20%;
+    }
+
+    .box2 {
+        max-width: 80%;
+    }
+
+    .content-container {
+        justify-content: center;
+        height: 172.5vw;
+        max-height: 90vh;
+    }
+}
+
+
+@media (max-width: 1718px) and (max-height: 1440px) {
+    .box1 {
+        max-width: 20%;
+    }
+
+    .box2 {
+        max-width: 80%;
+    }
+
+    .content-container {
+        justify-content: center;
+        height: 172.5vw;
+        max-height: 90vh;
+    }
+}
+
+@media (max-width: 1280px) and (max-height: 1080px) {
+    .box1 {
+        max-width: 100%;
+        max-height: 200px;
+    }
+
+    .box2 {
+        max-width: 100%;
+        max-height: 630px;
+    }
+
+    .content-container {
+        display: flex;
+        justify-content: center;
+        height: 90vh;
+        max-height: 87vh;
+    }
+}
 @media (min-width: 1920px) {
     .box1 {
         max-width: 20%;
@@ -287,7 +355,6 @@ html {
     .box1 {
         max-width: 20%;
         max-height: 1250px;
-
     }
 
     .logo {
@@ -373,33 +440,6 @@ html {
 
     .box2 {
         height: 140%;
-    }
-
-    .content-container {
-        gap: 0;
-    }
-}
-
-@media (max-width: 1280px) {
-
-    .box1,
-    .box2 {
-        flex: 1 1 100%;
-        margin-bottom: 20px;
-    }
-
-    .content-container {
-        justify-content: center;
-        max-height: 950px;
-        overflow:inherit;
-    }
-
-    .box1 {
-        height: 45%;
-    }
-
-    .box2 {
-        height: 119%;
     }
 
     .content-container {
