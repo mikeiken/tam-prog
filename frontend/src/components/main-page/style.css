@@ -5,6 +5,7 @@
 .main {
     overflow: hidden;
 }
+
 body,
 html {
     margin: 0;
@@ -12,6 +13,7 @@ html {
     height: 90vh;
     font-family: Arial, sans-serif;
 }
+
 
 .main-enter-active {
     animation: depth-in 0.7s forwards;
@@ -26,6 +28,7 @@ html {
         opacity: 0;
         transform: translateZ(-100px) scale(0.95);
     }
+
     100% {
         opacity: 1;
         transform: translateZ(0) scale(1);
@@ -37,6 +40,7 @@ html {
         opacity: 1;
         transform: translateZ(0) scale(1);
     }
+
     100% {
         opacity: 0;
         transform: translateZ(-100px) scale(0.95);
@@ -145,13 +149,13 @@ html {
     align-items: center;
 }
 
-.text-color{
+.text-color {
     color: #96c2a8;
     font-size: var(--font-size);
     font-weight: 800;
 }
 
-.about-wrapper{
+.about-wrapper {
     padding: 20px;
     max-width: 83%;
     height: 43vw;
@@ -162,7 +166,7 @@ html {
 
 }
 
-.license-wrapper{
+.license-wrapper {
     padding: 20px;
     max-width: 83%;
     height: 43vw;
@@ -173,21 +177,24 @@ html {
 
 }
 
-.contractor-wrapper{
+.contractor-wrapper {
     padding: 20px;
     max-width: 83%;
     height: 43vw;
     max-height: 100%;
-    background-color: rgb(138, 146, 122,0.5);
+    background-color: rgb(138, 146, 122, 0.5);
     border-radius: 20px;
     margin: 2vh auto;
 }
 
 .box2 .card {
-    flex: 0 0 220px; /* Фиксированная ширина карточки */
+    flex: 0 0 220px;
+    /* Фиксированная ширина карточки */
     max-width: 220px;
-    height: 300px; /* Фиксированная высота карточки */
-    margin-bottom: 0; /* Убираем нижний отступ между карточками */
+    height: 300px;
+    /* Фиксированная высота карточки */
+    margin-bottom: 0;
+    /* Убираем нижний отступ между карточками */
 }
 
 
@@ -225,7 +232,8 @@ html {
 /* Ограничение размеров для широких экранов */
 @media (min-width: 1718px) {
     .box1 {
-        max-width: 20%; /* Ограничиваем максимальную ширину */
+        max-width: 20%;
+        /* Ограничиваем максимальную ширину */
     }
 
     .box2 {
@@ -242,7 +250,8 @@ html {
 
 @media (min-width: 1920px) {
     .box1 {
-        max-width: 20%; /* Ограничиваем максимальную ширину */
+        max-width: 20%;
+        /* Ограничиваем максимальную ширину */
     }
 
     .box2 {
@@ -258,24 +267,25 @@ html {
 
 @media (min-width: 2560px) {
     .box1 {
-        max-width: 10%; 
+        max-width: 10%;
         max-height: 1250px;
 
     }
-    
-    .logo{
+
+    .logo {
         margin-left: 800px;
     }
 
-    .login-btn{
+    .login-btn {
         margin-right: 800px;
     }
 
 
     .box2 {
-        gap: 24px; /* Уменьшаем промежуток между карточками */
+        gap: 24px;
+        /* Уменьшаем промежуток между карточками */
 
-        max-width: 80%; 
+        max-width: 80%;
         max-height: 1250px;
     }
 
@@ -287,24 +297,25 @@ html {
 
 @media (min-width: 3440px) {
     .box1 {
-        max-width: 10%; 
+        max-width: 10%;
         max-height: 1250px;
 
     }
-    
-    .logo{
+
+    .logo {
         margin-left: 1000px;
     }
 
-    .login-btn{
+    .login-btn {
         margin-right: 1000px;
     }
 
 
     .box2 {
-        gap: 24px; /* Уменьшаем промежуток между карточками */
+        gap: 24px;
+        /* Уменьшаем промежуток между карточками */
 
-        max-width: 80%; 
+        max-width: 80%;
         max-height: 1250px;
     }
 
@@ -323,15 +334,15 @@ html {
         margin-bottom: 20px;
     }
 
-    .box1{
+    .box1 {
         height: 45%;
     }
 
-    .box2{
+    .box2 {
         height: 160%;
     }
 
-    .content-container{
+    .content-container {
         gap: 0;
     }
 }
