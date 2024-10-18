@@ -102,7 +102,6 @@ html {
     background-color: #8a927a;
 }
 
-/* Контейнер для контента */
 .content-container {
     display: flex;
     flex-wrap: wrap;
@@ -112,20 +111,15 @@ html {
     justify-content: center;
 }
 
-/* Блоки контента */
 .box1 {
     flex: 1 1 25%;
-    /* Минимум 25%, но можно расширяться */
     background-color: rgba(129, 186, 131, 0.5);
     border-radius: 20px;
     padding: 20px;
     transition: transform 0.3s ease;
-    /* height: 100%; Установить фиксированную высоту при необходимости */
 
-}
-
-.box1:hover {
-    transform: scale(1.005);
+    height: 100%;
+    overflow-y: auto;
 }
 
 .box2 {
@@ -251,7 +245,6 @@ html {
 @media (min-width: 1920px) {
     .box1 {
         max-width: 20%;
-        /* Ограничиваем максимальную ширину */
     }
 
     .box2 {
@@ -267,7 +260,7 @@ html {
 
 @media (min-width: 2560px) {
     .box1 {
-        max-width: 10%;
+        max-width: 20%;
         max-height: 1250px;
 
     }
@@ -280,12 +273,19 @@ html {
         margin-right: 800px;
     }
 
+    .loading-container,
+    .error-container,
+    .empty-container
+    {
+        margin-top: 18vw;
+
+    }
 
     .box2 {
         gap: 24px;
         /* Уменьшаем промежуток между карточками */
 
-        max-width: 80%;
+        max-width: 70%;
         max-height: 1250px;
     }
 
@@ -310,6 +310,13 @@ html {
         margin-right: 1000px;
     }
 
+    .loading-container,
+    .error-container,
+    .empty-container
+    {
+        margin-top: 15vw;
+
+    }
 
     .box2 {
         gap: 24px;
