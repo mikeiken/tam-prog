@@ -19,14 +19,14 @@ export default function Header() {
         { path: '/login', Component: AuthForm }, // Маршрут для AuthForm
     ];
 
-    const isLoginRoute = location.pathname === '/login';  // Проверка, если это маршрут /login
+    const isLoginRoute = location.pathname === '/login';
 
     return (
         <>
             <header className='header'>
                 <img className='logo' src={process.env.PUBLIC_URL + '/logo.png'} alt="Logo" />
                 <nav className='navbar'>
-                    <Link to='/'>Участки</Link>
+                    <Link to=''>Участки</Link>
                     <Link to='/contractor'>Подрядчики</Link>
                     <Link to='/license'>Лицензия</Link>
                     <Link to='/about'>О нас</Link>
@@ -36,12 +36,11 @@ export default function Header() {
                 </Link>
             </header>
 
-            {/* Если это не маршрут /login, показываем анимацию */}
             {!isLoginRoute ? (
                 <SwitchTransition>
                     <CSSTransition
                         key={location.key}
-                        timeout={1000}
+                        timeout={530}
                         classNames="main"
                         unmountOnExit
                     >

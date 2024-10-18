@@ -70,11 +70,13 @@ html {
     max-width: 150px;
     height: auto;
     width: 150px;
+    cursor: pointer;
 }
 
 .navbar {
     display: flex;
     gap: 20px;
+    position: relative; /* Для размещения псевдоэлемента */
 }
 
 .navbar a {
@@ -82,11 +84,27 @@ html {
     font-size: 18px;
     font-weight: bold;
     color: #96c2a8;
+    position: relative; /* Для позиционирования псевдоэлемента */
 }
 
-.navbar a:hover {
-    color: #649173;
+.navbar a::before {
+    border-radius: 20px;
+    content: '';
+    position: absolute;
+    bottom: 110%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #96c2a8; 
+    transform: scaleX(1); 
+    transform-origin: left; 
+    transition: transform 0.3s ease; 
 }
+
+.navbar a:hover::before {
+    transform: scaleX(0); 
+}
+
 
 .login-btn {
     padding: 10px 20px;
@@ -96,6 +114,8 @@ html {
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
+    font-weight:800;
+    font-size: 15px;
 }
 
 .login-btn:hover {
