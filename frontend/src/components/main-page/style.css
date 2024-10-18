@@ -256,6 +256,13 @@ html {
         height: 45vw;
     }
 
+    .loading-container,
+    .error-container,
+    .empty-container
+    {
+        margin-top: 16vw;
+    }
+
 }
 
 @media (min-width: 2560px) {
