@@ -13,33 +13,33 @@ html {
     font-family: Arial, sans-serif;
 }
 
-.main-enter-active{
-    animation: fade-rotate-scale-in 0.7s forwards;
+.main-enter-active {
+    animation: depth-in 0.7s forwards;
 }
 
-.main-exit-active{
-    animation: fade-rotate-scale-out 0.7s forwards;
+.main-exit-active {
+    animation: depth-out 0.7s forwards;
 }
 
-@keyframes fade-rotate-scale-in {
-    0%{
+@keyframes depth-in {
+    0% {
         opacity: 0;
-        transform: translateX(100%) scale(0.8) rotate(10deg);
+        transform: translateZ(-100px) scale(0.95);
     }
-    100%{
+    100% {
         opacity: 1;
-        transform: translateX(0) scale(1) rotate(0deg);
+        transform: translateZ(0) scale(1);
     }
 }
 
-@keyframes fade-rotate-scale-out {
-    0%{
+@keyframes depth-out {
+    0% {
         opacity: 1;
-        transform: translateX(0) scale(1) rotate(0deg);
+        transform: translateZ(0) scale(1);
     }
-    100%{
+    100% {
         opacity: 0;
-        transform: translateX(100%) scale(0.8) rotate(-10deg);
+        transform: translateZ(-100px) scale(0.95);
     }
 }
 
@@ -178,10 +178,11 @@ html {
 .about-wrapper{
     padding: 20px;
 
-    width: 200px;
-    height: 200px;
+    max-width: 83%;
+    height: 43vw;
+    max-height: 100%;
     background-color: #3498db;
-    margin: 2vh;
+    margin: 2vh auto;
     border-radius: 20px;
 
 }
@@ -192,7 +193,7 @@ html {
     width: 200px;
     height: 200px;
     background-color: purple;
-    margin: 2vh;
+    margin: 2vh auto;
     border-radius: 20px;
 
 }
@@ -204,13 +205,11 @@ html {
     height: 200px;
     background-color: #8a927a;
     border-radius: 20px;
-    margin: 2vh;
-
+    margin: 2vh auto;
 }
 
 /* Адаптивные стили */
 /* Ограничение размеров для широких экранов */
-
 @media (min-width: 1718px) {
     .box1 {
         max-width: 20%; /* Ограничиваем максимальную ширину */
@@ -241,6 +240,7 @@ html {
         justify-content: center;
         height: 45vw;
     }
+
 }
 
 @media (min-width: 2560px) {
