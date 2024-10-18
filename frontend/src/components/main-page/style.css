@@ -10,6 +10,40 @@ html {
     font-family: Arial, sans-serif;
 }
 
+
+.main-enter-active {
+    animation: depth-in 0.7s forwards;
+}
+
+.main-exit-active {
+    animation: depth-out 0.7s forwards;
+}
+
+@keyframes depth-in {
+    0% {
+        opacity: 0;
+        transform: translateZ(-100px) scale(0.95);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateZ(0) scale(1);
+    }
+}
+
+@keyframes depth-out {
+    0% {
+        opacity: 1;
+        transform: translateZ(0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateZ(-100px) scale(0.95);
+    }
+}
+
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -32,11 +66,14 @@ html {
     max-width: 150px;
     height: auto;
     width: 150px;
+    cursor: pointer;
 }
 
 .navbar {
     display: flex;
     gap: 20px;
+    position: relative;
+    /* Для размещения псевдоэлемента */
 }
 
 .navbar a {
@@ -44,11 +81,28 @@ html {
     font-size: 18px;
     font-weight: bold;
     color: #96c2a8;
+    position: relative;
+    /* Для позиционирования псевдоэлемента */
 }
 
-.navbar a:hover {
-    color: #649173;
+.navbar a::before {
+    border-radius: 20px;
+    content: '';
+    position: absolute;
+    bottom: 110%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #96c2a8;
+    transform: scaleX(1);
+    transform-origin: left;
+    transition: transform 0.3s ease;
 }
+
+.navbar a:hover::before {
+    transform: scaleX(0);
+}
+
 
 .login-btn {
     padding: 10px 20px;
@@ -58,35 +112,33 @@ html {
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
+    font-weight: 800;
+    font-size: 15px;
 }
 
 .login-btn:hover {
     background-color: #8a927a;
 }
 
-/* Контейнер для контента */
 .content-container {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     padding: 20px;
     height: 46.4vw;
+    justify-content: center;
+    overflow: hidden;
 }
 
-/* Блоки контента */
 .box1 {
     flex: 1 1 25%;
-    /* Минимум 25%, но можно расширяться */
     background-color: rgba(129, 186, 131, 0.5);
     border-radius: 20px;
     padding: 20px;
     transition: transform 0.3s ease;
-    /* height: 100%; Установить фиксированную высоту при необходимости */
 
-}
-
-.box1:hover {
-    transform: scale(1.005);
+    height: 100%;
+    overflow-y: auto;
 }
 
 .box2 {
@@ -104,11 +156,58 @@ html {
     align-content: flex-start;
 }
 
+.centered-into-wrappers {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text-color {
+    color: #96c2a8;
+    font-size: var(--font-size);
+    font-weight: 800;
+}
+
+.about-wrapper {
+    padding: 20px;
+    max-width: 83%;
+    height: 43vw;
+    max-height: 100%;
+    background-color: rgb(51, 152, 219, 0.5);
+    margin: 2vh auto;
+    border-radius: 20px;
+
+}
+
+.license-wrapper {
+    padding: 20px;
+    max-width: 83%;
+    height: 43vw;
+    max-height: 100%;
+    background-color: rgb(128, 0, 128, 0.5);
+    margin: 2vh auto;
+    border-radius: 20px;
+
+}
+
+.contractor-wrapper {
+    padding: 20px;
+    max-width: 83%;
+    height: 43vw;
+    max-height: 100%;
+    background-color: rgb(138, 146, 122, 0.5);
+    border-radius: 20px;
+    margin: 2vh auto;
+}
+
 .box2 .card {
-    flex: 0 0 220px; /* Фиксированная ширина карточки */
+    flex: 0 0 220px;
+    /* Фиксированная ширина карточки */
     max-width: 220px;
-    height: 300px; /* Фиксированная высота карточки */
-    margin-bottom: 0; /* Убираем нижний отступ между карточками */
+    height: 300px;
+    /* Фиксированная высота карточки */
+    margin-bottom: 0;
+    /* Убираем нижний отступ между карточками */
 }
 
 
@@ -140,29 +239,99 @@ html {
     }
 }
 
+
 /* Адаптивные стили */
 /* Ограничение размеров для широких экранов */
 
-@media (min-width: 1718px) {
+@media (max-width: 1280px) and (min-height: 1440px) {
     .box1 {
-        max-width: 20%; /* Ограничиваем максимальную ширину */
+        max-width: 20%;
     }
 
     .box2 {
         max-width: 80%;
-        max-height: 1300px;
+    }
+
+    .content-container {
+        display: flex;
+        flex-direction: 1 1 auto;
+        justify-content: center;
+        height: 111.5vw;
+        max-height: 900vh;
+    }
+}
+
+@media (max-width: 1920px) and (max-height: 1080px) {
+    .box1 {
+        max-width: 20%;
+    }
+
+    .box2 {
+        max-width: 80%;
     }
 
     .content-container {
         justify-content: center;
-        height: 72.5vw;
+        height: 172.5vw;
+        max-height: 90vh;
     }
 }
 
 
+@media (max-width: 1200px) and (max-height: 1080px) {
+    .box1 {
+        max-width: 20%;
+    }
+
+    .box2 {
+        max-width: 80%;
+    }
+
+    .content-container {
+        justify-content: center;
+        height: 172.5vw;
+        max-height: 90vh;
+    }
+}
+
+
+@media (max-width: 1718px) and (max-height: 1440px) {
+    .box1 {
+        max-width: 20%;
+    }
+
+    .box2 {
+        max-width: 80%;
+    }
+
+    .content-container {
+        justify-content: center;
+        height: 172.5vw;
+        max-height: 90vh;
+    }
+}
+
+@media (max-width: 1280px) and (max-height: 1080px) {
+    .box1 {
+        max-width: 100%;
+        max-height: 200px;
+    }
+
+    .box2 {
+        max-width: 100%;
+        max-height: 630px;
+    }
+
+    .content-container {
+        display: flex;
+        justify-content: center;
+        height: 90vh;
+        max-height: 87vh;
+    }
+}
 @media (min-width: 1920px) {
     .box1 {
-        max-width: 20%; /* Ограничиваем максимальную ширину */
+        max-width: 20%;
     }
 
     .box2 {
@@ -171,34 +340,81 @@ html {
 
     .content-container {
         justify-content: center;
-        height: 46vw;
+        height: 45vw;
     }
+
+    .loading-container,
+    .error-container,
+    .empty-container {
+        margin-top: 16vw;
+    }
+
 }
 
 @media (min-width: 2560px) {
     .box1 {
-        max-width: 10%; 
+        max-width: 20%;
         max-height: 1250px;
-
-    }
-    
-    .logo{
-        margin-left: 1000px;
     }
 
-    .login-btn{
-        margin-right: 1000px;
+    .logo {
+        margin-left: 800px;
     }
 
+    .login-btn {
+        margin-right: 800px;
+    }
+
+    .loading-container,
+    .error-container,
+    .empty-container {
+        margin-top: 18vw;
+
+    }
 
     .box2 {
-        gap: 24px; /* Уменьшаем промежуток между карточками */
+        gap: 24px;
 
-        max-width: 80%; 
+        max-width: 70%;
         max-height: 1250px;
     }
 
     .content-container {
+        justify-content: center;
+        max-height: 1250px;
+    }
+}
+
+@media (min-width: 3440px) {
+    .box1 {
+        max-width: 10%;
+        max-height: 1250px;
+
+    }
+
+    .logo {
+        margin-left: 1000px;
+    }
+
+    .login-btn {
+        margin-right: 1000px;
+    }
+
+    .loading-container,
+    .error-container,
+    .empty-container {
+        margin-top: 15vw;
+
+    }
+
+    .box2 {
+        gap: 24px;
+        max-width: 80%;
+        max-height: 1250px;
+    }
+
+    .content-container {
+        justify-content: center;
         max-height: 1250px;
     }
 }
@@ -212,15 +428,21 @@ html {
         margin-bottom: 20px;
     }
 
-    .box1{
+    .content-container {
+        justify-content: center;
+        max-height: 1150px;
+        overflow:inherit;
+    }
+
+    .box1 {
         height: 45%;
     }
 
-    .box2{
-        height: 160%;
+    .box2 {
+        height: 140%;
     }
 
-    .content-container{
+    .content-container {
         gap: 0;
     }
 }

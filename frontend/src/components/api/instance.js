@@ -20,4 +20,5 @@ const Instance = axios.create({
     xsrfHeaderName: 'X-XSRF-TOKEN',
 })
 
+
 export default Instance
