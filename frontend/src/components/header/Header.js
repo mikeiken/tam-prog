@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import AuthForm from '../auth/auth';
 import Garden from '../main-page/Garden/Garden';
@@ -9,15 +9,17 @@ import { CSSTransition, SwitchTransition } from "react-transition-group";
 import '../main-page/style.css';
 
 export default function Header() {
-    const location = useLocation();
+    const location = useLocation();  // Получаем текущее местоположение
 
     const routes = [
         { path: '/', Component: Garden },
         { path: '/about', Component: About },
         { path: '/license', Component: License },
         { path: '/contractor', Component: Conractor },
-        { path: '/login', Component: AuthForm }, // Обновите маршрут для AuthForm
+        { path: '/login', Component: AuthForm }, // Маршрут для AuthForm
     ];
+
+    const isLoginRoute = location.pathname === '/login';  // Проверка, если это маршрут /login
 
     return (
         <>
@@ -34,20 +36,30 @@ export default function Header() {
                 </Link>
             </header>
 
-            <SwitchTransition>
-                <CSSTransition
-                    key={location.key}
-                    timeout={1000}
-                    classNames="main"
-                    unmountOnExit
-                >
-                    <Routes location={location}>
-                        {routes.map(({ path, Component }) => (
-                            <Route key={path} path={path} element={<Component />} />
-                        ))}
-                    </Routes>
-                </CSSTransition>
-            </SwitchTransition>
+            {/* Если это не маршрут /login, показываем анимацию */}
+            {!isLoginRoute ? (
+                <SwitchTransition>
+                    <CSSTransition
+                        key={location.key}
+                        timeout={1000}
+                        classNames="main"
+                        unmountOnExit
+                    >
+                        <Routes location={location}>
+                            {routes.map(({ path, Component }) => (
+                                <Route key={path} path={path} element={<Component />} />
+                            ))}
+                        </Routes>
+                    </CSSTransition>
+                </SwitchTransition>
+            ) : (
+                // Если это /login, показываем компонент без анимации
+                <Routes location={location}>
+                    {routes.map(({ path, Component }) => (
+                        <Route key={path} path={path} element={<Component />} />
+                    ))}
+                </Routes>
+            )}
         </>
     );
 }
