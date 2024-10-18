@@ -13,7 +13,7 @@ export default function Form() {
             width: '24px',  // Задаем ширину
             height: '24px'
           }}
-            src={process.env.PUBLIC_URL + '/user.png'}></img>
+            src={process.env.PUBLIC_URL + '/user.png'} alt='text'></img>
         </div>
 
         <div className='input-box'>
@@ -26,7 +26,7 @@ export default function Form() {
               width: '24px',  // Задаем ширину
               height: '24px'
             }}
-            src={process.env.PUBLIC_URL + '/lock.png'}>
+            src={process.env.PUBLIC_URL + '/lock.png'} alt='text'>
           </img>
         </div>
 
