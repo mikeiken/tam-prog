@@ -139,9 +139,20 @@ html {
     align-content: flex-start;
 }
 
+.centered-into-wrappers {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text-color{
+    color: #96c2a8;
+    font-size: var(--font-size);
+    font-weight: 800;
+}
+
 .about-wrapper{
     padding: 20px;
-
     max-width: 83%;
     height: 43vw;
     max-height: 100%;
@@ -153,9 +164,9 @@ html {
 
 .license-wrapper{
     padding: 20px;
-
-    width: 200px;
-    height: 200px;
+    max-width: 83%;
+    height: 43vw;
+    max-height: 100%;
     background-color: rgb(128, 0, 128, 0.5);
     margin: 2vh auto;
     border-radius: 20px;
@@ -164,9 +175,9 @@ html {
 
 .contractor-wrapper{
     padding: 20px;
-
-    width: 200px;
-    height: 200px;
+    max-width: 83%;
+    height: 43vw;
+    max-height: 100%;
     background-color: rgb(138, 146, 122,0.5);
     border-radius: 20px;
     margin: 2vh auto;
