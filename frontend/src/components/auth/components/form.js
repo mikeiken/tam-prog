@@ -1,4 +1,6 @@
 import React from 'react'
+import { Link, Routes, Route } from 'react-router-dom'
+import MainPage from '../../main-page/MainPage'
 export default function Form() {
   return (
     <div className='wrapper'>
@@ -37,9 +39,14 @@ export default function Form() {
 
         <button type='submit' className='btn'>Login</button>
         <div className='register-link'>
-          <p>Don't have an account? <a href='/'>Register</a></p>
+          <p>Don't have an account?
+            <Link to='/main'>Register</Link>
+          </p>
         </div>
       </form>
+      <Routes>
+          <Route path='/main' element={<MainPage />} />
+      </Routes>
     </div>
   )
 }
