@@ -11,7 +11,10 @@ db.sqlite3
 .logs/
 django/*staticfiles/
 django/*static/
-
+.coverage
+coverage.html
+cov.xml
+style.css
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
 # Byte-compiled / optimized / DLL files

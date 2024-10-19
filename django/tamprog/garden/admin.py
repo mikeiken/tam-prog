@@ -10,4 +10,6 @@ admin.site.register(User)
 admin.site.register(Plant)
 admin.site.register(Plot)
 admin.site.register(Order)
+admin.site.register(AvailablePlants)
+
 
