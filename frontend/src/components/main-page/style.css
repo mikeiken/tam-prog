@@ -10,6 +10,43 @@ html {
     font-family: Arial, sans-serif;
 }
 
+.main {
+    overflow: hidden;
+}
+
+.main-enter-active {
+    animation: depth-in 0.7s forwards;
+}
+
+.main-exit-active {
+    animation: depth-out 0.7s forwards;
+}
+
+@keyframes depth-in {
+    0% {
+        opacity: 0;
+        transform: translateZ(-100px) scale(0.95);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateZ(0) scale(1);
+    }
+}
+
+@keyframes depth-out {
+    0% {
+        opacity: 1;
+        transform: translateZ(0) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateZ(-100px) scale(0.95);
+    }
+}
+
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -31,24 +68,46 @@ html {
 .logo {
     max-width: 150px;
     height: auto;
-    width: 150px;
+    width: 140px;
+    cursor: pointer;
 }
 
 .navbar {
     display: flex;
     gap: 20px;
+    position: relative;
+    /* Для размещения псевдоэлемента */
 }
 
 .navbar a {
+    text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
+
     text-decoration: none;
     font-size: 18px;
     font-weight: bold;
     color: #96c2a8;
+    position: relative;
+    /* Для позиционирования псевдоэлемента */
 }
 
-.navbar a:hover {
-    color: #649173;
+.navbar a::before {
+    border-radius: 20px;
+    content: '';
+    position: absolute;
+    bottom: 110%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #96c2a8;
+    transform: scaleX(1);
+    transform-origin: left;
+    transition: transform 0.3s ease;
 }
+
+.navbar a:hover::before {
+    transform: scaleX(0);
+}
+
 
 .login-btn {
     padding: 10px 20px;
@@ -58,35 +117,33 @@ html {
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
+    font-weight: 800;
+    font-size: 15px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .login-btn:hover {
     background-color: #8a927a;
 }
 
-/* Контейнер для контента */
 .content-container {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
     padding: 20px;
     height: 46.4vw;
+    justify-content: center;
 }
 
-/* Блоки контента */
 .box1 {
     flex: 1 1 25%;
-    /* Минимум 25%, но можно расширяться */
     background-color: rgba(129, 186, 131, 0.5);
     border-radius: 20px;
     padding: 20px;
     transition: transform 0.3s ease;
-    /* height: 100%; Установить фиксированную высоту при необходимости */
 
-}
-
-.box1:hover {
-    transform: scale(1.005);
+    height: 100%;
+    overflow-y: auto;
 }
 
 .box2 {
@@ -104,11 +161,59 @@ html {
     align-content: flex-start;
 }
 
+.centered-into-wrappers {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.text-color {
+    color: #96c2a8;
+    font-size: var(--font-size);
+    font-weight: 800;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.about-wrapper {
+    padding: 20px;
+    max-width: 83%;
+    height: 84vh;
+    max-height: 100%;
+    background-color: rgb(51, 152, 219, 0.5);
+    margin: 2vh auto;
+    border-radius: 20px;
+
+}
+
+.license-wrapper {
+    padding: 20px;
+    max-width: 83%;
+    height: 84vh;
+    max-height: 100%;
+    background-color: rgb(128, 0, 128, 0.5);
+    margin: 2vh auto;
+    border-radius: 20px;
+
+}
+
+.contractor-wrapper {
+    padding: 20px;
+    max-width: 83%;
+    height: 84vh;
+    max-height: 100%;
+    background-color: rgb(138, 146, 122, 0.5);
+    border-radius: 20px;
+    margin: 2vh auto;
+}
+
 .box2 .card {
-    flex: 0 0 220px; /* Фиксированная ширина карточки */
+    flex: 0 0 220px;
+    /* Фиксированная ширина карточки */
     max-width: 220px;
-    height: 300px; /* Фиксированная высота карточки */
-    margin-bottom: 0; /* Убираем нижний отступ между карточками */
+    height: 300px;
+    /* Фиксированная высота карточки */
+    margin-bottom: 0;
+    /* Убираем нижний отступ между карточками */
 }
 
 
@@ -142,126 +247,98 @@ html {
 
 /* Адаптивные стили */
 /* Ограничение размеров для широких экранов */
-
-@media (min-width: 1718px) {
-    .box1 {
-        max-width: 20%; /* Ограничиваем максимальную ширину */
-    }
-
-    .box2 {
-        max-width: 80%;
-        max-height: 1300px;
-    }
-
-    .content-container {
-        justify-content: center;
-        height: 72.5vw;
-    }
-}
-
-
-@media (min-width: 1920px) {
-    .box1 {
-        max-width: 20%; /* Ограничиваем максимальную ширину */
-    }
-
-    .box2 {
-        max-width: 1200px;
-    }
-
-    .content-container {
-        justify-content: center;
-        height: 46vw;
-    }
-}
-
-@media (min-width: 2560px) {
-    .box1 {
-        max-width: 10%; 
-        max-height: 1250px;
-
-    }
-    
-    .logo{
-        margin-left: 1000px;
-    }
-
-    .login-btn{
-        margin-right: 1000px;
-    }
-
-
-    .box2 {
-        gap: 24px; /* Уменьшаем промежуток между карточками */
-
-        max-width: 80%; 
-        max-height: 1250px;
-    }
-
-    .content-container {
-        max-height: 1250px;
-    }
-}
-
-
-@media (max-width: 1200px) {
-
-    .box1,
-    .box2 {
-        flex: 1 1 100%;
-        margin-bottom: 20px;
-    }
-
-    .box1{
-        height: 45%;
-    }
-
-    .box2{
-        height: 160%;
-    }
-
-    .content-container{
-        gap: 0;
-    }
-}
-
-@media (max-width: 768px) {
+@media (max-width: 684px) and (max-height: 1080px) {
     .navbar {
         display: none;
     }
+}
 
+@media (max-width: 1200px) and (max-height: 1080px) {
     .header {
-        flex-direction: column;
-        align-items: flex-start;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #ece4d3;
+        border-radius: 20px;
+        max-width: 100%;
+        transition: transform 0.3s ease-out;
+        z-index: 1;
+        margin: 15px 20px 0 20px;
+        height: 84px;
     }
 
     .logo {
         max-width: 120px;
     }
 
-    .content-container {
-        flex-direction: column;
+    .box1 {
+        width: 100%;
+        max-height: 200px;
     }
 
-    .box1,
     .box2 {
+        height: 61vh;
         width: 100%;
         flex: 1 1 auto;
     }
+
+    .content-container {
+        display: flex;
+        gap: 20px;
+        padding: 20px;
+        height: 89vh;
+        max-height: 100vh;
+        overflow: hidden;
+        justify-content: center;
+        flex-direction: row;
+    }
 }
 
-@media (max-width: 480px) {
-    .header {
-        padding: 10px;
+
+@media (min-width: 1200px) and (max-height: 1080px) {
+    .box1 {
+        max-width: 300px;
+    }
+
+    .box2 {
+        max-width: 1060px;
+    }
+
+    .content-container {
+        display: flex;
+        justify-content: center;
+        height: 89vw;
+        max-height: 89vh;
+        overflow: hidden;
+    }
+}
+
+@media (min-width: 1718px) {
+    .box1 {
+        max-width: 20%;
+        height: 100%;
+    }
+
+    .box2 {
+        gap: 24px;
+        max-width: 70%;
+        height: 100%;
+    }
+
+    .content-container {
+        justify-content: center;
+        height: 89vh;
+        max-height: 92vh;
+    }
+}
+
+@media (min-width: 2300px) {
+    .logo {
+        margin-left: 15vw;
     }
 
     .login-btn {
-        padding: 8px 16px;
-        font-size: 14px;
-    }
-
-    .spinner {
-        width: 30px;
-        height: 30px;
+        margin-right: 15vw;
     }
 }

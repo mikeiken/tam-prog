@@ -1,4 +1,6 @@
 import React from 'react'
+import { Link, Routes, Route } from 'react-router-dom'
+import MainPage from '../../main-page/MainPage'
 export default function Form() {
   return (
     <div className='wrapper'>
@@ -13,7 +15,7 @@ export default function Form() {
             width: '24px',  // Задаем ширину
             height: '24px'
           }}
-            src={process.env.PUBLIC_URL + '/user.png'}></img>
+            src={process.env.PUBLIC_URL + '/user.png'} alt='text'></img>
         </div>
 
         <div className='input-box'>
@@ -26,7 +28,7 @@ export default function Form() {
               width: '24px',  // Задаем ширину
               height: '24px'
             }}
-            src={process.env.PUBLIC_URL + '/lock.png'}>
+            src={process.env.PUBLIC_URL + '/lock.png'} alt='text'>
           </img>
         </div>
 
@@ -37,9 +39,14 @@ export default function Form() {
 
         <button type='submit' className='btn'>Login</button>
         <div className='register-link'>
-          <p>Don't have an account? <a href='/'>Register</a></p>
+          <p>Don't have an account?
+            <Link to='/main'>Register</Link>
+          </p>
         </div>
       </form>
+      <Routes>
+          <Route path='/main' element={<MainPage />} />
+      </Routes>
     </div>
   )
 }
