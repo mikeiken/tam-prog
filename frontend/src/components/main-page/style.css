@@ -10,6 +10,9 @@ html {
     font-family: Arial, sans-serif;
 }
 
+.main {
+    overflow: hidden;
+}
 
 .main-enter-active {
     animation: depth-in 0.7s forwards;
@@ -77,8 +80,10 @@ html {
 }
 
 .navbar a {
+    text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
+
     text-decoration: none;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
     color: #96c2a8;
     position: relative;
@@ -114,6 +119,7 @@ html {
     transition: background-color 0.3s;
     font-weight: 800;
     font-size: 15px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
 }
 
 .login-btn:hover {
@@ -127,7 +133,6 @@ html {
     padding: 20px;
     height: 46.4vw;
     justify-content: center;
-    overflow: hidden;
 }
 
 .box1 {
@@ -166,12 +171,13 @@ html {
     color: #96c2a8;
     font-size: var(--font-size);
     font-weight: 800;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .about-wrapper {
     padding: 20px;
     max-width: 83%;
-    height: 43vw;
+    height: 84vh;
     max-height: 100%;
     background-color: rgb(51, 152, 219, 0.5);
     margin: 2vh auto;
@@ -182,7 +188,7 @@ html {
 .license-wrapper {
     padding: 20px;
     max-width: 83%;
-    height: 43vw;
+    height: 84vh;
     max-height: 100%;
     background-color: rgb(128, 0, 128, 0.5);
     margin: 2vh auto;
@@ -193,7 +199,7 @@ html {
 .contractor-wrapper {
     padding: 20px;
     max-width: 83%;
-    height: 43vw;
+    height: 84vh;
     max-height: 100%;
     background-color: rgb(138, 146, 122, 0.5);
     border-radius: 20px;
@@ -239,251 +245,105 @@ html {
     }
 }
 
-
 /* Адаптивные стили */
 /* Ограничение размеров для широких экранов */
-
-@media (max-width: 1280px) and (min-height: 1440px) {
-    .box1 {
-        max-width: 20%;
-    }
-
-    .box2 {
-        max-width: 80%;
-    }
-
-    .content-container {
-        display: flex;
-        flex-direction: 1 1 auto;
-        justify-content: center;
-        height: 111.5vw;
-        max-height: 900vh;
-    }
-}
-
-@media (max-width: 1920px) and (max-height: 1080px) {
-    .box1 {
-        max-width: 20%;
-    }
-
-    .box2 {
-        max-width: 80%;
-    }
-
-    .content-container {
-        justify-content: center;
-        height: 172.5vw;
-        max-height: 90vh;
-    }
-}
-
-
-@media (max-width: 1200px) and (max-height: 1080px) {
-    .box1 {
-        max-width: 20%;
-    }
-
-    .box2 {
-        max-width: 80%;
-    }
-
-    .content-container {
-        justify-content: center;
-        height: 172.5vw;
-        max-height: 90vh;
-    }
-}
-
-
-@media (max-width: 1718px) and (max-height: 1440px) {
-    .box1 {
-        max-width: 20%;
-    }
-
-    .box2 {
-        max-width: 80%;
-    }
-
-    .content-container {
-        justify-content: center;
-        height: 172.5vw;
-        max-height: 90vh;
-    }
-}
-
-@media (max-width: 1280px) and (max-height: 1080px) {
-    .box1 {
-        max-width: 100%;
-        max-height: 200px;
-    }
-
-    .box2 {
-        max-width: 100%;
-        max-height: 630px;
-    }
-
-    .content-container {
-        display: flex;
-        justify-content: center;
-        height: 90vh;
-        max-height: 87vh;
-    }
-}
-@media (min-width: 1920px) {
-    .box1 {
-        max-width: 20%;
-    }
-
-    .box2 {
-        max-width: 1200px;
-    }
-
-    .content-container {
-        justify-content: center;
-        height: 45vw;
-    }
-
-    .loading-container,
-    .error-container,
-    .empty-container {
-        margin-top: 16vw;
-    }
-
-}
-
-@media (min-width: 2560px) {
-    .box1 {
-        max-width: 20%;
-        max-height: 1250px;
-    }
-
-    .logo {
-        margin-left: 800px;
-    }
-
-    .login-btn {
-        margin-right: 800px;
-    }
-
-    .loading-container,
-    .error-container,
-    .empty-container {
-        margin-top: 18vw;
-
-    }
-
-    .box2 {
-        gap: 24px;
-
-        max-width: 70%;
-        max-height: 1250px;
-    }
-
-    .content-container {
-        justify-content: center;
-        max-height: 1250px;
-    }
-}
-
-@media (min-width: 3440px) {
-    .box1 {
-        max-width: 10%;
-        max-height: 1250px;
-
-    }
-
-    .logo {
-        margin-left: 1000px;
-    }
-
-    .login-btn {
-        margin-right: 1000px;
-    }
-
-    .loading-container,
-    .error-container,
-    .empty-container {
-        margin-top: 15vw;
-
-    }
-
-    .box2 {
-        gap: 24px;
-        max-width: 80%;
-        max-height: 1250px;
-    }
-
-    .content-container {
-        justify-content: center;
-        max-height: 1250px;
-    }
-}
-
-
-@media (max-width: 1200px) {
-
-    .box1,
-    .box2 {
-        flex: 1 1 100%;
-        margin-bottom: 20px;
-    }
-
-    .content-container {
-        justify-content: center;
-        max-height: 1150px;
-        overflow:inherit;
-    }
-
-    .box1 {
-        height: 45%;
-    }
-
-    .box2 {
-        height: 140%;
-    }
-
-    .content-container {
-        gap: 0;
-    }
-}
-
-@media (max-width: 768px) {
+@media (max-width: 684px) and (max-height: 1080px) {
     .navbar {
         display: none;
     }
+}
 
+@media (max-width: 1200px) and (max-height: 1080px) {
     .header {
-        flex-direction: column;
-        align-items: flex-start;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+        background-color: #ece4d3;
+        border-radius: 20px;
+        max-width: 100%;
+        transition: transform 0.3s ease-out;
+        z-index: 1;
+        margin: 15px 20px 0 20px;
+        height: 84px;
     }
 
     .logo {
         max-width: 120px;
     }
 
-    .content-container {
-        flex-direction: column;
+    .box1 {
+        width: 100%;
+        max-height: 200px;
     }
 
-    .box1,
     .box2 {
+        height: 61vh;
         width: 100%;
         flex: 1 1 auto;
     }
-}
 
-@media (max-width: 480px) {
-    .header {
-        padding: 10px;
-    }
-
-    .login-btn {
-        padding: 8px 16px;
-        font-size: 14px;
-    }
-
-    .spinner {
-        width: 30px;
-        height: 30px;
+    .content-container {
+        display: flex;
+        gap: 20px;
+        padding: 20px;
+        height: 89vh;
+        max-height: 100vh;
+        overflow: hidden;
+        justify-content: center;
+        flex-direction: row;
     }
 }
+
+
+@media (min-width: 1200px) and (max-height: 1080px) {
+    .box1 {
+        max-width: 300px;
+    }
+
+    .box2 {
+        max-width: 1060px;
+    }
+
+    .content-container {
+        display: flex;
+        justify-content: center;
+        height: 89vw;
+        max-height: 89vh;
+        overflow: hidden;
+    }
+}
+
+@media (min-width: 1718px) {
+    .box1 {
+        max-width: 20%;
+        height: 100%;
+    }
+
+    .loading-container,
+    .error-container,
+    .empty-container {
+        margin-top: 18vw;
+    }
+
+    .box2 {
+        gap: 24px;
+        max-width: 70%;
+        height: 100%;
+    }
+
+    .content-container {
+        justify-content: center;
+        height: 89vh;
+        max-height: 92vh;
+    }
+
+    .loading-container,
+    .error-container,
+    .empty-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 14vw;
+    }
+}
+

@@ -13,6 +13,7 @@ const Instance = axios.create({
     baseURL: 'http://homelab.kerasi.ru/api/v1',
     timeout: 5000,
     headers: {
+        'Access-Control-Allow-Origin': '*',
         'Accept': 'application/json',
         'X-XSRF-TOKEN': xsrfToken,
     },

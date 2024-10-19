@@ -31,7 +31,7 @@ export default function SearchBlock() {
                 <img src={process.env.PUBLIC_URL + '/search.png'} alt='Search Icon' className='search-icon' />
             </div>
             <div>
-                {/* {loading ? (
+                {loading ? (
                     <div className='loading-container'>
                         <div className="spinner"></div>
                     </div>
@@ -49,7 +49,7 @@ export default function SearchBlock() {
                     data.map(item => (
                         <SearchCard key={item.id}/>
                     ))
-                )} */}
+                )}
             </div>
         </div>
     );
