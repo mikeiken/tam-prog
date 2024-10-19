@@ -24,25 +24,7 @@ export default function PlotInfo() {
     }, []);
     return (
         <div className='box2'>
-            {loading ? (
-                <div className='centered-spinner'>
-                    <div className="spinner"></div>
-                </div>
-            ) : error ? (
-                <p
-                    className='centered-spinner text-color'
-                    style={{ '--font-size': '5em' }}
-                >
-                    Error: {error.message}
-                </p>
-
-            ) : data.length === 0 ? (
-                <p>Пусто</p>
-            ) : (
-                data.map(item => (
-                    <Card key={item.id} label={item.name} description={item.nutrients} />
-                ))
-            )}
+            
         </div>
     )
 }

@@ -7,8 +7,6 @@ import axios from 'axios'
 // }
 
 // const xsrfToken = getCookie('XSRF-TOKEN');
-// xsrfCookieName: 'XSRF-TOKEN',
-// xsrfHeaderName: 'X-XSRF-TOKEN',
 
 
 const Instance = axios.create({
@@ -17,6 +15,8 @@ const Instance = axios.create({
     headers: {
         'Content-Type': 'application/json',
     },
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
 })
 
 

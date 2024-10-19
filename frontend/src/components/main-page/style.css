@@ -320,12 +320,6 @@ html {
         height: 100%;
     }
 
-    .loading-container,
-    .error-container,
-    .empty-container {
-        margin-top: 18vw;
-    }
-
     .box2 {
         gap: 24px;
         max-width: 70%;
@@ -336,14 +330,6 @@ html {
         justify-content: center;
         height: 89vh;
         max-height: 92vh;
-    }
-
-    .loading-container,
-    .error-container,
-    .empty-container {
-        display: flex;
-        justify-content: center;
-        margin-top: 14vw;
     }
 }
 

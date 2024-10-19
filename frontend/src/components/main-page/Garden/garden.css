@@ -34,11 +34,13 @@
 .loading-container,
 .error-container,
 .empty-container {
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    margin-top: 17vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    max-height: 73vh; 
 }
+
 
 .tmp-card{
     margin: 2vh 0;
