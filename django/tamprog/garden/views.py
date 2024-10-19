@@ -7,6 +7,8 @@ from rest_framework import generics
 from .models import *
 from .serializers import *
 
+methods = ['get', 'post', 'head',
+           'put', 'patch', 'delete', 'update', 'destroy']
 
 class AgronomistViewSet(viewsets.ModelViewSet):
     queryset = Agronomist.objects.all()
@@ -115,6 +117,18 @@ class PlotViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response()
+
+class AvailablePlantsViewSet(viewsets.ModelViewSet):
+    queryset = AvailablePlants.objects.all()
+    serializer_class = AvailablePlantsSerializer
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
