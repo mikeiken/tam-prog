@@ -1,6 +1,5 @@
 import React from 'react';
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
-import AuthForm from '../auth/auth';
+import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
 import Garden from '../main-page/Garden/Garden';
 import About from '../main-page/About/about';
 import License from '../main-page/License/License';
@@ -33,7 +32,6 @@ export default function Header() {
                 </Link>
             </header>
 
-            {/* Анимация страниц */}
             <SwitchTransition>
                 <CSSTransition
                     key={location.key}
