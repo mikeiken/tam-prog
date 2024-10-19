@@ -8,7 +8,7 @@ import { CSSTransition, SwitchTransition } from "react-transition-group";
 import '../main-page/style.css';
 
 export default function Header() {
-    const location = useLocation();  // Получаем текущее местоположение
+    const location = useLocation(); 
 
     const routes = [
         { path: '/garden', Component: Garden },
@@ -17,15 +17,37 @@ export default function Header() {
         { path: '/contractor', Component: Contractor },
     ];
 
+    const isActivePath = (path) => location.pathname === path;
+
     return (
         <>
             <header className='header'>
                 <img className='logo' src={process.env.PUBLIC_URL + '/logo.png'} alt="Logo" />
                 <nav className='navbar'>
-                    <Link to='/garden'>Участки</Link>
-                    <Link to='/contractor'>Подрядчики</Link>
-                    <Link to='/license'>Лицензия</Link>
-                    <Link to='/about'>О нас</Link>
+                    <Link 
+                        to='/garden' 
+                        onClick={e => isActivePath('/garden') && e.preventDefault()}
+                    >
+                        Участки
+                    </Link>
+                    <Link 
+                        to='/contractor' 
+                        onClick={e => isActivePath('/contractor') && e.preventDefault()}
+                    >
+                        Подрядчики
+                    </Link>
+                    <Link 
+                        to='/license' 
+                        onClick={e => isActivePath('/license') && e.preventDefault()}
+                    >
+                        Лицензия
+                    </Link>
+                    <Link 
+                        to='/about' 
+                        onClick={e => isActivePath('/about') && e.preventDefault()}
+                    >
+                        О нас
+                    </Link>
                 </nav>
                 <Link to='/'>
                     <button className='login-btn'>Войти</button>
