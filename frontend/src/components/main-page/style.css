@@ -176,13 +176,15 @@ html {
 
 .about-wrapper {
     padding: 20px;
-    max-width: 83%;
+    max-width: 75%;
     height: 84vh;
     max-height: 100%;
-    background-color: rgb(51, 152, 219, 0.5);
+    background-color: rgb(129, 186, 131, 0.5);
     margin: 2vh auto;
     border-radius: 20px;
-
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
 
 .license-wrapper {
@@ -208,16 +210,11 @@ html {
 
 .box2 .card {
     flex: 0 0 220px;
-    /* Фиксированная ширина карточки */
     max-width: 220px;
     height: 300px;
-    /* Фиксированная высота карточки */
     margin-bottom: 0;
-    /* Убираем нижний отступ между карточками */
 }
 
-
-/* Спиннер */
 .spinner {
     border: 4px solid rgba(0, 0, 0, 0.1);
     border-radius: 50%;
@@ -333,6 +330,12 @@ html {
     }
 }
 
+@media (min-width: 1922px) {
+    .about-wrapper {
+        height: 65vh;
+        width: 120vh;
+    }
+}
 @media (min-width: 2300px) {
     .logo {
         margin-left: 15vw;

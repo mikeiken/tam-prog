@@ -8,7 +8,7 @@ import { CSSTransition, SwitchTransition } from "react-transition-group";
 import '../main-page/style.css';
 
 export default function Header() {
-    const location = useLocation(); 
+    const location = useLocation();
 
     const routes = [
         { path: '/garden', Component: Garden },
@@ -24,32 +24,35 @@ export default function Header() {
             <header className='header'>
                 <img className='logo' src={process.env.PUBLIC_URL + '/logo.png'} alt="Logo" />
                 <nav className='navbar'>
-                    <Link 
-                        to='/garden' 
+                    <Link
+                        to='/garden'
                         onClick={e => isActivePath('/garden') && e.preventDefault()}
                     >
                         Участки
                     </Link>
-                    <Link 
-                        to='/contractor' 
+                    <Link
+                        to='/contractor'
                         onClick={e => isActivePath('/contractor') && e.preventDefault()}
                     >
                         Подрядчики
                     </Link>
-                    <Link 
-                        to='/license' 
+                    <Link
+                        to='/license'
                         onClick={e => isActivePath('/license') && e.preventDefault()}
                     >
                         Лицензия
                     </Link>
-                    <Link 
-                        to='/about' 
+                    <Link
+                        to='/about'
                         onClick={e => isActivePath('/about') && e.preventDefault()}
                     >
                         О нас
                     </Link>
                 </nav>
-                <Link to='/'>
+                <Link
+                    to='/'
+                    onClick={e => isActivePath('/') && e.preventDefault()}
+                >
                     <button className='login-btn'>Войти</button>
                 </Link>
             </header>
