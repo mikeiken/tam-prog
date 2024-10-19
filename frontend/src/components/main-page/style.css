@@ -68,7 +68,7 @@ html {
 .logo {
     max-width: 150px;
     height: auto;
-    width: 150px;
+    width: 140px;
     cursor: pointer;
 }
 
@@ -83,7 +83,7 @@ html {
     text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.3);
 
     text-decoration: none;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     color: #96c2a8;
     position: relative;
@@ -347,3 +347,12 @@ html {
     }
 }
 
+@media (min-width: 2300px) {
+    .logo {
+        margin-left: 15vw;
+    }
+
+    .login-btn {
+        margin-right: 15vw;
+    }
+}
