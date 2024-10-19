@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import *
+from django.utils import timezone
 
 class AgronomistSerializer(serializers.ModelSerializer):
     class Meta:
@@ -40,6 +41,9 @@ class PlantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plant
         fields = "__all__"
+    def create(self, validated_data):
+        validated_data['landing_data'] = timezone.now().date()  # Устанавливаем текущую дату
+        return super().create(validated_data)
 
 
 class PlotSerializer(serializers.ModelSerializer):
@@ -52,3 +56,12 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = "__all__"
+
+
+class AvailablePlantsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AvailablePlants
+        fields = "__all__"
+    def create(self, validated_data):
+        validated_data['landing_data'] = timezone.now().date()  # Устанавливаем текущую дату
+        return super().create(validated_data)
