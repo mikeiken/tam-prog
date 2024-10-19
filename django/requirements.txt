@@ -3,6 +3,7 @@ colorama==0.4.6
 coverage==7.6.3
 Django==4.2.16
 djangorestframework==3.15.2
+django-cors-headers==4.5.0
 drf-yasg==1.21.7
 exceptiongroup==1.2.2
 inflection==0.5.1
@@ -25,3 +26,4 @@ tomli==2.0.2
 typing-extensions==4.12.2
 tzdata==2024.1
 uritemplate==4.1.1
+
