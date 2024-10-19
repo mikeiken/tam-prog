@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import Instance from '../../../api/instance'
-import Card from '../../../card/Card';
 
 export default function PlotInfo() {
     const [data, setData] = useState([]);
