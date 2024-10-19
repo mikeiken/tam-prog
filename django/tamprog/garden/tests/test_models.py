@@ -1,5 +1,9 @@
+
+
 import pytest
-from garden.models import Agronomist, Supplier, Worker, GardenBed, Fertilizer, User, Plant, Plot, Order
+from yaml import compose
+
+from garden.models import Agronomist, Supplier, Worker, GardenBed, Fertilizer, User, Plant, Plot, Order, AvailablePlants
 from django.utils import timezone
 
 # Тесты для модели Agronomist
@@ -43,18 +47,27 @@ def test_create_worker():
 def test_create_gardenbed():
     garden_bed = GardenBed.objects.create(
         state="Чернозем",
-        size=10.5
+        size=10.5,
+        price = 10
     )
     assert garden_bed.state == "Чернозем"
     assert garden_bed.size == 10.5
+    assert garden_bed.price == 10
 
 # Тесты для модели Fertilizer
 @pytest.mark.django_db
 def test_create_fertilizer():
     fertilizer = Fertilizer.objects.create(
-        compound="Азот, Фосфор"
+        compound="Азот, Фосфор",
+        price = 10,
+        boost = 4,
+        name = "Навоз"
     )
     assert fertilizer.compound == "Азот, Фосфор"
+    assert fertilizer.price == 10
+    assert fertilizer.boost == 4
+    assert fertilizer.name == "Навоз"
+
 
 # Тесты для модели User
 @pytest.mark.django_db
@@ -81,14 +94,18 @@ def test_create_user(agronomist, worker):
 def test_create_plant(garden_bed):
     plant = Plant.objects.create(
         name="Помидор",
-        growth_conditions="Тепло, Влажно",
-        nutrients="Азот, Калий",
-        garden_id=garden_bed
+        growth_time=24,
+        description="Великое",
+        garden_id=garden_bed,
+        price=10,
+        landing_data = "2024-09-03"
     )
     assert plant.name == "Помидор"
-    assert plant.growth_conditions == "Тепло, Влажно"
-    assert plant.nutrients == "Азот, Калий"
+    assert plant.growth_time == 24
+    assert plant.description == "Великое"
     assert plant.garden_id == garden_bed
+    assert plant.price == 10
+    assert plant.landing_data == "2024-09-03"
 
 # Тесты для модели Plot
 @pytest.mark.django_db
@@ -115,3 +132,22 @@ def test_create_order(garden_bed, plant, worker, fertilizer):
     assert order.plant_id == plant
     assert order.worker_id == worker
     assert order.fertilizer_id == fertilizer
+
+
+@pytest.mark.django_db
+def test_create_available_plant():
+    plant = AvailablePlants.objects.create(
+        name="Помидор",
+        price=15.5,
+        growth_time=90,
+        description="Красный сочный овощ",
+        landing_data="2024-05-10",
+        garden_id=1
+    )
+
+    assert plant.name == "Помидор"
+    assert plant.price == 15.5
+    assert plant.growth_time == 90
+    assert plant.description == "Красный сочный овощ"
+    assert str(plant.landing_data) == "2024-05-10"
+    assert plant.garden_id == 1
