@@ -30,33 +30,37 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-sihuf!9sq3^(+b2=z5t
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-CORS_ORIGIN_ALLOW_ALL = True
 ALLOWED_HOSTS = (os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(','))
 
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://localhost",
-    "http://localhost:8000",
 ]
-CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOW_HEADERS = \
-    ['Access-Control-Allow-Origin',
-     'Access-Control-Allow-Credentials',
-     'headers',
-     'content-type',
-     'accept',
-     'accept-encoding',
-     'authorization',
-     'content-type',
-     'origin',
-     'dnt',
-     'user-agent',
-     'x-csrftoken',
-     'x-requested-with']
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
 
-CORS_ALLOW_METHODS = ['GET', 'POST', 'PUT',
-                      'DELETE', 'OPTIONS', 'PATCH', 'UPDATE', 'DESTROY']
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'DELETE',
+    'OPTIONS',
+    'PATCH',
+    'UPDATE',
+    'DESTROY'
+]
 
 # Application definition
 

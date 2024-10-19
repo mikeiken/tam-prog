@@ -4,13 +4,21 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics
 
+
 from .models import *
 from .serializers import *
 
 methods = ['get', 'post', 'head',
            'put', 'patch', 'delete', 'update', 'destroy']
 
-class AgronomistViewSet(viewsets.ModelViewSet):
+class CORSMixin:
+    def finalize_response(self, request, response, *args, **kwargs):
+        response = super().finalize_response(request, response, *args, **kwargs)
+        response["Access-Control-Allow-Origin"] = "http://localhost:3000"
+        return response
+
+
+class AgronomistViewSet(CORSMixin, viewsets.ModelViewSet):
     queryset = Agronomist.objects.all()
     serializer_class = AgronomistSerializer
 
@@ -23,7 +31,7 @@ class AgronomistViewSet(viewsets.ModelViewSet):
         return Response()
 
 
-class SupplierViewSet(viewsets.ModelViewSet):
+class SupplierViewSet(CORSMixin, viewsets.ModelViewSet):
     queryset = Supplier.objects.all()
     serializer_class = SupplierSerializer
 
@@ -36,7 +44,7 @@ class SupplierViewSet(viewsets.ModelViewSet):
         return Response()
 
 
-class WorkerViewSet(viewsets.ModelViewSet):
+class WorkerViewSet(CORSMixin, viewsets.ModelViewSet):
     queryset = Worker.objects.all()
     serializer_class = WorkerSerializer
 
@@ -49,7 +57,7 @@ class WorkerViewSet(viewsets.ModelViewSet):
         return Response()
 
 
-class GardenBedViewSet(viewsets.ModelViewSet):
+class GardenBedViewSet(CORSMixin, viewsets.ModelViewSet):
     queryset = GardenBed.objects.all()
     serializer_class = GardenBedSerializer
 
@@ -62,7 +70,7 @@ class GardenBedViewSet(viewsets.ModelViewSet):
         return Response()
 
 
-class FertilizerViewSet(viewsets.ModelViewSet):
+class FertilizerViewSet(CORSMixin, viewsets.ModelViewSet):
     queryset = Fertilizer.objects.all()
     serializer_class = FertilizerSerializer
 
@@ -75,7 +83,7 @@ class FertilizerViewSet(viewsets.ModelViewSet):
         return Response()
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(CORSMixin, viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
@@ -88,7 +96,7 @@ class UserViewSet(viewsets.ModelViewSet):
         return Response()
 
 
-class PlantViewSet(viewsets.ModelViewSet):
+class PlantViewSet(CORSMixin, viewsets.ModelViewSet):
     queryset = Plant.objects.all()
     serializer_class = PlantSerializer
 
@@ -101,7 +109,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         return Response()
 
 
-class PlotViewSet(viewsets.ModelViewSet):
+class PlotViewSet(CORSMixin, viewsets.ModelViewSet):
     queryset = Plot.objects.all()
     serializer_class = PlotSerializer
 
@@ -114,7 +122,7 @@ class PlotViewSet(viewsets.ModelViewSet):
         return Response()
 
 
-class OrderViewSet(viewsets.ModelViewSet):
+class OrderViewSet(CORSMixin, viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
@@ -126,7 +134,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         self.perform_update(serializer)
         return Response()
 
-class AvailablePlantsViewSet(viewsets.ModelViewSet):
+class AvailablePlantsViewSet(CORSMixin, viewsets.ModelViewSet):
     queryset = AvailablePlants.objects.all()
     serializer_class = AvailablePlantsSerializer
 

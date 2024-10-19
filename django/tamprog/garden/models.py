@@ -44,7 +44,7 @@ class User(models.Model):
     email_validator = EmailValidator(allowlist = ["mail.ru", "gmail.com", "yahoo.com", "yandex.ru"])
     email = models.CharField(max_length=1024, unique=True, validators=[email_validator])
 
-    phone_validator = RegexValidator(regex=r'^+7d{10}$')
+    phone_validator = RegexValidator(regex=r'^\+7\d{10}$')
     phone = models.CharField(max_length=18, unique=True, validators=[phone_validator])
 
     agronomist_id = models.ForeignKey(Agronomist,verbose_name='agronomist_id', on_delete=models.PROTECT)
