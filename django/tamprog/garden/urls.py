@@ -37,8 +37,7 @@ router_order = routers.SimpleRouter()
 router_order.register(r'order', OrderViewSet)
 
 router_available_plants = routers.SimpleRouter()
-router_plant.register(r'avplant', AvailablePlantsViewSet)
-
+router_available_plants.register(r'availableplants', AvailablePlantsViewSet)
 urlpatterns = [
     path('', include(router_agronomist.urls)),
     path('', include(router_supplier.urls)),
