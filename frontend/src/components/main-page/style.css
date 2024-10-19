@@ -336,6 +336,7 @@ html {
         width: 120vh;
     }
 }
+
 @media (min-width: 2300px) {
     .logo {
         margin-left: 15vw;
