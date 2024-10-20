@@ -15,7 +15,7 @@
     height: 120px;
     width: auto;
     transition: .5s all;
-    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.7));
+    filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.7));
 }
 
 .student-link{
@@ -25,19 +25,8 @@
 
 }
 
-.student-link:hover{
-    transform: scale(1.1);
-}
-
 .description-fix-pos{
     position: relative;
-}
-
-.student-img:hover {
-    transform: scale(1.1);
-    filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.7));
-    animation: shake 0.4s; 
-
 }
 
 .student-description{
@@ -45,8 +34,7 @@
 }
 
 .student-img:hover {
-    transform: scale(1.1);
-    filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.7));
+    filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.7));
     animation: sway 0.4s; /* Изменено на анимацию покачивания */
 }
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import StudentCard from '../../student-card/StudentCard'
+import StudentCard from './student-card/StudentCard'
 
 const listStudents = {
   'Денис': {
