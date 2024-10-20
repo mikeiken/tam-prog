@@ -1,5 +1,5 @@
-import React from 'react';
-import { Routes, Route, Link, useLocation, Navigate } from 'react-router-dom';
+import React, { useRef } from 'react';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import Garden from '../main-page/Garden/Garden';
 import About from '../main-page/About/about';
 import License from '../main-page/License/License';
@@ -18,6 +18,9 @@ export default function Header() {
     ];
 
     const isActivePath = (path) => location.pathname === path;
+
+    // Create a ref for the transition
+    const transitionRef = useRef(null);
 
     return (
         <>
@@ -59,16 +62,19 @@ export default function Header() {
 
             <SwitchTransition>
                 <CSSTransition
+                    nodeRef={transitionRef} // Add this line
                     key={location.key}
                     timeout={530}
                     classNames="main"
                     unmountOnExit
                 >
-                    <Routes location={location}>
-                        {routes.map(({ path, Component }) => (
-                            <Route key={path} path={path} element={<Component />} />
-                        ))}
-                    </Routes>
+                    <div ref={transitionRef}> {/* Wrap the Routes in a div with the ref */}
+                        <Routes location={location}>
+                            {routes.map(({ path, Component }) => (
+                                <Route key={path} path={path} element={<Component />} />
+                            ))}
+                        </Routes>
+                    </div>
                 </CSSTransition>
             </SwitchTransition>
         </>
