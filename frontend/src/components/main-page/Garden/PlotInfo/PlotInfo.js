@@ -7,7 +7,7 @@ export default function PlotInfo({ selectedItem }) {
             {selectedItem ? (
                 <PlotInfoWindow item={selectedItem} />
             ) : (
-                <p>Пожалуйста, выберите объект</p>
+                <p className='select-wrapper text-color ' style={{ '--font-size': '40px' }}>Пожалуйста, выберите объект</p>
             )}
         </div>
     );

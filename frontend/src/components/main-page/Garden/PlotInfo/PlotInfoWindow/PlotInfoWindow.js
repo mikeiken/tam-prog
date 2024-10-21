@@ -1,8 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function PlotInfoWindow({ item }) {
+    const [isVisible, setIsVisible] = useState(false);
+
+    useEffect(() => {
+        if (item) {
+            setIsVisible(true);
+        } else {
+            setIsVisible(false);
+        }
+    }, [item]);
+
     return (
-        <div className='container-plot-wrapper'>
+        <div className={`container-plot-wrapper ${isVisible ? 'visible' : ''}`}>
             <div className='container-plot-info'>
                 <h3>Информация об объекте:</h3>
                 <p>ID: {item.id}</p>
@@ -11,7 +21,8 @@ export default function PlotInfoWindow({ item }) {
             </div>
 
             <div className='container-plot-products'>
-                {/* Можно добавить другую информацию о продукте здесь */}
+                <h1>ID: {item.id}</h1>
+
             </div>
         </div>
     );

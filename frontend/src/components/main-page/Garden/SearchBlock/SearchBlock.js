@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../garden.css';
 import SearchCard from '../SearchCard/SearchCard';
-
+import Instance from '../../../api/instance'
 const testData = [
     { id: 1, name: "Объект 1", description: "Описание объекта 1" },
     { id: 2, name: "Объект 2", description: "Описание объекта 2" },
@@ -11,16 +11,16 @@ const testData = [
 ];
 
 export default function SearchBlock({ onSelectItem }) {
-    const [data, setData] = useState(testData); // Используем тестовые данные
-    const [loading, setLoading] = useState(false); // Изначально не загружаем данные
+    const [data, setData] = useState([]); 
+    const [loading, setLoading] = useState(false); 
     const [error, setError] = useState(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                // В этом случае мы используем тестовые данные, так что нет реального запроса
-                setData(testData);
+                const response = await Instance.get('/garder/?format=json')
+                setData(response.data);
             } catch (err) {
                 setError(err);
             } finally {
@@ -53,7 +53,7 @@ export default function SearchBlock({ onSelectItem }) {
                     </p>
                 </div>
             ) : data.length === 0 ? (
-                <div className='empty-container'>
+                <div className='empty-container text-color' style={{ '--font-size': '30px' }}>
                     <p>Пусто</p>
                 </div>
             ) : (
