@@ -16,8 +16,8 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  IS_RELEASE: ${{ github.event.pull_request.merged }}
-  # IS_RELEASE: True
+  # IS_RELEASE: ${{ github.event.pull_request.merged }}
+  IS_RELEASE: True
   DJANGO_SUFFIX: -django
   FRONTEND_SUFFIX: -frontend
   NGINX_SUFFIX: -nginx
@@ -41,6 +41,7 @@ jobs:
           echo "NGINX_SUFFIX: ${{ env.NGINX_SUFFIX }}"
           echo "PSQL_SUFFIX: ${{ env.PSQL_SUFFIX }}"
           echo "PULL_REQUEST_MERGED: ${{ github.event.pull_request.merged }}"
+    
   build-and-push-image-django:
     runs-on: ubuntu-latest
     # Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.
