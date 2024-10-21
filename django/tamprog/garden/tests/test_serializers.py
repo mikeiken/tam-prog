@@ -1,9 +1,6 @@
 import pytest
-from rest_framework.exceptions import ValidationError
 from garden.serializers import *
-from garden.models import Agronomist, Supplier, Worker, GardenBed, Fertilizer, User, Plant, Plot, Order
 from django.utils import timezone
-
 # Тест для сериализатора Agronomist
 @pytest.mark.django_db
 def test_agronomist_serializer():
@@ -54,24 +51,32 @@ def test_worker_serializer():
 def test_garden_bed_serializer():
     data = {
         "state": "Хорошее",
-        "size": 10.5
+        "size": 10.5,
+        "price": 10
     }
     serializer = GardenBedSerializer(data=data)
     assert serializer.is_valid()
     garden_bed = serializer.save()
     assert garden_bed.state == "Хорошее"
     assert garden_bed.size == 10.5
+    assert garden_bed.price == 10
 
 # Тест для сериализатора Fertilizer
 @pytest.mark.django_db
 def test_fertilizer_serializer():
     data = {
-        "compound": "Азот, Фосфор"
+        "compound": "Азот, Фосфор",
+        "price": 10,
+        "boost" : 4,
+        "name" : "Навоз"
     }
     serializer = FertilizerSerializer(data=data)
     assert serializer.is_valid()
     fertilizer = serializer.save()
     assert fertilizer.compound == "Азот, Фосфор"
+    assert fertilizer.price == 10
+    assert fertilizer.boost == 4
+    assert fertilizer.name == "Навоз"
 
 # Тест для сериализатора User
 @pytest.mark.django_db
@@ -80,38 +85,46 @@ def test_user_serializer(agronomist, worker):
         "password": "hashed_password",
         "login": "user123",
         "role": "admin",
-        "email": "user@example.com",
-        "phone": "+1234567890",
+        "email": "user@mail.ru",
+        "phone": "+72345678908",
         "agronomist_id": agronomist.id,
         "worker_id": worker.id
     }
     serializer = UserSerializer(data=data)
-    assert serializer.is_valid()
+    assert serializer.is_valid(), serializer.errors  # Добавлено для отладки
     user = serializer.save()
     assert user.password == "hashed_password"
     assert user.login == "user123"
     assert user.role == "admin"
-    assert user.email == "user@example.com"
-    assert user.phone == "+1234567890"
+    assert user.email == "user@mail.ru"
+    assert user.phone == "+72345678908"
     assert user.agronomist_id == agronomist
     assert user.worker_id == worker
 
-# Тест для сериализатора Plant
 @pytest.mark.django_db
 def test_plant_serializer(garden_bed):
     data = {
         "name": "Помидор",
-        "growth_conditions": "Тепло, Влажно",
-        "nutrients": "Азот, Калий",
-        "garden_id": garden_bed.id
+        "growth_time": 24,
+        "description": "Великое",
+        "garden_id": garden_bed.id,
+        "price": 10,
+        "landing_data": timezone.now().date().isoformat()
+
     }
+
     serializer = PlantSerializer(data=data)
-    assert serializer.is_valid()
+    assert serializer.is_valid(), serializer.errors
     plant = serializer.save()
+
+
     assert plant.name == "Помидор"
-    assert plant.growth_conditions == "Тепло, Влажно"
-    assert plant.nutrients == "Азот, Калий"
+    assert plant.growth_time == 24
+    assert plant.description == "Великое"
     assert plant.garden_id == garden_bed
+    assert plant.price == 10
+    assert plant.landing_data == timezone.now().date()
+
 
 # Тест для сериализатора Plot
 @pytest.mark.django_db

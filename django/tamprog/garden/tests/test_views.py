@@ -2,7 +2,7 @@ import pytest
 from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
-from garden.models import Agronomist, Supplier, Worker, GardenBed, Fertilizer, User, Plant, Plot, Order
+from garden.models import Agronomist, Supplier, Worker, GardenBed, Fertilizer, User, Plant, Plot, Order, AvailablePlants
 
 import datetime
 @pytest.fixture
@@ -79,7 +79,7 @@ class TestViewSets:
 
     @pytest.mark.django_db
     def test_create_garden_bed(self, api_client):
-        data = {"state": "Отличное", "size": 15.0}
+        data = {"state": "Отличное", "size": 15.0, "price": 10}
         response = api_client.post(reverse('gardenbed-list'), data, format='json')
         assert response.status_code == status.HTTP_201_CREATED
         assert GardenBed.objects.count() == 1
@@ -100,7 +100,7 @@ class TestViewSets:
 
     @pytest.mark.django_db
     def test_create_fertilizer(self, api_client):
-        data = {"compound": "Калий, Азот"}
+        data = {"compound": "Калий, Азот","price": 10,"boost" : 4,"name" : "Навоз"}
         response = api_client.post(reverse('fertilizer-list'), data, format='json')
         assert response.status_code == status.HTTP_201_CREATED
         assert Fertilizer.objects.count() == 1
@@ -125,8 +125,8 @@ class TestViewSets:
             "password": "new_password",
             "login": "new_user",
             "role": "user",
-            "email": "new_user@example.com",
-            "phone": "+1234567890",
+            "email": "new_user@mail.ru",
+            "phone": "+72345678908",
             "agronomist_id": agronomist.id,
             "worker_id": worker.id
         }
@@ -136,11 +136,11 @@ class TestViewSets:
 
     @pytest.mark.django_db
     def test_update_user(self, api_client, user):
-        data = {"email": "updated_user@example.com"}
+        data = {"email": "updated_user@mail.ru"}
         response = api_client.patch(reverse('user-detail', args=[user.id]), data, format='json')
         assert response.status_code == status.HTTP_200_OK
         user.refresh_from_db()
-        assert user.email == "updated_user@example.com"
+        assert user.email == "updated_user@mail.ru"
 
     @pytest.mark.django_db
     def test_delete_user(self, api_client, user):
@@ -152,9 +152,11 @@ class TestViewSets:
     def test_create_plant(self, api_client, garden_bed):
         data = {
             "name": "Огурец",
-            "growth_conditions": "Тепло, Влажно",
-            "nutrients": "Калий, Азот",
-            "garden_id": garden_bed.id
+            "growth_time": 24,
+            "description": "Великое",
+            "garden_id": garden_bed.id,
+            "price": 10,
+            "landing_data": "2024-09-03"
         }
         response = api_client.post(reverse('plant-list'), data, format='json')
         assert response.status_code == status.HTTP_201_CREATED
@@ -221,3 +223,31 @@ class TestViewSets:
         response = api_client.delete(reverse('order-detail', args=[order.id]))
         assert response.status_code == status.HTTP_204_NO_CONTENT
         assert Order.objects.count() == 0
+
+    @pytest.mark.django_db
+    def test_create_available_plant(self,api_client, garden_bed):
+        data = {
+            "name": "Огурец",
+            "price": 20.0,
+            "growth_time": 75,
+            "description": "Зеленый овощ",
+            "landing_data": "2024-05-15",
+            "garden_id": garden_bed.id
+        }
+        response = api_client.post(reverse('availableplants-list'), data, format='json')
+        assert response.status_code == status.HTTP_201_CREATED
+        assert AvailablePlants.objects.count() == 1
+
+    @pytest.mark.django_db
+    def test_update_available_plant(self,api_client, available_plants):
+        data = {"price": 18.0}
+        response = api_client.patch(reverse('availableplants-detail', args=[available_plants.id]), data, format='json')
+        assert response.status_code == status.HTTP_200_OK
+        available_plants.refresh_from_db()
+        assert available_plants.price == 18.0
+
+    @pytest.mark.django_db
+    def test_delete_available_plant(self,api_client, available_plants):
+        response = api_client.delete(reverse('availableplants-detail', args=[available_plants.id]))
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+        assert AvailablePlants.objects.count() == 0

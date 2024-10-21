@@ -61,3 +61,9 @@ def test_order_url(api_client):
     url = reverse('order-list')
     response = api_client.get(url)
     assert response.status_code == status.HTTP_200_OK
+
+@pytest.mark.django_db
+def test_available_plants_url(api_client):
+    url = reverse('availableplants-list')
+    response = api_client.get(url)
+    assert response.status_code == status.HTTP_200_OK
