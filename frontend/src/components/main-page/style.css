@@ -269,11 +269,12 @@ html {
 
     .box1 {
         width: 100%;
-        max-height: 200px;
+        max-height: 300px;
+        overflow: hidden;
     }
 
     .box2 {
-        height: 61vh;
+        height: 57vh;
         width: 100%;
         flex: 1 1 auto;
     }

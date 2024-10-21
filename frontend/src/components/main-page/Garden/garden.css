@@ -1,9 +1,9 @@
 .search-block {
-    display: flex; 
-    align-items: center; 
-    position: sticky; 
-    z-index: 10; 
-    padding: 10px; 
+    display: flex;
+    align-items: center;
+    position: sticky;
+    z-index: 10;
+    padding: 10px;
 }
 
 .container-plot-wrapper {
@@ -12,17 +12,20 @@
     height: 100%;
     flex-direction: column;
     justify-content: space-between;
-    opacity: 0; /* Начальная прозрачность */
-    transition: opacity 0.3s ease, height 0.3s ease; /* Плавный переход для opacity и height */
+    opacity: 0;
+    /* Начальная прозрачность */
+    transition: opacity 0.3s ease, height 0.3s ease;
+    /* Плавный переход для opacity и height */
 }
 
 .container-plot-wrapper.visible {
-    opacity: 1; /* Полная видимость */
+    opacity: 1;
+    /* Полная видимость */
     /* height: auto; Если хотите анимировать высоту, убедитесь, что элемент имеет фиксированную высоту в начале */
 }
 
 
-.container-plot-info{
+.container-plot-info {
     padding: 20px;
     border-radius: 20px;
     margin: 0 auto;
@@ -32,7 +35,7 @@
 }
 
 
-.container-plot-products{
+.container-plot-products {
     margin: 0 auto;
     padding: 20px;
     width: 80%;
@@ -41,25 +44,36 @@
     background-color: #96c2a8;
 }
 
+.scrolled-content {
+    height: 92%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 20px;
+}
+
 .search-input {
     width: 100%;
-    height: 4vh; 
+    height: 4vh;
     border-radius: 20px;
-    padding: 20px; 
-    padding-right: 50px; 
-    outline: none; 
+    padding: 20px;
+    padding-right: 50px;
+    outline: none;
     border: none;
-    box-sizing: border-box; 
+    box-sizing: border-box;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .search-icon {
-    position: absolute; 
-    right: 15px; 
-    width: 30px; 
-    height: 30px; 
+    position: absolute;
+    right: 15px;
+    width: 30px;
+    height: 30px;
     cursor: pointer;
     opacity: 0.6;
     transition: .3s all;
+    z-index: 1001;
 }
 
 .search-icon:hover {
@@ -74,7 +88,7 @@
     align-items: center;
     margin: 0 auto;
     height: 100vh;
-    max-height: 72vh; 
+    max-height: 72vh;
 }
 
 .select-wrapper {
@@ -83,26 +97,27 @@
     align-items: center;
     margin: 0 auto;
     height: 100vh;
-    max-height:84vh; 
+    max-height: 84vh;
 }
-.search-card-img{
+
+.search-card-img {
     width: 90px;
     height: 90px;
     margin-right: 20px;
 }
 
-.search-card-wrapper{
+.search-card-wrapper {
     display: flex;
     padding: 15px;
     margin: 2vh 0;
     border-radius: 20px;
-    width: 100%;
+    width: 95%;
     height: 12vh;
     background-color: darkgray;
     transition: .3s all;
 }
 
-.search-card-wrapper:hover{
+.search-card-wrapper:hover {
     transform: scale(1.03);
     cursor: pointer;
 }
