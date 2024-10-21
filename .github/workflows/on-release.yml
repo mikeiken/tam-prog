@@ -16,8 +16,8 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  # IS_RELEASE: ${{ github.event_name == 'release' }}
-  IS_RELEASE: True
+  IS_RELEASE: ${{ github.event_name == 'release' }}
+  # IS_RELEASE: True
   DJANGO_SUFFIX: -django
   FRONTEND_SUFFIX: -frontend
   NGINX_SUFFIX: -nginx
@@ -25,8 +25,22 @@ env:
 
 # There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
 jobs:
+  print-conf:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print configuration
+        run: |
+          echo "GITHUB_EVENT_NAME: ${{ github.event_name }}"
+          echo "IS_RELEASE: ${{ env.IS_RELEASE }}"
+          echo "REGISTRY: ${{ env.REGISTRY }}"
+          echo "IMAGE_NAME: ${{ env.IMAGE_NAME }}"
+          echo "GITHUB_REPOSITORY: ${{ github.repository }}"
+          echo "GITHUB_ACTOR: ${{ github.actor }}"
+          echo "DJANGO_SUFFIX: ${{ env.DJANGO_SUFFIX }}"
+          echo "FRONTEND_SUFFIX: ${{ env.FRONTEND_SUFFIX }}"
+          echo "NGINX_SUFFIX: ${{ env.NGINX_SUFFIX }}"
+          echo "PSQL_SUFFIX: ${{ env.PSQL_SUFFIX }}"
   build-and-push-image-django:
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
     # Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.
     permissions:
@@ -86,7 +100,6 @@ jobs:
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.DJANGO_SUFFIX }}:$STRIPPED_TAG
 
   build-and-push-image-frontend:
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
     permissions:
@@ -143,7 +156,6 @@ jobs:
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.FRONTEND_SUFFIX }}:$STRIPPED_TAG
 
   build-and-push-image-nginx:
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
     permissions:
@@ -200,7 +212,6 @@ jobs:
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.NGINX_SUFFIX }}:$STRIPPED_TAG
 
   build-and-push-image-psql:
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
     permissions:
