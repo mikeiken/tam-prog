@@ -1,6 +1,7 @@
-import React from 'react'
-import { Link, Routes, Route } from 'react-router-dom'
-import MainPage from '../../main-page/MainPage'
+import React from 'react';
+import { Link, Routes, Route } from 'react-router-dom';
+import Garden from '../../main-page/Garden/Garden';
+
 export default function Form() {
   return (
     <div className='wrapper'>
@@ -12,7 +13,7 @@ export default function Form() {
           <img style={{
             position: 'absolute', left: '10px', top: '50%',
             transform: 'translateY(-50%)',
-            width: '24px',  // Задаем ширину
+            width: '24px', 
             height: '24px'
           }}
             src={process.env.PUBLIC_URL + '/user.png'} alt='text'></img>
@@ -25,7 +26,7 @@ export default function Form() {
             style={{
               position: 'absolute', left: '10px', top: '50%',
               transform: 'translateY(-50%)',
-              width: '24px',  // Задаем ширину
+              width: '24px', 
               height: '24px'
             }}
             src={process.env.PUBLIC_URL + '/lock.png'} alt='text'>
@@ -33,20 +34,21 @@ export default function Form() {
         </div>
 
         <div className='remember'>
-          <label for=""> <input type="checkbox" /> Remember me</label>
+          <label htmlFor=''> <input type='checkbox' /> Remember me</label>
           <a href="/">Forgot password?</a>
         </div>
 
         <button type='submit' className='btn'>Login</button>
         <div className='register-link'>
           <p>Don't have an account?
-            <Link to='/main'>Register</Link>
+            <Link to='/garden'>Register</Link> 
           </p>
         </div>
       </form>
+
       <Routes>
-          <Route path='/main' element={<MainPage />} />
+        <Route path='/garden' element={<Garden />} />
       </Routes>
     </div>
-  )
+  );
 }
