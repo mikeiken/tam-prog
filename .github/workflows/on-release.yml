@@ -16,8 +16,8 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  IS_RELEASE: ${{ github.event.pull_request.merged }}
-  # IS_RELEASE: True
+  # IS_RELEASE: ${{ github.event.pull_request.merged }}
+  IS_RELEASE: True
   DJANGO_SUFFIX: -django
   FRONTEND_SUFFIX: -frontend
   NGINX_SUFFIX: -nginx
@@ -41,6 +41,22 @@ jobs:
           echo "NGINX_SUFFIX: ${{ env.NGINX_SUFFIX }}"
           echo "PSQL_SUFFIX: ${{ env.PSQL_SUFFIX }}"
           echo "PULL_REQUEST_MERGED: ${{ github.event.pull_request.merged }}"
+
+  check-if-container-tag-is-not-exist:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if container tag is not exist
+        id: check
+        run: |
+          TAG=${{ github.event.release.tag_name }}
+          if curl -s -I https://ghcr.io/v2/${{ github.repository }}/manifests/$TAG | grep -q "404 Not Found"; then
+            echo "Tag $TAG does not exist"
+            echo "::set-output name=tag_not_exist::true"
+          else
+            echo "Tag $TAG already exists"
+            echo "::set-output name=tag_not_exist::false"
+          fi
+    
   build-and-push-image-django:
     runs-on: ubuntu-latest
     # Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.
