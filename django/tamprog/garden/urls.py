@@ -1,8 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-
 from .views import *
-
 from django.conf import settings
 from django.conf.urls.static import static
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, SpectacularRedocView
@@ -37,7 +35,7 @@ router_order = routers.SimpleRouter()
 router_order.register(r'order', OrderViewSet)
 
 router_available_plants = routers.SimpleRouter()
-router_plant.register(r'avplant', AvailablePlantsViewSet)
+router_available_plants.register(r'availableplants', AvailablePlantsViewSet)
 
 urlpatterns = [
     path('', include(router_agronomist.urls)),
