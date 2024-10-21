@@ -16,8 +16,8 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  IS_RELEASE: ${{ github.event_name == 'release' }}
-  # IS_RELEASE: True
+  # IS_RELEASE: ${{ github.event_name == 'release' }}
+  IS_RELEASE: True
   DJANGO_SUFFIX: -django
   FRONTEND_SUFFIX: -frontend
   NGINX_SUFFIX: -nginx
