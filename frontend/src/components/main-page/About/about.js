@@ -5,7 +5,7 @@ const listStudents = {
   'Денис': {
     name: 'Денис',
     ico: '',
-    link: 'https://t.me/apateon',
+    link: 'https://github.com/Kseen715',
     des: 'Автоматизация технологических процессов сборки, настройка и развёртывание программного обеспечения.',
     subject: 'Девопс',
     image: process.env.PUBLIC_URL + '/students/Денис.png',
@@ -13,7 +13,7 @@ const listStudents = {
   'Леонид': {
     name: 'Леонид',
     ico: '',
-    link: 'https://t.me/st4v3r',
+    link: 'https://github.com/o6ez9na',
     des: 'Разработка клиентской части веб-сайта.',
     subject: 'Фронтенд',
     image: process.env.PUBLIC_URL + '/students/Леонид.png',
@@ -22,7 +22,7 @@ const listStudents = {
   'Анастасия': {
     name: 'Анастасия',
     ico: '',
-    link: 'https://t.me/n_anastasya_v',
+    link: 'https://github.com/Nvnastya',
     des: 'Разработка серверной части веб-сайта.',
     subject: 'Бэкенд',  
     image: process.env.PUBLIC_URL + '/students/Анастасия.png',
@@ -30,7 +30,7 @@ const listStudents = {
   'Николай': {
     name: 'Николай',
     ico: '',
-    link: 'https://t.me/Kolan4ik_h',
+    link: 'https://github.com/Kolan4ik2003',
     des: 'Тестировщик, разработка серверной части веб-сайта.',
     subject: 'Тесты',  
     image: process.env.PUBLIC_URL + '/students/Николай.png',
@@ -39,7 +39,7 @@ const listStudents = {
   'Дарья': {
     name: 'Дарья',
     ico: '',
-    link: 'https://t.me/koteikagrr_27',
+    link: 'https://github.com/kotikgriga27',
     des: 'Формализации спецификаций, архитектуры, функциональных требований и эксплуатационных инструкций для оптимизации разработки и эксплуатации программных систем; тестировщик.',
     subject: '?????',  
     image: process.env.PUBLIC_URL + '/students/Дарья.png',
