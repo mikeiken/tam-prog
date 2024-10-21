@@ -150,15 +150,36 @@ html {
     flex: 1 1 70%;
     background-color: rgba(129, 186, 131, 0.5);
     border-radius: 20px;
+    height: 100%;
     padding: 20px;
     display: flex;
-    flex-wrap: wrap;
     gap: 40px;
-    overflow-y: auto;
     transition: 0.3s ease;
+}
+
+.container-plot-wrapper{
+    display: flex;
+    width: 100%;
     height: 100%;
-    justify-content: flex-start;
-    align-content: flex-start;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.container-plot-products{
+    margin: 0 auto;
+
+    width: 80%;
+    height: 35%;
+    border-radius: 20px;
+    background-color: #96c2a8;
+}
+
+.container-plot-info{
+    border-radius: 20px;
+    margin: 0 auto;
+    width: 60%;
+    height: 60%;
+    background-color: #3498db;
 }
 
 .centered-into-wrappers {
