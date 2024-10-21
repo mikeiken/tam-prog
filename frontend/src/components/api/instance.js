@@ -10,7 +10,7 @@ import axios from 'axios'
 
 
 const Instance = axios.create({
-    baseURL: 'http://homelab.kerasi.ru/api/v1',
+    baseURL: 'http://django:8000/api/v1',
     timeout: 5000,
     headers: {
         'Content-Type': 'application/json',

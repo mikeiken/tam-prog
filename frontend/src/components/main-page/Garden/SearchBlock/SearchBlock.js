@@ -22,7 +22,7 @@ export default function SearchBlock({ onSelectItem }) {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const response = await Instance.get('/garder/?format=json')
+                const response = await Instance.get('/garden/?format=json')
                 setData(response.data);
             } catch (err) {
                 setError(err);
