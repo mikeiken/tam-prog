@@ -3,6 +3,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics
+from fuzzywuzzy import fuzz
+from rest_framework.decorators import action
 
 
 from .models import *
@@ -107,6 +109,28 @@ class PlantViewSet(CORSMixin, viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response()
+    
+    @action(detail=False, methods=['get'], url_path='search')
+    def search(self, request):
+        query = request.GET.get('query', '')
+        threshold = 70 
+        
+        if query:
+            plants = Plant.objects.all()
+            filtered_plants = []
+            
+            for plant in plants:
+                similarity = fuzz.ratio(query.lower(), plant.name.lower())
+                if similarity >= threshold:
+                    filtered_plants.append((plant, similarity))
+            
+            filtered_plants.sort(key=lambda x: x[1], reverse=True)
+            filtered_plants = [plant[0] for plant in filtered_plants]
+        else:
+            filtered_plants = []
+
+        serializer = self.get_serializer(filtered_plants, many=True)
+        return Response(serializer.data)
 
 
 class PlotViewSet(CORSMixin, viewsets.ModelViewSet):
