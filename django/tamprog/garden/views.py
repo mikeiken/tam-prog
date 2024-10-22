@@ -83,6 +83,28 @@ class FertilizerViewSet(CORSMixin, viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response()
+    
+    @action(detail=False, methods=['get'], url_path='search')
+    def search(self, request):
+        query = request.GET.get('query', '')
+        threshold = 70
+        
+        if query:
+            fertilizers = Fertilizer.objects.all()
+            filtered_fertilizers = []
+            
+            for fertilizer in fertilizers:
+                similarity = fuzz.ratio(query.lower(), fertilizer.name.lower())
+                if similarity >= threshold:
+                    filtered_fertilizers.append((fertilizer, similarity))
+            
+            filtered_fertilizers.sort(key=lambda x: x[1], reverse=True)
+            filtered_fertilizers = [fertilizer[0] for fertilizer in filtered_fertilizers]
+        else:
+            filtered_fertilizers = []
+
+        serializer = self.get_serializer(filtered_fertilizers, many=True)
+        return Response(serializer.data)
 
 
 class UserViewSet(CORSMixin, viewsets.ModelViewSet):
