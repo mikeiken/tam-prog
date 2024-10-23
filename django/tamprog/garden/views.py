@@ -191,3 +191,25 @@ class AvailablePlantsViewSet(CORSMixin, viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response()
+
+    @action(detail=False, methods=['get'], url_path='search')
+    def search(self, request):
+        query = request.GET.get('query', '')
+        threshold = 70
+
+        if query:
+            available_plants = AvailablePlants.objects.all()
+            filtered_available_plants = []
+
+            for available_plant in available_plants:
+                similarity = fuzz.ratio(query.lower(), available_plant.name.lower())
+                if similarity >= threshold:
+                    filtered_available_plants.append((available_plant, similarity))
+            
+            filtered_available_plants.sort(key=lambda x: x[1], reverse=True)
+            filtered_available_plants = [available_plant[0] for available_plant in filtered_available_plants]
+        else:
+            filtered_available_plants = []
+
+        serializer = self.get_serializer(filtered_available_plants, many=True)
+        return Response(serializer.data)
