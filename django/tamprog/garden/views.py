@@ -3,6 +3,8 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics
+from fuzzywuzzy import fuzz
+from rest_framework.decorators import action
 
 
 from .models import *
@@ -81,6 +83,28 @@ class FertilizerViewSet(CORSMixin, viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response()
+    
+    @action(detail=False, methods=['get'], url_path='search')
+    def search(self, request):
+        query = request.GET.get('query', '')
+        threshold = 70
+        
+        if query:
+            fertilizers = Fertilizer.objects.all()
+            filtered_fertilizers = []
+            
+            for fertilizer in fertilizers:
+                similarity = fuzz.ratio(query.lower(), fertilizer.name.lower())
+                if similarity >= threshold:
+                    filtered_fertilizers.append((fertilizer, similarity))
+            
+            filtered_fertilizers.sort(key=lambda x: x[1], reverse=True)
+            filtered_fertilizers = [fertilizer[0] for fertilizer in filtered_fertilizers]
+        else:
+            filtered_fertilizers = []
+
+        serializer = self.get_serializer(filtered_fertilizers, many=True)
+        return Response(serializer.data)
 
 
 class UserViewSet(CORSMixin, viewsets.ModelViewSet):
@@ -107,6 +131,28 @@ class PlantViewSet(CORSMixin, viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response()
+    
+    @action(detail=False, methods=['get'], url_path='search')
+    def search(self, request):
+        query = request.GET.get('query', '')
+        threshold = 70 
+        
+        if query:
+            plants = Plant.objects.all()
+            filtered_plants = []
+            
+            for plant in plants:
+                similarity = fuzz.ratio(query.lower(), plant.name.lower())
+                if similarity >= threshold:
+                    filtered_plants.append((plant, similarity))
+            
+            filtered_plants.sort(key=lambda x: x[1], reverse=True)
+            filtered_plants = [plant[0] for plant in filtered_plants]
+        else:
+            filtered_plants = []
+
+        serializer = self.get_serializer(filtered_plants, many=True)
+        return Response(serializer.data)
 
 
 class PlotViewSet(CORSMixin, viewsets.ModelViewSet):
@@ -145,3 +191,25 @@ class AvailablePlantsViewSet(CORSMixin, viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response()
+
+    @action(detail=False, methods=['get'], url_path='search')
+    def search(self, request):
+        query = request.GET.get('query', '')
+        threshold = 70
+
+        if query:
+            available_plants = AvailablePlants.objects.all()
+            filtered_available_plants = []
+
+            for available_plant in available_plants:
+                similarity = fuzz.ratio(query.lower(), available_plant.name.lower())
+                if similarity >= threshold:
+                    filtered_available_plants.append((available_plant, similarity))
+            
+            filtered_available_plants.sort(key=lambda x: x[1], reverse=True)
+            filtered_available_plants = [available_plant[0] for available_plant in filtered_available_plants]
+        else:
+            filtered_available_plants = []
+
+        serializer = self.get_serializer(filtered_available_plants, many=True)
+        return Response(serializer.data)
