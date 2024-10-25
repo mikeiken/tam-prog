@@ -1,0 +1,23 @@
+from .models import Field, Bed
+from users.models import User
+
+def create_field(name, owner):
+    field = Field.objects.create(name=name, owner=owner)
+    return field
+
+def rent_bed(field, user):
+    bed = Bed.objects.filter(field=field, is_rented=False).first()
+    if bed:
+        bed.is_rented = True
+        bed.rented_by = user
+        bed.save()
+    return bed
+
+def release_bed(bed):
+    bed.is_rented = False
+    bed.rented_by = None
+    bed.save()
+    return bed
+
+def get_user_beds(user):
+    return Bed.objects.filter(rented_by=user)

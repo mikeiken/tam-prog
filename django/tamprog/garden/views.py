@@ -1,143 +1,38 @@
-from django.shortcuts import render
 from rest_framework import viewsets
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import generics
-from fuzzywuzzy import fuzz
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
+from rest_framework.response import Response
+from .models import Field, Bed
+from .serializers import FieldSerializer, BedSerializer
+from .services import create_field, rent_bed, release_bed, get_user_beds
 
+class FieldViewSet(viewsets.ModelViewSet):
+    queryset = Field.objects.all()
+    serializer_class = FieldSerializer
+    permission_classes = [IsAuthenticated]
 
-from .models import *
-from .serializers import *
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
-methods = ['get', 'post', 'head',
-           'put', 'patch', 'delete', 'update', 'destroy']
+class BedViewSet(viewsets.ModelViewSet):
+    queryset = Bed.objects.all()
+    serializer_class = BedSerializer
+    permission_classes = [IsAuthenticated]
 
-class CORSMixin:
-    def finalize_response(self, request, response, *args, **kwargs):
-        response = super().finalize_response(request, response, *args, **kwargs)
-        response["Access-Control-Allow-Origin"] = "http://localhost:3000"
-        return response
-
-
-class AgronomistViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = Agronomist.objects.all()
-    serializer_class = AgronomistSerializer
-
-
-
-class SupplierViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = Supplier.objects.all()
-    serializer_class = SupplierSerializer
-
-
-
-class WorkerViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = Worker.objects.all()
-    serializer_class = WorkerSerializer
-
-
-
-class GardenBedViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = GardenBed.objects.all()
-    serializer_class = GardenBedSerializer
-
-
-
-class FertilizerViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = Fertilizer.objects.all()
-    serializer_class = FertilizerSerializer
-
-    
-    @action(detail=False, methods=['get'], url_path='search')
-    def search(self, request):
-        query = request.GET.get('query', '')
-        threshold = 70
-        
-        if query:
-            fertilizers = Fertilizer.objects.all()
-            filtered_fertilizers = []
-            
-            for fertilizer in fertilizers:
-                similarity = fuzz.ratio(query.lower(), fertilizer.name.lower())
-                if similarity >= threshold:
-                    filtered_fertilizers.append((fertilizer, similarity))
-            
-            filtered_fertilizers.sort(key=lambda x: x[1], reverse=True)
-            filtered_fertilizers = [fertilizer[0] for fertilizer in filtered_fertilizers]
-        else:
-            filtered_fertilizers = []
-
-        serializer = self.get_serializer(filtered_fertilizers, many=True)
+    @action(detail=False, methods=['get'])
+    def my_beds(self, request):
+        beds = get_user_beds(request.user)
+        serializer = self.get_serializer(beds, many=True)
         return Response(serializer.data)
 
+    @action(detail=True, methods=['post'])
+    def rent(self, request, pk=None):
+        field = Field.objects.get(id=pk)
+        bed = rent_bed(field, request.user)
+        return Response({'bed_id': bed.id})
 
-class UserViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
-
-class PlantViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = Plant.objects.all()
-    serializer_class = PlantSerializer
-
-    
-    @action(detail=False, methods=['get'], url_path='search')
-    def search(self, request):
-        query = request.GET.get('query', '')
-        threshold = 70 
-        
-        if query:
-            plants = Plant.objects.all()
-            filtered_plants = []
-            
-            for plant in plants:
-                similarity = fuzz.ratio(query.lower(), plant.name.lower())
-                if similarity >= threshold:
-                    filtered_plants.append((plant, similarity))
-            
-            filtered_plants.sort(key=lambda x: x[1], reverse=True)
-            filtered_plants = [plant[0] for plant in filtered_plants]
-        else:
-            filtered_plants = []
-
-        serializer = self.get_serializer(filtered_plants, many=True)
-        return Response(serializer.data)
-
-
-class PlotViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = Plot.objects.all()
-    serializer_class = PlotSerializer
-
-
-class OrderViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
-
-
-class AvailablePlantsViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = AvailablePlants.objects.all()
-    serializer_class = AvailablePlantsSerializer
-
-    @action(detail=False, methods=['get'], url_path='search')
-    def search(self, request):
-        query = request.GET.get('query', '')
-        threshold = 70
-
-        if query:
-            available_plants = AvailablePlants.objects.all()
-            filtered_available_plants = []
-
-            for available_plant in available_plants:
-                similarity = fuzz.ratio(query.lower(), available_plant.name.lower())
-                if similarity >= threshold:
-                    filtered_available_plants.append((available_plant, similarity))
-            
-            filtered_available_plants.sort(key=lambda x: x[1], reverse=True)
-            filtered_available_plants = [available_plant[0] for available_plant in filtered_available_plants]
-        else:
-            filtered_available_plants = []
-
-        serializer = self.get_serializer(filtered_available_plants, many=True)
-        return Response(serializer.data)
+    @action(detail=True, methods=['post'])
+    def release(self, request, pk=None):
+        bed = self.get_object()
+        release_bed(bed)
+        return Response({'status': 'bed released'})
