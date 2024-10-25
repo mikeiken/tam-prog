@@ -74,6 +74,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'garden',
+    'orders',
+    'plants',
+    'user',
+    'fertilizer',
     'drf_spectacular',
 ]
 
