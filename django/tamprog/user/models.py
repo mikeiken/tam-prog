@@ -8,3 +8,5 @@ class User(AbstractUser):
     account_number = models.CharField(max_length=20)
     full_name = models.CharField(max_length=255)
 
+class Worker(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)

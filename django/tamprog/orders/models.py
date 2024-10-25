@@ -1,6 +1,6 @@
 from django.db import models
-from users.models import User, Worker
-from fields.models import Bed
+from user.models import User, Worker
+from garden.models import Bed
 from plants.models import Plant
 
 class Order(models.Model):

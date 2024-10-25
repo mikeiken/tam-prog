@@ -1,5 +1,5 @@
 from django.db import models
-from fields.models import Bed
+from garden.models import Bed
 
 class Plant(models.Model):
     name = models.CharField(max_length=100)
