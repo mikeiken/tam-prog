@@ -32,35 +32,6 @@ DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = (os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(','))
 
-CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-    "http://localhost",
-]
-
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-]
-
-CORS_ALLOW_METHODS = [
-    'GET',
-    'POST',
-    'PUT',
-    'DELETE',
-    'OPTIONS',
-    'PATCH',
-    'UPDATE',
-    'DESTROY'
-]
 
 # Application definition
 
@@ -177,6 +148,72 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static-dj')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://localhost:8000",
+    "http://localhost",
+    "http://homelab.kerasi.ru",
+]
+
+CORS_ALLOW_HEADERS = [
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+]
+
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'DELETE',
+    'OPTIONS',
+    'PATCH',
+    'UPDATE',
+    'DESTROY'
+]
+
+# Content Security Policy (CSP)
+CSP_SCRIPT_SRC = (
+    "'self'",
+    "'unsafe-eval'",
+    "https://mc.yandex.ru",
+)
+CSP_FRAME_SRC = (
+    "'self'",
+    "https://example.com",
+)
+
+CSP_CONNECT_SRC = (
+    "'self'",
+    'https://example.com',
+    "https://mc.yandex.ru",
+    "http://localhost:3000",
+    "http://localhost:8000",
+    "http://homelab.kerasi.ru",
+)
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://example.com',
+    "http://localhost:3000",
+    "http://localhost:8000",
+    "http://homelab.kerasi.ru",
+]
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'My API',
+    'DESCRIPTION': 'API documentation for my project',
+    'VERSION': '1.0.0',
+}
+
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',

@@ -16,6 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+
+schema_view = SpectacularAPIView.as_view()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +28,6 @@ urlpatterns = [
     path('', include('orders.urls')),
     path('', include('plants.urls')),
     path('', include('user.urls')),
+    path('api/schema/', schema_view, name='schema'),  # URL для схемы
+    path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),  # Swagger UI
 ]
