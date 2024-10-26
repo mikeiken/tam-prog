@@ -27,7 +27,7 @@ def fertilizer():
 @pytest.fixture
 def user(agronomist, worker):
     return User.objects.create(password="hashed_password", login="user123", role="admin",
-                               email="chel@mail.ru", phone="+72345678908",
+                               email="user@mail.ru", phone="+72345678908",
                                agronomist_id=agronomist, worker_id=worker)
 
 @pytest.fixture

@@ -85,7 +85,7 @@ def test_user_serializer(agronomist, worker):
         "password": "hashed_password",
         "login": "user123",
         "role": "admin",
-        "email": "chel@mail.ru",
+        "email": "user@mail.ru",
         "phone": "+72345678908",
         "agronomist_id": agronomist.id,
         "worker_id": worker.id
@@ -96,7 +96,7 @@ def test_user_serializer(agronomist, worker):
     assert user.password == "hashed_password"
     assert user.login == "user123"
     assert user.role == "admin"
-    assert user.email == "chel@mail.ru"
+    assert user.email == "user@mail.ru"
     assert user.phone == "+72345678908"
     assert user.agronomist_id == agronomist
     assert user.worker_id == worker
