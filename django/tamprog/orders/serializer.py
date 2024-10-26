@@ -1,12 +1,8 @@
+# orders/serializers.py
 from rest_framework import serializers
-from .models import Fertilizer, BedPlantFertilizer
+from .models import Order
 
-class FertilizerSerializer(serializers.ModelSerializer):
+class OrderSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Fertilizer
-        fields = '__all__'
-
-class BedPlantFertilizerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BedPlantFertilizer
+        model = Order
         fields = '__all__'

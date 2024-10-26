@@ -4,7 +4,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Fertilizer, BedPlantFertilizer
 from .serializers import FertilizerSerializer, BedPlantFertilizerSerializer
-from .services import create_fertilizer, apply_fertilizer, get_fertilizers_for_plant
+from .services import create_fertilizer, get_fertilizers_for_plant
 
 class FertilizerViewSet(viewsets.ModelViewSet):
     queryset = Fertilizer.objects.all()
