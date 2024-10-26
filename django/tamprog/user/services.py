@@ -1,14 +1,15 @@
-from .models import User
+from .models import User, Agronomist
 from rest_framework_simplejwt.tokens import RefreshToken
 
-def create_user(username, password, wallet_balance=0.00, phone_number='', account_number='', full_name=''):
+def create_user(username, password, wallet_balance=0.00, phone_number='', account_number='', full_name='', role='user'):
     user = User.objects.create_user(
         username=username,
         password=password,
         wallet_balance=wallet_balance,
         phone_number=phone_number,
         account_number=account_number,
-        full_name=full_name
+        full_name=full_name,
+        role=role
     )
     return user
 

@@ -1,11 +1,10 @@
-# users/serializers.py
 from rest_framework import serializers
-from .models import User
+from .models import User, Agronomist
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['id', 'username', 'wallet_balance', 'phone_number', 'account_number', 'full_name']
+        fields = ['id', 'username', 'wallet_balance', 'phone_number', 'account_number', 'full_name', 'role']
         read_only_fields = ['username']
 
     def validate_phone_number(self, value):
@@ -22,3 +21,8 @@ class UserSerializer(serializers.ModelSerializer):
         if not value:
             raise serializers.ValidationError("Full name is required.")
         return value
+
+class AgronomistSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Agronomist
+        fields = ['user', 'work_schedule']
