@@ -20,7 +20,7 @@ class UserViewSet(viewsets.ModelViewSet):
         phone_number = request.data.get('phone_number', '')
         account_number = request.data.get('account_number', '')
         full_name = request.data.get('full_name', '')
-        role = request.data.get('role', 'chel')
+        role = request.data.get('role', 'person')
         tokens = get_tokens_for_user(Person)
         return Response(tokens)
 

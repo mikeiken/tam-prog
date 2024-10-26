@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('chel', '0001_initial'),
+        ('user', '0001_initial'),
         ('plants', '0001_initial'),
         ('garden', '0008_bed_field_delete_availableplants_and_more'),
     ]
@@ -24,8 +24,8 @@ class Migration(migrations.Migration):
                 ('completed_at', models.DateTimeField(blank=True, null=True)),
                 ('bed', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='garden.bed')),
                 ('plant', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='plants.plant')),
-                ('chel', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='chel.chel')),
-                ('worker', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='chel.worker')),
+                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='user.user')),
+                ('worker', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='user.worker')),
             ],
         ),
     ]

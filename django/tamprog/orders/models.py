@@ -1,5 +1,5 @@
 from django.db import models
-from chel.models import Person, Worker
+from user.models import Person, Worker
 from garden.models import Bed
 from plants.models import Plant
 

@@ -1,6 +1,6 @@
 from django.utils import timezone
 from .models import Order
-from chel.models import Worker
+from user.models import Worker
 from garden.models import Bed
 from plants.models import Plant
 

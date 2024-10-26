@@ -1,5 +1,5 @@
 from django.db import models
-from chel.models import Person
+from user.models import Person
 
 class Field(models.Model):
     name = models.CharField(max_length=100)

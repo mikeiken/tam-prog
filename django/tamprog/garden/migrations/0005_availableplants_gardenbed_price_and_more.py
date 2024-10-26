@@ -75,17 +75,17 @@ class Migration(migrations.Migration):
             field=models.CharField(max_length=1024, unique=True, validators=[django.core.validators.EmailValidator(allowlist=['mail.ru', 'gmail.com', 'yahoo.com', 'yandex.ru'])]),
         ),
         migrations.AlterField(
-            model_name='chel',
+            model_name='user',
             name='email',
             field=models.CharField(max_length=1024, unique=True, validators=[django.core.validators.EmailValidator(allowlist=['mail.ru', 'gmail.com', 'yahoo.com', 'yandex.ru'])]),
         ),
         migrations.AlterField(
-            model_name='chel',
+            model_name='user',
             name='login',
             field=models.CharField(max_length=1024, unique=True),
         ),
         migrations.AlterField(
-            model_name='chel',
+            model_name='user',
             name='phone',
             field=models.CharField(max_length=18, unique=True, validators=[django.core.validators.RegexValidator(regex='^+7d{10}$')]),
         ),
