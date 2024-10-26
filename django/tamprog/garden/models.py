@@ -1,9 +1,9 @@
 from django.db import models
-from user.models import Person
+from user.models import Person, Agronomist
 
 class Field(models.Model):
     name = models.CharField(max_length=100)
-    owner = models.ForeignKey(Person, on_delete=models.CASCADE)
+    count_beds = models.IntegerField(default=0)
 
 class Bed(models.Model):
     field = models.ForeignKey(Field, on_delete=models.CASCADE)

@@ -12,7 +12,10 @@ class FieldViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
-        serializer.save(owner=self.request.user)
+        count_beds = self.request.data.get('count_beds', 0)  # Получаем количество грядок из запроса
+        serializer.save(count_beds=count_beds)
+
+
 
 class BedViewSet(viewsets.ModelViewSet):
     queryset = Bed.objects.all()

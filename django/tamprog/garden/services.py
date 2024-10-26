@@ -2,7 +2,7 @@ from .models import Field, Bed
 from user.models import Person
 
 def create_field(name, owner):
-    field = Field.objects.create(name=name, owner=owner)
+    field = Field.objects.create(name=name, count_beds=count_beds)
     return field
 
 def rent_bed(field, user):
