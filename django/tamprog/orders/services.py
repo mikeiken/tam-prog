@@ -1,7 +1,7 @@
 from django.utils import timezone
 from .models import Order
-from users.models import Worker
-from fields.models import Bed
+from user.models import Worker
+from garden.models import Bed
 from plants.models import Plant
 
 def create_order(user, worker, bed, plant, action):

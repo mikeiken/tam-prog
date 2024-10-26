@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from .models import Plant, BedPlant
 from .serializers import PlantSerializer, BedPlantSerializer
 from .services import plant_in_bed, harvest_plant, fertilize_plant, water_plant, dig_up_plant
-from fertilizers.models import Fertilizer
+from fertilizer.models import Fertilizer
 
 class PlantViewSet(viewsets.ModelViewSet):
     queryset = Plant.objects.all()

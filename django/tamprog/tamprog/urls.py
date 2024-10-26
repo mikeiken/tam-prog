@@ -21,8 +21,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('log/', include('rest_framework.urls')),
     path('api/v1/', include('fertilizer.urls')),
-    path('api/v1/', include('garden.urls')),
-    path('api/v1/', include('orders.urls')),
-    path('api/v1/', include('plants.urls')),
-    path('api/v1/', include('user.urls')),
+    path('api/v2/', include('garden.urls')),
+    path('api/v3/', include('orders.urls')),
+    path('api/v4/', include('plants.urls')),
+    path('api/v5/', include('user.urls')),
 ]

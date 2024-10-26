@@ -1,6 +1,6 @@
 from .models import Plant, BedPlant
-from fields.models import Bed
-from fertilizers.models import Fertilizer, BedPlantFertilizer
+from garden.models import Bed
+from fertilizer.models import Fertilizer, BedPlantFertilizer
 
 def plant_in_bed(bed, plant):
     bed_plant = BedPlant.objects.create(bed=bed, plant=plant)

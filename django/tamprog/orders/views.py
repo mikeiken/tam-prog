@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from .models import Order
-from orders.serializers import OrderSerializer
+from orders.serializer import OrderSerializer
 from .services import create_order, complete_order
 
 class OrderViewSet(viewsets.ModelViewSet):
@@ -16,6 +16,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         plant = serializer.validated_data['plant']
         action = serializer.validated_data['action']
         create_order(self.request.user, worker, bed, plant, action)
+
 
     def perform_update(self, serializer):
         order = serializer.save()
