@@ -124,27 +124,27 @@ class TestViewSets:
         data = {
             "password": "new_password",
             "login": "new_user",
-            "role": "user",
+            "role": "chel",
             "email": "new_user@mail.ru",
             "phone": "+72345678908",
             "agronomist_id": agronomist.id,
             "worker_id": worker.id
         }
-        response = api_client.post(reverse('user-list'), data, format='json')
+        response = api_client.post(reverse('chel-list'), data, format='json')
         assert response.status_code == status.HTTP_201_CREATED
         assert User.objects.count() == 1
 
     @pytest.mark.django_db
     def test_update_user(self, api_client, user):
         data = {"email": "updated_user@mail.ru"}
-        response = api_client.patch(reverse('user-detail', args=[user.id]), data, format='json')
+        response = api_client.patch(reverse('chel-detail', args=[user.id]), data, format='json')
         assert response.status_code == status.HTTP_200_OK
         user.refresh_from_db()
         assert user.email == "updated_user@mail.ru"
 
     @pytest.mark.django_db
     def test_delete_user(self, api_client, user):
-        response = api_client.delete(reverse('user-detail', args=[user.id]))
+        response = api_client.delete(reverse('chel-detail', args=[user.id]))
         assert response.status_code == status.HTTP_204_NO_CONTENT
         assert User.objects.count() == 0
 

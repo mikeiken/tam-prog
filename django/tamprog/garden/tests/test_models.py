@@ -76,7 +76,7 @@ def test_create_user(agronomist, worker):
         password="hashed_password",
         login="user123",
         role="admin",
-        email="user@example.com",
+        email="chel@example.com",
         phone="+1234567890",
         agronomist_id=agronomist,
         worker_id=worker
@@ -84,7 +84,7 @@ def test_create_user(agronomist, worker):
     assert user.password == "hashed_password"
     assert user.login == "user123"
     assert user.role == "admin"
-    assert user.email == "user@example.com"
+    assert user.email == "chel@example.com"
     assert user.phone == "+1234567890"
     assert user.agronomist_id == agronomist
     assert user.worker_id == worker

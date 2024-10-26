@@ -1,9 +1,9 @@
 from rest_framework import serializers
-from .models import User, Agronomist
+from .models import Person, Agronomist
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = Person
         fields = ['id', 'username', 'wallet_balance', 'phone_number', 'account_number', 'full_name', 'role']
         read_only_fields = ['username']
 
@@ -25,4 +25,4 @@ class UserSerializer(serializers.ModelSerializer):
 class AgronomistSerializer(serializers.ModelSerializer):
     class Meta:
         model = Agronomist
-        fields = ['user', 'work_schedule']
+        fields = ['person', 'work_schedule']

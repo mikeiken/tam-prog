@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user', '0001_initial'),
+        ('chel', '0001_initial'),
         ('garden', '0007_rename_garden_num_availableplants_garden_id'),
     ]
 
@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100)),
-                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='user.user')),
+                ('owner', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='chel.chel')),
             ],
         ),
         migrations.DeleteModel(
@@ -58,11 +58,11 @@ class Migration(migrations.Migration):
             name='Supplier',
         ),
         migrations.RemoveField(
-            model_name='user',
+            model_name='chel',
             name='agronomist_id',
         ),
         migrations.RemoveField(
-            model_name='user',
+            model_name='chel',
             name='worker_id',
         ),
         migrations.DeleteModel(
@@ -97,6 +97,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='bed',
             name='rented_by',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='user.user'),
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='chel.chel'),
         ),
     ]

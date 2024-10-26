@@ -46,7 +46,7 @@ CORS_ALLOW_HEADERS = [
     'content-type',
     'dnt',
     'origin',
-    'user-agent',
+    'chel-agent',
     'x-csrftoken',
     'x-requested-with',
 ]
@@ -77,7 +77,7 @@ INSTALLED_APPS = [
     'garden',
     'orders',
     'plants',
-    'user',
+    'chel',
     'fertilizer',
     'drf_spectacular',
 ]

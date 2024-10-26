@@ -1,6 +1,7 @@
 from django.db import models
 from plants.models import BedPlant
-from django.core.validators import EmailValidator, RegexValidator, MinValueValidator\
+from django.core.validators import EmailValidator, RegexValidator, MinValueValidator
+
 
 class Fertilizer(models.Model):
     name = models.CharField(max_length=100)

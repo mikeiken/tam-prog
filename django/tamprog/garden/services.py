@@ -1,5 +1,5 @@
 from .models import Field, Bed
-from user.models import User
+from chel.models import Person
 
 def create_field(name, owner):
     field = Field.objects.create(name=name, owner=owner)

@@ -40,7 +40,7 @@ def test_fertilizer_url(api_client):
 
 @pytest.mark.django_db
 def test_user_url(api_client):
-    url = reverse('user-list')
+    url = reverse('chel-list')
     response = api_client.get(url)
     assert response.status_code == status.HTTP_200_OK
 
