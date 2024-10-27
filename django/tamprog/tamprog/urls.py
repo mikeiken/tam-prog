@@ -21,17 +21,14 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 schema_view = SpectacularAPIView.as_view()
 
 
-
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('log/', include('rest_framework.urls')),
-    path('', include('fertilizer.urls')),
-    path('', include('garden.urls')),
-    path('', include('orders.urls')),
-    path('', include('plants.urls')),
-    path('', include('user.urls')),
-    path('api/schema/', schema_view, name='schema'),  # URL для схемы
-    path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),  # Swagger UI
-    path('api/', include('user.urls')),
+    path('api/v1/', include('fertilizer.urls')),
+    path('api/v1/', include('garden.urls')),
+    path('api/v1/', include('orders.urls')),
+    path('api/v1/', include('plants.urls')),
+    path('api/v1/', include('user.urls')),
+    path('api/v1/api/schema/', schema_view, name='schema'),
+    path('api/v1/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]

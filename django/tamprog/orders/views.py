@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from .models import Order
 from orders.serializer import OrderSerializer
 from .services import create_order, complete_order
@@ -8,7 +8,7 @@ from .services import create_order, complete_order
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         worker = serializer.validated_data['worker']

@@ -1,7 +1,5 @@
 from rest_framework import serializers
-from .models import Person, Agronomist, Worker
-
-
+from .models import Person, Worker
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -29,12 +27,7 @@ class LoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
 
-class AgronomistSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Agronomist
-        fields = ['id', 'name']
-
 class WorkerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Worker
-        fields = ['id', 'name']
+        fields = '__all__'
