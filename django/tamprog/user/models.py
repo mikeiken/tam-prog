@@ -13,7 +13,10 @@ class PersonManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-
+    def create_superuser(self, username, full_name, phone_number, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        return self.create_user(username, full_name, phone_number, password, **extra_fields)
 
 class Person(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=255, unique=True)
