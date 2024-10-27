@@ -1,7 +1,7 @@
 from .models import Field, Bed
 from user.models import Person
 
-def create_field(name, owner):
+def create_field(name, count_beds):
     field = Field.objects.create(name=name, count_beds=count_beds)
     return field
 
