@@ -35,7 +35,7 @@ class Person(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['full_name', 'phone_number']
 
     class Meta:
-        pass  # Используем таблицу auth_user
+        pass
 
     def __str__(self):
         return self.username

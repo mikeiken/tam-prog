@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from .permissions import *
 from .models import Plant, BedPlant
 from .serializers import PlantSerializer, BedPlantSerializer
 from .services import plant_in_bed, harvest_plant, fertilize_plant, water_plant, dig_up_plant
@@ -10,12 +11,12 @@ from fertilizer.models import Fertilizer
 class PlantViewSet(viewsets.ModelViewSet):
     queryset = Plant.objects.all()
     serializer_class = PlantSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [AgronomistPermission]
 
 class BedPlantViewSet(viewsets.ModelViewSet):
     queryset = BedPlant.objects.all()
     serializer_class = BedPlantSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [AgronomistOrRenterPermission, IsAuthenticated]
 
     def perform_create(self, serializer):
         bed = serializer.validated_data['bed']

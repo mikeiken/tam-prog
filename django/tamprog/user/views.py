@@ -1,14 +1,15 @@
 from rest_framework import viewsets
-from .permissions import PostOnly
+from .permission import *
 from .models import *
 from .serializers import *
 from rest_framework import generics, status
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAdminUser
 from .services import PersonService
 from django.contrib.auth import get_user_model
+
 User = get_user_model()
 class LoginView(generics.GenericAPIView):
     permission_classes = (AllowAny,)
@@ -56,14 +57,15 @@ class RegisterViewSet(viewsets.ModelViewSet):
             status=status.HTTP_201_CREATED,
             headers=headers
         )
+
+
 class PersonViewSet(viewsets.ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
+    permission_classes = [IsAdminUser]
 
-class AgronomistViewSet(viewsets.ModelViewSet):
-    queryset = Agronomist.objects.all()
-    serializer_class = AgronomistSerializer
 
 class WorkerViewSet(viewsets.ModelViewSet):
     queryset = Worker.objects.all()
     serializer_class = WorkerSerializer
+    permission_classes = [AgronomistPermission]
