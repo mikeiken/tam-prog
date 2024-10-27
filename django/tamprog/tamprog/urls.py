@@ -20,6 +20,9 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 schema_view = SpectacularAPIView.as_view()
 
+
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('log/', include('rest_framework.urls')),
@@ -30,4 +33,5 @@ urlpatterns = [
     path('', include('user.urls')),
     path('api/schema/', schema_view, name='schema'),  # URL для схемы
     path('swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),  # Swagger UI
+    path('api/', include('user.urls')),
 ]

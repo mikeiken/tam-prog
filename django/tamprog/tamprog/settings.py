@@ -45,10 +45,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_simplejwt',
+    'user',
     'garden',
     'orders',
     'plants',
-    'user',
     'fertilizer',
     'drf_spectacular',
 ]
@@ -214,11 +214,16 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
 }
 
-
+AUTH_USER_MODEL = 'user.Person'
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
     ),
     #'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     #'PAGE_SIZE': 30
