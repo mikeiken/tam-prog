@@ -34,7 +34,7 @@ ALLOWED_HOSTS = (os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(
 
 
 # Application definition
-
+AUTH_USER_MODEL = 'user.Person'
 INSTALLED_APPS = [
     'corsheaders',
     'django.contrib.admin',
@@ -214,7 +214,7 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
 }
 
-AUTH_USER_MODEL = 'user.Person'
+
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 

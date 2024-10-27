@@ -20,7 +20,7 @@ class PersonManager(BaseUserManager):
 
 class Person(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=255, unique=True)
-    wallet_balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    wallet_balance = models.FloatField(default=0.00)
     full_name = models.CharField(max_length=255)
     phone_number = models.CharField(
         max_length=15,
@@ -34,8 +34,12 @@ class Person(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['full_name', 'phone_number']
 
+    class Meta:
+        pass  # Используем таблицу auth_user
+
     def __str__(self):
         return self.username
+
 class Agronomist(models.Model):
     name = models.CharField(max_length=255)
 
