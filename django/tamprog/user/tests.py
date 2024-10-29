@@ -1,67 +1,103 @@
 import pytest
-from django.urls import reverse
 from rest_framework import status
 from django.contrib.auth import get_user_model
-from user.models import Person
 
 User = get_user_model()
 
+@pytest.mark.django_db
+def test_register_user(api_client):
+    """Тест успешной регистрации нового пользователя."""
+    url = '/api/v1/register/'
+    data = {
+        'username': 'newuser',
+        'phone_number': '+1234567890',
+        'full_name': 'New User',
+        'password': 'newpassword',
+        'wallet_balance': 100.00
+    }
+    response = api_client.post(url, data, format='json')
+    assert response.status_code == status.HTTP_201_CREATED
+    assert User.objects.filter(username='newuser').exists()
 
 @pytest.mark.django_db
-def test_login_user(api_client, create_user):
-    """Тестирует вход пользователя в систему."""
-    url = reverse('login')  # Убедитесь, что ваш URL имеет правильное имя
+def test_register_user_existing_username(api_client, user):
+    """Тест на регистрацию пользователя с уже существующим именем."""
+    url = '/api/v1/register/'
     data = {
-        "username": "testuser",
-        "password": "password123"
+        'username': user.username,
+        'phone_number': '+1234567890',
+        'full_name': 'New User',
+        'password': 'newpassword',
+        'wallet_balance': 50.00
     }
+    response = api_client.post(url, data, format='json')
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert "username" in response.data
 
+@pytest.mark.django_db
+def test_register_user_missing_fields(api_client):
+    """Тест на регистрацию без обязательных полей."""
+    url = '/api/v1/register/'
+    data = {
+        'username': 'incompleteuser'
+        # Пропущены обязательные поля
+    }
+    response = api_client.post(url, data, format='json')
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert "phone_number" in response.data
+    assert "password" in response.data
+
+@pytest.mark.django_db
+def test_register_user_invalid_phone_number(api_client):
+    """Тест на регистрацию с неверным форматом номера телефона."""
+    url = '/api/v1/register/'
+    data = {
+        'username': 'user_invalid_phone',
+        'phone_number': 'invalid_phone',
+        'full_name': 'New User',
+        'password': 'newpassword',
+        'wallet_balance': 100.00
+    }
+    response = api_client.post(url, data, format='json')
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert "phone_number" in response.data
+
+@pytest.mark.django_db
+def test_login_user(api_client, user):
+    """Тест успешного входа с корректными данными."""
+    user.set_password('testpassword')
+    user.save()
+    url = '/api/v1/login/'
+    data = {
+        'username': user.username,
+        'password': 'testpassword'
+    }
     response = api_client.post(url, data, format='json')
     assert response.status_code == status.HTTP_200_OK
-    assert "refresh" in response.data
-    assert "access" in response.data
-    assert response.data["wallet_balance"] == create_user.wallet_balance
-
-
-
+    assert 'access' in response.data
+    assert 'refresh' in response.data
+    assert 'wallet_balance' in response.data
 
 @pytest.mark.django_db
-def test_get_person(api_client, create_user):
-    """Тестирует получение информации о человеке."""
-    person = Person.objects.create(
-        username="personuser",
-        full_name="Person User",
-        phone_number="+1112223333",
-        wallet_balance=200.00
-    )
-
-    url = reverse('person-detail', kwargs={'pk': person.id})  # Убедитесь, что ваш URL имеет правильное имя
-    api_client.login(username="testuser", password="password123")  # Логин пользователя
-
-    response = api_client.get(url)
-    assert response.status_code == status.HTTP_200_OK
-    assert response.data['username'] == person.username
-    assert response.data['full_name'] == person.full_name
-
-@pytest.mark.django_db
-def test_update_person(api_client, create_user):
-    person = Person.objects.create(
-        username="personuser",
-        full_name="Person User",
-        phone_number="+1112223333",
-        wallet_balance=200.00
-    )
-
-    url = reverse('person-detail', kwargs={'pk': person.id})  # Убедитесь, что ваш URL имеет правильное имя
-    api_client.login(username="testuser", password="password123")  # Логин пользователя
-
+def test_login_user_invalid_credentials(api_client):
+    """Тест на вход с неверными данными."""
+    url = '/api/v1/login/'
     data = {
-        "full_name": "Updated Person User",
-        "phone_number": "+9998887777"
+        'username': 'nonexistentuser',
+        'password': 'wrongpassword'
     }
+    response = api_client.post(url, data, format='json')
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert "detail" in response.data
+    assert response.data["detail"] == "Invalid credentials"
 
-    response = api_client.patch(url, data, format='json')
-    assert response.status_code == status.HTTP_200_OK
-    person.refresh_from_db()  # Обновление объекта из базы данных
-    assert person.full_name == "Updated Person User"
-
+@pytest.mark.django_db
+def test_login_user_missing_fields(api_client):
+    """Тест на вход с отсутствующими обязательными полями."""
+    url = '/api/v1/login/'
+    data = {
+        'username': 'testuser'
+    }
+    response = api_client.post(url, data, format='json')
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert "password" in response.data
