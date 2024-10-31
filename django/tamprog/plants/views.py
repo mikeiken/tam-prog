@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .permissions import *
@@ -32,8 +32,10 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def fertilize(self, request, pk=None):
         bed_plant = self.get_object()
-        fertilizer_id = request.data['fertilizer_id']
-        fertilizer = Fertilizer.objects.get(id=fertilizer_id)
+        plant_name = bed_plant.plant.name
+        fertilizer = Fertilizer.objects.filter(compound__icontains=plant_name).first()
+        if not fertilizer:
+            return Response({'error': 'No suitable fertilizer found'}, status=404)
         fertilize_plant(bed_plant, fertilizer)
         return Response({'status': 'plant fertilized'})
 

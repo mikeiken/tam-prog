@@ -10,8 +10,13 @@ def harvest_plant(bed_plant):
     bed_plant.delete()
 
 def fertilize_plant(bed_plant, fertilizer):
+
+    new_growth_time = bed_plant.growth_time - fertilizer.boost
+    bed_plant.growth_time = new_growth_time
+
     BedPlantFertilizer.objects.create(bed_plant=bed_plant, fertilizer=fertilizer)
     bed_plant.fertilizer_applied = True
+    bed_plant.save(update_fields=["fertilizer_applied", "growth_time"])
     bed_plant.save()
 
 def water_plant(bed_plant):

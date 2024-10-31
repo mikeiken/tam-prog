@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from .models import Fertilizer, BedPlantFertilizer
 from .permission import *
 from .serializers import FertilizerSerializer, BedPlantFertilizerSerializer
-from .services import create_fertilizer, get_fertilizers_for_plant, apply_fertilizer
+from .services import create_fertilizer, get_fertilizers_for_plant#, apply_fertilizer
 
 class FertilizerViewSet(viewsets.ModelViewSet):
     queryset = Fertilizer.objects.all()
@@ -23,14 +23,9 @@ class BedPlantFertilizerViewSet(viewsets.ModelViewSet):
     serializer_class = BedPlantFertilizerSerializer
     permission_classes = [BedPlantF]
 
-    def perform_create(self, serializer):
-        bed_plant = serializer.validated_data['bed_plant']
-        fertilizer = serializer.validated_data['fertilizer']
-        apply_fertilizer(bed_plant, fertilizer)
-
     @action(detail=True, methods=['get'])
     def fertilizers(self, request, pk=None):
         bed_plant = self.get_object()
         fertilizers = get_fertilizers_for_plant(bed_plant)
-        serializer = FertilizerSerializer(fertilizers, many=True)
+        serializer = BedPlantFertilizerSerializer(fertilizers, many=True)
         return Response(serializer.data)
