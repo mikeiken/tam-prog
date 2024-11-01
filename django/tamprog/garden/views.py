@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from .permission import *
 from .models import Field, Bed
 from .serializers import FieldSerializer, BedSerializer
-from .services import create_field, rent_bed, release_bed, get_user_beds
+from .services import BedService
 
 class FieldViewSet(viewsets.ModelViewSet):
     queryset = Field.objects.all()
@@ -24,18 +24,18 @@ class BedViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def my_beds(self, request):
-        beds = get_user_beds(request.user)
+        beds = BedService.get_user_beds(request.user)
         serializer = self.get_serializer(beds, many=True)
         return Response(serializer.data)
 
     @action(detail=True, methods=['post'])
     def rent(self, request, pk=None):
         field = Field.objects.get(id=pk)
-        bed = rent_bed(field, request.user)
+        bed = BedService.rent_bed(field, request.user)
         return Response({'bed_id': bed.id})
 
     @action(detail=True, methods=['post'])
     def release(self, request, pk=None):
         bed = self.get_object()
-        release_bed(bed)
+        BedService.release_bed(bed)
         return Response({'status': 'bed released'})

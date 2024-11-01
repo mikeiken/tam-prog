@@ -45,3 +45,5 @@ class Agronomist(models.Model):
 
 class Worker(models.Model):
     name = models.CharField(max_length=255)
+    price = models.FloatField(default=0.00)
+    description = models.TextField()
