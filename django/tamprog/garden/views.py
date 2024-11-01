@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -6,6 +6,7 @@ from .permission import *
 from .models import Field, Bed
 from .serializers import FieldSerializer, BedSerializer
 from .services import BedService
+
 
 class FieldViewSet(viewsets.ModelViewSet):
     queryset = Field.objects.all()
@@ -30,12 +31,20 @@ class BedViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def rent(self, request, pk=None):
-        field = Field.objects.get(id=pk)
-        bed = BedService.rent_bed(field, request.user)
-        return Response({'bed_id': bed.id})
+        bed = self.get_object()
+        person = request.user
+        result = BedService.rent_bed(bed.id, person)
+        if result:
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
 
     @action(detail=True, methods=['post'])
     def release(self, request, pk=None):
         bed = self.get_object()
-        BedService.release_bed(bed)
-        return Response({'status': 'bed released'})
+        result = BedService.release_bed(bed.id)
+        if result:
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)

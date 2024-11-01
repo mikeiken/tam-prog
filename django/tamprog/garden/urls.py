@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter
 from .views import FieldViewSet, BedViewSet
 
 router = DefaultRouter()
-router.register(r'plot', FieldViewSet)
+router.register(r'field', FieldViewSet)
 router.register(r'bed', BedViewSet)
 
 urlpatterns = [
