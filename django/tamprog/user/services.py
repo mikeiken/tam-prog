@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from .queries import *
 
 User = get_user_model()
 
@@ -22,3 +23,9 @@ class PersonService:
             return True
         return False
 
+
+class WorkerService:
+    @staticmethod
+    def get_sorted_workers(ascending: bool = True):
+        query = GetWorkersSortedByPrice(ascending)
+        return query.execute()

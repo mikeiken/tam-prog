@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAdminUser
-from .services import PersonService
+from .services import *
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -69,3 +69,9 @@ class WorkerViewSet(viewsets.ModelViewSet):
     queryset = Worker.objects.all()
     serializer_class = WorkerSerializer
     permission_classes = [AgronomistPermission]
+
+    def list(self, request, *args, **kwargs):
+        ascending = request.query_params.get('asc', 'true').lower() == 'true'
+        workers = WorkerService.get_sorted_workers(ascending)
+        serializer = self.get_serializer(workers, many=True)
+        return Response(serializer.data)

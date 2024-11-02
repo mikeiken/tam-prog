@@ -5,13 +5,20 @@ from rest_framework.response import Response
 from .permissions import *
 from .models import Plant, BedPlant
 from .serializers import PlantSerializer, BedPlantSerializer
-from .services import BedPlantService
+from .services import *
 from fertilizer.models import Fertilizer
 
 class PlantViewSet(viewsets.ModelViewSet):
     queryset = Plant.objects.all()
     serializer_class = PlantSerializer
     permission_classes = [AgronomistPermission]
+
+    def list(self, request, *args, **kwargs):
+        ascending = request.query_params.get('asc', 'true').lower() == 'true'
+        plants = PlantService.get_sorted_plants(ascending)
+        serializer = self.get_serializer(plants, many=True)
+        return Response(serializer.data)
+
 
 class BedPlantViewSet(viewsets.ModelViewSet):
     queryset = BedPlant.objects.all()

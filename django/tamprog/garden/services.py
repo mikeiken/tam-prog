@@ -1,5 +1,16 @@
 from user.models import Person
-from .models import Bed, Field
+from .models import Bed
+from .queries import *
+
+class FieldService:
+    @staticmethod
+    def get_sorted_fields(sort_by: str = 'price', ascending: bool = True):
+        if sort_by == 'beds':
+            query = GetFieldsSortedByBeds(ascending)
+        else:  # По умолчанию сортируем по цене
+            query = GetFieldsSortedByPrice(ascending)
+
+        return query.execute()
 
 
 class BedService:

@@ -1,5 +1,13 @@
 from .models import BedPlant
 from fertilizer.models import BedPlantFertilizer
+from .queries import GetPlantsSortedByPrice
+
+class PlantService:
+    @staticmethod
+    def get_sorted_plants(ascending: bool = True):
+        query = GetPlantsSortedByPrice(ascending)
+        return query.execute()
+
 
 class BedPlantService:
 

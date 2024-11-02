@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from .permission import *
 from .models import Field, Bed
 from .serializers import FieldSerializer, BedSerializer
-from .services import BedService
+from .services import *
 
 
 class FieldViewSet(viewsets.ModelViewSet):
@@ -16,6 +16,13 @@ class FieldViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         count_beds = self.request.data.get('count_beds', 0)
         serializer.save(count_beds=count_beds)
+
+    def list(self, request, *args, **kwargs):
+        sort_by = request.query_params.get('sort', 'price')
+        ascending = request.query_params.get('asc', 'true').lower() == 'true'
+        fields = FieldService.get_sorted_fields(sort_by, ascending)
+        serializer = self.get_serializer(fields, many=True)
+        return Response(serializer.data)
 
 
 class BedViewSet(viewsets.ModelViewSet):
