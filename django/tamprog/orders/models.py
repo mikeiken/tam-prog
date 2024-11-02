@@ -12,6 +12,3 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     completed_at = models.DateTimeField(null=True, blank=True)
     total_cost = models.FloatField(default=0.00)
-
-
-

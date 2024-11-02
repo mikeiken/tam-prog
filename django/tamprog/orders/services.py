@@ -31,3 +31,12 @@ class OrderService:
         order.completed_at = timezone.now()
         order.save()
         return order
+
+    @staticmethod
+    def filter_orders(is_completed=None):
+        if is_completed is not None:
+            if is_completed:
+                return Order.objects.filter(completed_at__isnull=False)
+            else:
+                return Order.objects.filter(completed_at__isnull=True)
+        return Order.objects.all()

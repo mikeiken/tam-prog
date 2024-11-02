@@ -52,3 +52,9 @@ class BedService:
     @staticmethod
     def get_user_beds(user):
         return Bed.objects.filter(rented_by=user)
+
+    @staticmethod
+    def filter_beds(is_rented=None):
+        if is_rented is not None:
+            return Bed.objects.filter(is_rented=is_rented)
+        return Bed.objects.all()

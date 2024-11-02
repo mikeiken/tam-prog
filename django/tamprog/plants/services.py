@@ -37,3 +37,10 @@ class BedPlantService:
     @staticmethod
     def dig_up_plant(bed_plant):
         bed_plant.delete()
+
+
+    @staticmethod
+    def filter_bed_plants(fertilizer_applied=None):
+        if fertilizer_applied is not None:
+            return BedPlant.objects.filter(fertilizer_applied=fertilizer_applied)
+        return BedPlant.objects.all()

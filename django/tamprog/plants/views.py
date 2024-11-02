@@ -57,3 +57,9 @@ class BedPlantViewSet(viewsets.ModelViewSet):
         bed_plant = self.get_object()
         BedPlantService.dig_up_plant(bed_plant)
         return Response({'status': 'plant dug up'})
+
+    def get_queryset(self):
+        fertilizer_applied = self.request.query_params.get('fertilizer_applied', None)
+        if fertilizer_applied is not None:
+            return BedPlantService.filter_bed_plants(fertilizer_applied=fertilizer_applied.lower() == 'true')
+        return BedPlant.objects.all()

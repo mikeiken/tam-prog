@@ -26,3 +26,9 @@ class OrderViewSet(viewsets.ModelViewSet):
         order = serializer.save()
         if order.completed_at:
             OrderService.complete_order(order)
+
+    def get_queryset(self):
+        is_completed = self.request.query_params.get('is_completed', None)
+        if is_completed is not None:
+            return OrderService.filter_orders(is_completed=is_completed.lower() == 'true')
+        return Order.objects.all()

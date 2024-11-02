@@ -55,3 +55,10 @@ class BedViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+    def get_queryset(self):
+        is_rented = self.request.query_params.get('is_rented', None)
+        if is_rented is not None:
+            return BedService.filter_beds(is_rented=is_rented.lower() == 'true')
+        return Bed.objects.all()
