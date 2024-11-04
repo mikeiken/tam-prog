@@ -1,5 +1,8 @@
 import pytest
 from rest_framework import status
+from unittest.mock import patch, MagicMock
+from user.models import Worker
+from user.services import WorkerService
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -101,3 +104,26 @@ def test_login_user_missing_fields(api_client):
     response = api_client.post(url, data, format='json')
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "password" in response.data
+
+
+@pytest.mark.django_db
+@patch('user.services.GetWorkersSortedByPrice')
+def test_get_sorted_workers_ascending(mock_get_sorted_by_price, workers):
+    mock_query_instance = MagicMock()
+    mock_query_instance.execute.return_value = sorted(workers, key=lambda w: w.price)
+    mock_get_sorted_by_price.return_value = mock_query_instance
+    sorted_workers = WorkerService.get_sorted_workers(ascending=True)
+    mock_query_instance.execute.assert_called_once()
+    assert [worker.price for worker in sorted_workers] == sorted([worker.price for worker in workers])
+
+
+@pytest.mark.django_db
+@patch('user.services.GetWorkersSortedByPrice')
+def test_get_sorted_workers_descending(mock_get_sorted_by_price, workers):
+    mock_query_instance = MagicMock()
+    mock_query_instance.execute.return_value = sorted(workers, key=lambda w: w.price,reverse=True)
+    mock_get_sorted_by_price.return_value = mock_query_instance
+    sorted_workers = WorkerService.get_sorted_workers(ascending=False)
+    mock_query_instance.execute.assert_called_once()
+    assert [worker.price for worker in sorted_workers] == sorted([worker.price for worker in workers], reverse=True)
+
