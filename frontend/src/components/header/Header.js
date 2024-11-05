@@ -53,10 +53,10 @@ export default function Header() {
                     </Link>
                 </nav>
                 <Link
-                    to='/'
-                    onClick={e => isActivePath('/') && e.preventDefault()}
+                    to='/login'
+                    onClick={e => isActivePath('/login') && e.preventDefault()}
                 >
-                    <button className='login-btn'>Войти</button>
+                    <button className='login-btn'>Выйти</button>
                 </Link>
             </header>
 
