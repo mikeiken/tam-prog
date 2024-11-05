@@ -15,6 +15,7 @@ html {
     display: flex;
     flex-direction: column;
     align-items: center;
+    overflow: hidden;
 }
 
 .image-container {
@@ -28,23 +29,14 @@ html {
 
 .text-overlay {
     position: absolute;
-    /* Абсолютное позиционирование для текста */
     top: 50%;
-    /* Центрируем по вертикали */
     left: 50%;
-    /* Центрируем по горизонтали */
     transform: translate(-50%, -50%);
-    /* Смещаем текст на половину его ширины и высоты */
     color: white;
-    /* Цвет текста */
     font-size: 24px;
-    /* Размер шрифта */
     text-align: center;
-    /* Выравнивание текста по центру */
     background-color: rgba(0, 0, 0, 0.5);
-    /* Полупрозрачный фон для текста (по желанию) */
     padding: 10px;
-    /* Отступ вокруг текста (по желанию) */
 }
 
 .header-for-landing {
@@ -61,7 +53,7 @@ html {
 }
 
 .landing {
-    width: 100%;
+    width: 200vh;
     min-height: 100vh;
     /* Минимальная высота для контента */
     background-color: whitesmoke;
@@ -75,17 +67,11 @@ html {
     margin: 0;
     padding: 0;
     opacity: 0;
-    /* Начальное состояние (невидимое) */
-    transform: translateY(10px);
-    /* Смещение по вертикали */
-    transition: opacity 0.5s ease-out, transform 0.8s ease;
+    transition: opacity 2s ease-out;
 }
 
 .landing img.loaded {
     opacity: 1;
-    /* Конечное состояние (видимое) */
-    transform: translateY(0);
-    /* Сброс смещения */
 }
 
 .user-interface-login {
@@ -299,7 +285,7 @@ html {
 .about-wrapper {
     padding: 20px;
     max-width: 75%;
-    height: 84vh;
+    height: 83vh;
     max-height: 100%;
     background-color: rgb(129, 186, 131, 0.5);
     margin: 2vh auto;
@@ -312,7 +298,7 @@ html {
 .license-wrapper {
     padding: 20px;
     max-width: 83%;
-    height: 84vh;
+    height: 83vh;
     max-height: 100%;
     background-color: rgb(128, 0, 128, 0.5);
     margin: 2vh auto;
@@ -323,7 +309,7 @@ html {
 .contractor-wrapper {
     padding: 20px;
     max-width: 83%;
-    height: 84vh;
+    height: 83vh;
     max-height: 100%;
     background-color: rgb(138, 146, 122, 0.5);
     border-radius: 20px;
