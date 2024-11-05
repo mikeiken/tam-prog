@@ -43,7 +43,7 @@ export default function Header() {
                         to='/license'
                         onClick={e => isActivePath('/license') && e.preventDefault()}
                     >
-                        Лицензия
+                        Ваши участки
                     </Link>
                     <Link
                         to='/about'
