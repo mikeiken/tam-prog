@@ -17,29 +17,122 @@ html {
     align-items: center;
 }
 
+.image-container {
+    position: relative;
+    /* Относительное позиционирование для контейнера */
+    width: 100%;
+    /* Занимает всю ширину */
+
+
+}
+
+.text-overlay {
+    position: absolute;
+    /* Абсолютное позиционирование для текста */
+    top: 50%;
+    /* Центрируем по вертикали */
+    left: 50%;
+    /* Центрируем по горизонтали */
+    transform: translate(-50%, -50%);
+    /* Смещаем текст на половину его ширины и высоты */
+    color: white;
+    /* Цвет текста */
+    font-size: 24px;
+    /* Размер шрифта */
+    text-align: center;
+    /* Выравнивание текста по центру */
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Полупрозрачный фон для текста (по желанию) */
+    padding: 10px;
+    /* Отступ вокруг текста (по желанию) */
+}
+
 .header-for-landing {
     position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
     top: 0;
     left: 0;
     width: 100%;
     height: 100px;
+    z-index: 1000;
     background-color: rgba(40, 37, 40, 0.5);
-    z-index: 1000; 
 }
 
 .landing {
     width: 100%;
-    min-height: 100vh; /* Минимальная высота для контента */
-    background-color: #8a927a;
+    min-height: 100vh;
+    /* Минимальная высота для контента */
+    background-color: whitesmoke;
 }
 
 .landing img {
     width: 100%;
     height: auto;
     object-fit: cover;
+    display: block;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    /* Начальное состояние (невидимое) */
+    transform: translateY(10px);
+    /* Смещение по вертикали */
+    transition: opacity 0.5s ease-out, transform 0.8s ease;
 }
 
+.landing img.loaded {
+    opacity: 1;
+    /* Конечное состояние (видимое) */
+    transform: translateY(0);
+    /* Сброс смещения */
+}
 
+.user-interface-login {
+    width: 30px;
+}
+
+.landing-login-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: .3s ease;
+    cursor: pointer;
+}
+
+.landing-login-btn a {
+    font-weight: 500;
+}
+
+@keyframes filling {
+    from {
+        background-position: center 25%;
+    }
+
+    to {
+        background-position: center 50%;
+    }
+}
+
+.landing-container-text {
+    background-image: url(https://avatars.mds.yandex.net/i?id=efac26118587148006a28e09274db923_l-5905533-images-thumbs&n=13);
+    -webkit-text-fill-color: transparent;
+    -webkit-background-clip: text;
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 150px;
+    font-family: 'Bungee', cursive;
+    animation: filling 2s ease forwards;
+}
+
+.landing-login-btn:hover {
+    transform: scale(1.05);
+}
+
+.landing-link {
+    text-decoration: none;
+    color: black
+}
 
 .main {
     overflow: hidden;
