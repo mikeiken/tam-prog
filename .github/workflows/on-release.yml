@@ -22,8 +22,8 @@ on:
           - "Pre-release"
       skip_build:
         description: "Skip build/test step"
-        required: false
-        default: 'false'
+        type: boolean
+        default: false
 
 env:
   REGISTRY: ghcr.io
@@ -71,7 +71,7 @@ jobs:
   build-and-push-image-django:
     runs-on: ubuntu-latest
     # run if not skip
-    if: ${{ !github.event.inputs.skip_build }}
+    if: ${{ github.event.inputs.skip_build }} == false
     needs:
       - set-prefix
     # Sets the permissions granted to the `GITHUB_TOKEN` for the actions in this job.
@@ -133,7 +133,7 @@ jobs:
   build-and-push-image-frontend:
     runs-on: ubuntu-latest
     # run if not skip
-    if: ${{ !github.event.inputs.skip_build }}
+    if: ${{ github.event.inputs.skip_build }} == false
     needs:
       - set-prefix
     permissions:
@@ -191,7 +191,7 @@ jobs:
   build-and-push-image-nginx:
     runs-on: ubuntu-latest
     # run if not skip
-    if: ${{ !github.event.inputs.skip_build }}
+    if: ${{ github.event.inputs.skip_build }} == false
     needs:
       - set-prefix
     permissions:
