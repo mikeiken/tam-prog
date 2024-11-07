@@ -24,7 +24,6 @@ on:
         description: "Skip build/test step"
         type: boolean
         default: false
-        required: false
 
 env:
   REGISTRY: ghcr.io
@@ -67,6 +66,7 @@ jobs:
           echo "FRONTEND_SUFFIX: ${{ env.FRONTEND_SUFFIX }}"
           echo "NGINX_SUFFIX: ${{ env.NGINX_SUFFIX }}"
           echo "RELEASE_PREFIX: ${{ needs.set-prefix.outputs.PREFIX }}"
+          echo "SKIP_BUILD: ${{ github.event.inputs.skip_build }}"
 
   build-and-push-image-django:
     runs-on: ubuntu-latest
