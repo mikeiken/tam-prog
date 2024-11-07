@@ -118,7 +118,7 @@ jobs:
           push-to-registry: true
 
       - name: Tag image as latest if release
-        if: ${{ needs.set-prefix.outputs.PREFIX }} == ''
+        if: ${{ needs.set-prefix.outputs.PREFIX }} != 'pre-'
         run: |
           docker tag ${{ steps.meta.outputs.tags }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.DJANGO_SUFFIX }}:latest
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.DJANGO_SUFFIX }}:latest
@@ -176,7 +176,7 @@ jobs:
           push-to-registry: true
 
       - name: Tag image as latest if release
-        if: ${{ needs.set-prefix.outputs.PREFIX }} == ''
+        if: ${{ needs.set-prefix.outputs.PREFIX }} != 'pre-'
         run: |
           docker tag ${{ steps.meta.outputs.tags }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.FRONTEND_SUFFIX }}:latest
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.FRONTEND_SUFFIX }}:latest
@@ -234,7 +234,7 @@ jobs:
           push-to-registry: true
 
       - name: Tag image as latest if release
-        if: ${{ needs.set-prefix.outputs.PREFIX }} == ''
+        if: ${{ needs.set-prefix.outputs.PREFIX }} != 'pre-'
         run: |
           docker tag ${{ steps.meta.outputs.tags }} ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.NGINX_SUFFIX }}:latest
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}${{ env.NGINX_SUFFIX }}:latest
