@@ -91,7 +91,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.getenv('POSTGRES_DB', 'garden'),
-        'HOST': os.getenv('DJANGO_DB_HOST', '127.0.0.1'),
+        'HOST': os.getenv('DJANGO_DB_HOST', '127.0.0.1') \
+            if (os.getenv('IS_IN_CONTAINER', 'false').lower() == 'true') \
+            else '127.0.0.1',
         'PORT': os.getenv('POSTGRES_PORT', '5432'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'root'),
         'USER': os.getenv('POSTGRES_USER', 'agronom'),
