@@ -1,147 +1,64 @@
-from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import generics
+from .permission import *
+from .models import Field, Bed
+from .serializers import FieldSerializer, BedSerializer
+from .services import *
 
 
-from .models import *
-from .serializers import *
+class FieldViewSet(viewsets.ModelViewSet):
+    queryset = Field.objects.all()
+    serializer_class = FieldSerializer
+    permission_classes = [AgronomistPermission]
 
-methods = ['get', 'post', 'head',
-           'put', 'patch', 'delete', 'update', 'destroy']
+    def perform_create(self, serializer):
+        count_beds = self.request.data.get('count_beds', 0)
+        serializer.save(count_beds=count_beds)
 
-class CORSMixin:
-    def finalize_response(self, request, response, *args, **kwargs):
-        response = super().finalize_response(request, response, *args, **kwargs)
-        response["Access-Control-Allow-Origin"] = "http://localhost:3000"
-        return response
-
-
-class AgronomistViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = Agronomist.objects.all()
-    serializer_class = AgronomistSerializer
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response()
+    def list(self, request, *args, **kwargs):
+        sort_by = request.query_params.get('sort', 'price')
+        ascending = request.query_params.get('asc', 'true').lower() == 'true'
+        fields = FieldService.get_sorted_fields(sort_by, ascending)
+        serializer = self.get_serializer(fields, many=True)
+        return Response(serializer.data)
 
 
-class SupplierViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = Supplier.objects.all()
-    serializer_class = SupplierSerializer
+class BedViewSet(viewsets.ModelViewSet):
+    queryset = Bed.objects.all()
+    serializer_class = BedSerializer
+    permission_classes = [IsAuthenticated]
 
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response()
+    @action(detail=False, methods=['get'])
+    def my_beds(self, request):
+        beds = BedService.get_user_beds(request.user)
+        serializer = self.get_serializer(beds, many=True)
+        return Response(serializer.data)
 
-
-class WorkerViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = Worker.objects.all()
-    serializer_class = WorkerSerializer
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response()
+    @action(detail=True, methods=['post'])
+    def rent(self, request, pk=None):
+        bed = self.get_object()
+        person = request.user
+        result = BedService.rent_bed(bed.id, person)
+        if result:
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class GardenBedViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = GardenBed.objects.all()
-    serializer_class = GardenBedSerializer
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response()
+    @action(detail=True, methods=['post'])
+    def release(self, request, pk=None):
+        bed = self.get_object()
+        result = BedService.release_bed(bed.id)
+        if result:
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class FertilizerViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = Fertilizer.objects.all()
-    serializer_class = FertilizerSerializer
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response()
-
-
-class UserViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response()
-
-
-class PlantViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = Plant.objects.all()
-    serializer_class = PlantSerializer
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response()
-
-
-class PlotViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = Plot.objects.all()
-    serializer_class = PlotSerializer
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response()
-
-
-class OrderViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response()
-
-class AvailablePlantsViewSet(CORSMixin, viewsets.ModelViewSet):
-    queryset = AvailablePlants.objects.all()
-    serializer_class = AvailablePlantsSerializer
-
-    def update(self, request, *args, **kwargs):
-        partial = kwargs.pop('partial', False)
-        instance = self.get_object()
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response()
+    def get_queryset(self):
+        is_rented = self.request.query_params.get('is_rented', None)
+        if is_rented is not None:
+            return BedService.filter_beds(is_rented=is_rented.lower() == 'true')
+        return Bed.objects.all()
