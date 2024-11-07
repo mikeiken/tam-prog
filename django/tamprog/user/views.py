@@ -10,11 +10,69 @@ from rest_framework.permissions import AllowAny, IsAdminUser
 from .services import *
 from django.contrib.auth import get_user_model
 
+from drf_spectacular.utils import extend_schema, extend_schema_view, \
+    OpenApiResponse, OpenApiParameter, OpenApiExample
+
 User = get_user_model()
+
+@extend_schema(tags=['User'])
 class LoginView(generics.GenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = LoginSerializer
 
+    @extend_schema(
+        summary='Login user', 
+        request=LoginSerializer,
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description="User logged in successfully",
+                examples=[
+                    OpenApiExample(
+                        name="Successful login",
+                        value={
+                            "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
+                            "access": "eyJ0eXAi",
+                            "wallet_balance": 250.00,
+                        }
+                    )
+                ],
+                response=OpenApiResponse(),
+            ),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+                description="Invalid credentials",
+                examples={
+                    "application/json": {
+                        "detail": "Invalid credentials"
+                    }
+                },
+                response=None
+            )
+        },
+        parameters=[
+            OpenApiParameter(
+                name="Username",
+                location=OpenApiParameter.QUERY,
+                type=str,
+                description=None,
+            ),
+            OpenApiParameter(
+                name="Password",
+                location=OpenApiParameter.QUERY,
+                type=str,
+                description=None,
+            )
+        ],
+        examples=[
+            OpenApiExample(
+                name="User login",
+                value={
+                    "username": "oleg189",
+                    "password": "i_l0v3_my_cat53"
+                },
+                request_only=True,
+            ),
+        ]
+    )
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -31,7 +89,7 @@ class LoginView(generics.GenericAPIView):
             })
         return Response({"detail": "Invalid credentials"}, status=400)
 
-
+@extend_schema(tags=['User'])
 class RegisterViewSet(viewsets.ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = RegisterSerializer
