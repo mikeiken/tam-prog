@@ -38,10 +38,18 @@ env:
 jobs:
   set-prefix:
     runs-on: ubuntu-latest
+    outputs:
+      PREFIX: ${{ steps.set_prefix.outputs.PREFIX }}
     steps:
       - name: Set PREFIX
         id: set_prefix
-        run: echo "::set-output name=PREFIX::$(if [ '${{ github.event.inputs.type }}' == 'Stable' ]; then echo ''; else echo 'pre-'; fi)"
+        run: |
+          if [ '${{ github.event.inputs.type }}' == 'Stable' ]; then
+            echo "PREFIX=" >> $GITHUB_ENV
+          else
+            echo "PREFIX=pre-" >> $GITHUB_ENV
+          fi
+          echo "PREFIX=${{ env.PREFIX }}" >> $GITHUB_OUTPUT
 
   print-conf:
     runs-on: ubuntu-latest
