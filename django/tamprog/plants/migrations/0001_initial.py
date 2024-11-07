@@ -9,23 +9,28 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('garden', '0001_initial'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Field',
+            name='Plant',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100)),
-                ('count_beds', models.IntegerField(default=0)),
+                ('growth_time', models.IntegerField()),
+                ('price', models.DecimalField(decimal_places=2, max_digits=10)),
+                ('description', models.TextField()),
             ],
         ),
         migrations.CreateModel(
-            name='Bed',
+            name='BedPlant',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('is_rented', models.BooleanField(default=False)),
-                ('field', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='garden.field')),
+                ('planted_at', models.DateTimeField(auto_now_add=True)),
+                ('fertilizer_applied', models.BooleanField(default=False)),
+                ('bed', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='garden.bed')),
+                ('plant', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='plants.plant')),
             ],
         ),
     ]
