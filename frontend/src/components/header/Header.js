@@ -30,25 +30,25 @@ export default function Header() {
                 <nav className='navbar'>
                     <Link
                         to='garden'
-                        onClick={e => isActivePath('/garden') && e.preventDefault()}
+                        onClick={e => isActivePath('/navigate/garden') && e.preventDefault()}
                     >
                         Участки
                     </Link>
                     <Link
                         to='contractor'
-                        onClick={e => isActivePath('/contractor') && e.preventDefault()}
+                        onClick={e => isActivePath('/navigate/contractor') && e.preventDefault()}
                     >
                         Подрядчики
                     </Link>
                     <Link
                         to='license'
-                        onClick={e => isActivePath('/license') && e.preventDefault()}
+                        onClick={e => isActivePath('/navigate/license') && e.preventDefault()}
                     >
                         Ваши участки
                     </Link>
                     <Link
                         to='about'
-                        onClick={e => isActivePath('/about') && e.preventDefault()}
+                        onClick={e => isActivePath('/navigate/about') && e.preventDefault()}
                     >
                         О нас
                     </Link>
@@ -63,13 +63,13 @@ export default function Header() {
 
             <SwitchTransition>
                 <CSSTransition
-                    nodeRef={transitionRef} // Add this line
+                    nodeRef={transitionRef} 
                     key={location.key}
                     timeout={530}
                     classNames="main"
                     unmountOnExit
                 >
-                    <div ref={transitionRef}> {/* Wrap the Routes in a div with the ref */}
+                    <div ref={transitionRef}> 
                         <Routes location={location}>
                             {routes.map(({ path, Component }) => (
                                 <Route key={path} path={path} element={<Component />} />
