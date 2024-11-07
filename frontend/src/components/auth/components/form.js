@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, Routes, Route } from 'react-router-dom';
 import Garden from '../../main-page/Garden/Garden';
+import Header from '../../header/Header';
 
 export default function Form() {
   return (
@@ -41,13 +42,13 @@ export default function Form() {
         <button type='submit' className='btn'>Login</button>
         <div className='register-link'>
           <p>Don't have an account?
-            <Link to='/garden'>Register</Link> 
+            <Link to='/navigate/garden'>Register</Link> 
           </p>
         </div>
       </form>
 
       <Routes>
-        <Route path='/garden' element={<Garden />} />
+        <Route path='/navigate/garden' element={<Header/>} />
       </Routes>
     </div>
   );
