@@ -69,6 +69,7 @@ jobs:
           echo "NGINX_SUFFIX: ${{ env.NGINX_SUFFIX }}"
           echo "RELEASE_PREFIX: ${{ needs.set_prefix.outputs.PREFIX }}"
           echo "RELEASE_PREFIX: ${{ env.PREFIX }}"
+          echo "RELEASE_PREFIX: $PREFIX"
 
   build-and-push-image-django:
     runs-on: ubuntu-latest
