@@ -22,8 +22,8 @@ on:
           - "Pre-release"
       skip_build:
         description: "Skip build/test step"
-        type: boolean
-        default: false
+        required: false
+        default: 'false'
 
 env:
   REGISTRY: ghcr.io
