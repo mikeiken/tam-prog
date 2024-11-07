@@ -45,11 +45,10 @@ jobs:
         id: set_prefix
         run: |
           if [ '${{ github.event.inputs.type }}' == 'Stable' ]; then
-            echo "PREFIX=" >> $GITHUB_ENV
+            echo "PREFIX=" >> $GITHUB_OUTPUT
           else
-            echo "PREFIX=pre-" >> $GITHUB_ENV
+            echo "PREFIX=pre-" >> $GITHUB_OUTPUT
           fi
-          echo "PREFIX=$PREFIX" >> $GITHUB_OUTPUT
 
   print-conf:
     runs-on: ubuntu-latest
@@ -68,6 +67,7 @@ jobs:
           echo "FRONTEND_SUFFIX: ${{ env.FRONTEND_SUFFIX }}"
           echo "NGINX_SUFFIX: ${{ env.NGINX_SUFFIX }}"
           echo "RELEASE_PREFIX: ${{ needs.set_prefix.outputs.PREFIX }}"
+          echo "RELEASE_PREFIX: ${{ needs.set-prefix.outputs.PREFIX }}"
           echo "RELEASE_PREFIX: ${{ env.PREFIX }}"
           echo "RELEASE_PREFIX: $PREFIX"
 
