@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './style.css';
-import LoginBtn from './ui/login-btn /LoginBtn';
+import LoginBtn from './ui/login-btn/LoginBtn';
 
 export default function MainPage() {
     const [loaded, setLoaded] = useState(false);

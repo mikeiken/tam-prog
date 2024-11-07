@@ -21,8 +21,8 @@ services:
     volumes:
       # - /usr/tamprog/db-init:/docker-entrypoint-initdb.d
       # - /usr/tamprog/db:/var/lib/postgresql/data
-      - db-data/db-init:/docker-entrypoint-initdb.d
-      - db-data/data:/var/lib/postgresql/data
+      - db-data:/docker-entrypoint-initdb.d
+      - db-data:/var/lib/postgresql/data
     ports:
       - "${POSTGRES_PORT}:5432"
     restart: always
