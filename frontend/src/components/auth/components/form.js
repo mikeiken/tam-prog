@@ -1,15 +1,43 @@
-import React from 'react';
-import { Link, Routes, Route } from 'react-router-dom';
-import Garden from '../../main-page/Garden/Garden';
+import React, { useState } from 'react';
+import { Link, Routes, Route, useNavigate } from 'react-router-dom';
+import axios from '../../api/instance';
 import Header from '../../header/Header';
 
 export default function Form() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post('/login/', {
+        username,
+        password,
+      });
+      localStorage.setItem('accessToken', response.data.access);
+      localStorage.setItem('refreshToken', response.data.refresh);
+      navigate('/navigate/garden');
+    } catch (error) {
+      console.error('Login failed:', error);
+      // Handle error (e.g., display message to the user)
+    }
+  };
+  
+  const handleChangeName = (event) => {
+    setUsername(event.target.value);
+  }
+
+  const handleChangePassword = (event) => {
+    setPassword(event.target.value);
+  }
+
   return (
     <div className='wrapper'>
-      <form action=''>
+      <form onSubmit={handleSubmit}>
         <h1>Login</h1>
         <div className='input-box'>
-          <input className='' type='text' required />
+          <input className='' type='text' required onChange={handleChangeName}/>
           <label>Enter your name</label>
           <img style={{
             position: 'absolute', left: '10px', top: '50%',
@@ -21,7 +49,7 @@ export default function Form() {
         </div>
 
         <div className='input-box'>
-          <input className='' type='password' required />
+          <input className='' type='password' required onChange={handleChangePassword}/>
           <label>Enter your password</label>
           <img
             style={{
