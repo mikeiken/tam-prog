@@ -33,30 +33,33 @@ class LoginView(generics.GenericAPIView):
                             "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
                             "access": "eyJ0eXAi",
                             "wallet_balance": 250.00,
-                        }
+                        },
                     )
                 ],
-                response=OpenApiResponse(),
+                response=LoginSerializer,
             ),
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(
                 description="Invalid credentials",
-                examples={
-                    "application/json": {
-                        "detail": "Invalid credentials"
-                    }
-                },
-                response=None
+                examples=[
+                    OpenApiExample(
+                        name="Invalid credentials",
+                        value={
+                            "detail": "Invalid credentials"
+                        },
+                    )
+                ],
+                response=LoginSerializer,
             )
         },
         parameters=[
             OpenApiParameter(
-                name="Username",
+                name="username",
                 location=OpenApiParameter.QUERY,
                 type=str,
                 description=None,
             ),
             OpenApiParameter(
-                name="Password",
+                name="password",
                 location=OpenApiParameter.QUERY,
                 type=str,
                 description=None,

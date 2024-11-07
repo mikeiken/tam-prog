@@ -211,9 +211,14 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'My API',
-    'DESCRIPTION': 'API documentation for my project',
+    'TITLE': 'Tamprog API',
+    'DESCRIPTION': 'API documentation for Tamprog',
     'VERSION': '1.0.0',
+    "SERVE_INCLUDE_SCHEMA": False, # исключить эндпоинт /schema
+    "SWAGGER_UI_SETTINGS": {
+        "filter": True, # включить поиск по тегам
+    },
+    "COMPONENT_SPLIT_REQUEST": True,
 }
 
 
