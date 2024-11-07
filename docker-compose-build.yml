@@ -12,16 +12,17 @@ services:
 
   psql:
     container_name: psql
-    build: ./psql
-    image: tam-prog-psql:latest
+    image: postgres:14-alpine
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       PGDATA: "/var/lib/postgresql/data/pgdata"
     volumes:
-      - /usr/tamprog/db-init:/docker-entrypoint-initdb.d
-      - /usr/tamprog/db:/var/lib/postgresql/data
+      # - /usr/tamprog/db-init:/docker-entrypoint-initdb.d
+      # - /usr/tamprog/db:/var/lib/postgresql/data
+      - db-data/db-init:/docker-entrypoint-initdb.d
+      - db-data/data:/var/lib/postgresql/data
     ports:
       - "${POSTGRES_PORT}:5432"
     restart: always
@@ -135,4 +136,9 @@ services:
   #     condition: service_healthy
 
 networks:
-  gateway: {}
+  gateway:
+    driver: bridge
+
+volumes:
+  db-data:
+    driver: local
