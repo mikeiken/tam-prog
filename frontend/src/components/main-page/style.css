@@ -240,7 +240,7 @@ html {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    padding: 20px;
+    padding: 20px 20px 2px 20px;
     height: 46.4vw;
     justify-content: center;
 }
@@ -415,7 +415,7 @@ html {
         display: flex;
         justify-content: center;
         height: 89vw;
-        max-height: 89vh;
+        max-height: 86vh;
         overflow: hidden;
     }
 }
