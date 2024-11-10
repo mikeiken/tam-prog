@@ -23,7 +23,7 @@ class PlantService:
     
     @staticmethod
     def get_suggestions(query):
-        return Plant.objects.filter(name__istartswith=query).values_list('name', flat=True)[:10]
+        return Plant.objects.filter(name__istartswith=query).values_list('name', flat=True).order_by('name')[:10]
 
 
 class BedPlantService:
