@@ -2,6 +2,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from fuzzywuzzy import fuzz
 from .permissions import *
 from .models import Plant, BedPlant
 from .serializers import PlantSerializer, BedPlantSerializer
@@ -14,10 +15,24 @@ class PlantViewSet(viewsets.ModelViewSet):
     permission_classes = [AgronomistPermission]
 
     def list(self, request, *args, **kwargs):
-        ascending = request.query_params.get('asc', 'true').lower() == 'true'
-        plants = PlantService.get_sorted_plants(ascending)
+        search_query = request.query_params.get('search', None)
+        if search_query:
+            plants = self.fuzzy_search(search_query)
+        else:
+            ascending = request.query_params.get('asc', 'true').lower() == 'true'
+            plants = PlantService.get_sorted_plants(ascending)
+        
         serializer = self.get_serializer(plants, many=True)
         return Response(serializer.data)
+
+    def fuzzy_search(self, query, threshold=70):
+        results = []
+        plants = Plant.objects.all()
+        for plant in plants:
+            similarity = fuzz.ratio(query.lower(), plant.name.lower())
+            if similarity >= threshold:
+                results.append(plant)
+        return results
 
 
 class BedPlantViewSet(viewsets.ModelViewSet):
