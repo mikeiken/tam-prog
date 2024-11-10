@@ -6,7 +6,8 @@ from rest_framework import generics, status
 from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny, IsAdminUser
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from .services import *
 from django.contrib.auth import get_user_model
 
@@ -30,6 +31,18 @@ class LoginView(generics.GenericAPIView):
                 'wallet_balance': user.wallet_balance,
             })
         return Response({"detail": "Invalid credentials"}, status=400)
+
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        try:
+            refresh_token = RefreshToken.for_user(request.user)
+            refresh_token.blacklist()
+            return Response({"message": "Exit successful"}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RegisterViewSet(viewsets.ModelViewSet):
