@@ -33,6 +33,15 @@ class PlantViewSet(viewsets.ModelViewSet):
             if similarity >= threshold:
                 results.append(plant)
         return results
+    
+    @action(detail=False, methods=['get'])
+    def suggestions(self, request):
+        query = request.query_params.get('q', '').lower()
+        if not query:
+            return Response([])
+
+        suggestions = Plant.objects.filter(name__istartswith=query).values_list('name', flat=True)[:10]
+        return Response(suggestions)
 
 
 class BedPlantViewSet(viewsets.ModelViewSet):
