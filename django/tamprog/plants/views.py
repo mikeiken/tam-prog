@@ -15,10 +15,11 @@ class PlantViewSet(viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         search_query = request.query_params.get('search', None)
+        ascending = request.query_params.get('asc', 'true').lower() == 'true'
         if search_query:
             plants = PlantService.fuzzy_search(search_query)
         else:
-            plants = self.queryset
+            plants = PlantService.get_sorted_plants(ascending)
 
         serializer = self.get_serializer(plants, many=True)
         return Response(serializer.data)
