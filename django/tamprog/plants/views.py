@@ -22,6 +22,15 @@ class PlantViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(plants, many=True)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'])
+    def suggestions(self, request):
+        query = request.query_params.get('q', '').lower()
+        if not query:
+            return Response([])
+
+        suggestions = PlantService.get_suggestions(query)
+        return Response(suggestions)
 
 
 class BedPlantViewSet(viewsets.ModelViewSet):

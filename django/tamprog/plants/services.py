@@ -20,6 +20,10 @@ class PlantService:
             if similarity >= threshold:
                 results.append(plant)
         return results
+    
+    @staticmethod
+    def get_suggestions(query):
+        return Plant.objects.filter(name__istartswith=query).values_list('name', flat=True)[:10]
 
 
 class BedPlantService:
