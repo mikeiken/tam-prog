@@ -98,6 +98,71 @@ class RegisterViewSet(viewsets.ModelViewSet):
     serializer_class = RegisterSerializer
     permission_classes = (PostOnly,)
 
+    @extend_schema(
+        summary='Register new user', 
+        request=LoginSerializer,
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description="User registered successfully",
+                examples=[
+                    OpenApiExample(
+                        name="Successful registration",
+                        value={
+                            "message": "User created successfully", 
+                            "user_id": 1,
+                            "username": "oleg189",
+                        },
+                    )
+                ],
+                response=LoginSerializer,
+            ),
+        },
+        parameters=[
+            OpenApiParameter(
+                name="username",
+                location=OpenApiParameter.QUERY,
+                type=str,
+                description=None,
+            ),
+            OpenApiParameter(
+                name="full_name",
+                location=OpenApiParameter.QUERY,
+                type=str,
+                description=None,
+            ),
+            OpenApiParameter(
+                name="phone_number",
+                location=OpenApiParameter.QUERY,
+                type=str,
+                description=None,
+            ),
+            OpenApiParameter(
+                name="password",
+                location=OpenApiParameter.QUERY,
+                type=str,
+                description=None,
+            ),
+            OpenApiParameter(
+                name="wallet_balance",
+                location=OpenApiParameter.QUERY,
+                type=float,
+                description=None,
+            ),
+        ],
+        examples=[
+            OpenApiExample(
+                name="Register new user",
+                value={
+                    "username": "oleg189",
+                    "full_name": "Oleg Ivanov",
+                    "phone_number": "+79991234567",
+                    "password": "i_l0v3_my_cat53",
+                    "wallet_balance": 250.00
+                },
+                request_only=True,
+            ),
+        ]
+    )
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -113,7 +178,7 @@ class RegisterViewSet(viewsets.ModelViewSet):
 
         # Возвращаем успешный ответ с данными о пользователе
         headers = self.get_success_headers(serializer.data)
-        return Response(
+        return eRsponse(
             {"message": "User created successfully", "user_id": user.id, "username": user.username},
             status=status.HTTP_201_CREATED,
             headers=headers
