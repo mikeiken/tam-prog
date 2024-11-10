@@ -14,13 +14,18 @@ class PlantViewSet(viewsets.ModelViewSet):
     permission_classes = [AgronomistPermission]
 
     def list(self, request, *args, **kwargs):
-        search_query = request.query_params.get('search', None)
         ascending = request.query_params.get('asc', 'true').lower() == 'true'
-        if search_query:
-            plants = PlantService.fuzzy_search(search_query)
-        else:
-            plants = PlantService.get_sorted_plants(ascending)
+        plants = PlantService.get_sorted_plants(ascending)
+        serializer = self.get_serializer(plants, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'])
+    def search(self, request):
+        query = request.query_params.get('q', '').lower()
+        if not query:
+            return Response([])
 
+        plants = PlantService.fuzzy_search(query)
         serializer = self.get_serializer(plants, many=True)
         return Response(serializer.data)
     
