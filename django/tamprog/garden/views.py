@@ -10,15 +10,13 @@ from .services import *
 from drf_spectacular.utils import extend_schema, extend_schema_view, \
     OpenApiResponse, OpenApiParameter, OpenApiExample
 
+@extend_schema(tags=['Field'])
 class FieldViewSet(viewsets.ModelViewSet):
     queryset = Field.objects.all()
     serializer_class = FieldSerializer
     permission_classes = [AgronomistPermission]
 
-    # post
-    @extend_schema(
-        summary='Post', 
-    )
+    # put
     def perform_create(self, serializer):
         count_beds = self.request.data.get('count_beds', 0)
         serializer.save(count_beds=count_beds)
@@ -33,7 +31,7 @@ class FieldViewSet(viewsets.ModelViewSet):
     
 
 
-
+@extend_schema(tags=['Bed'])
 class BedViewSet(viewsets.ModelViewSet):
     queryset = Bed.objects.all()
     serializer_class = BedSerializer

@@ -18,17 +18,16 @@ from django.contrib import admin
 from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
-from drf_spectacular.utils import extend_schema, extend_schema_view, \
-    OpenApiResponse, OpenApiParameter, OpenApiExample
+from drf_spectacular.utils import extend_schema
 
 @extend_schema(
-    tags=['API'] 
+    tags=['API'],
+    summary='API schema',
 )
 class CustomSchemaView(SpectacularAPIView):
     pass
 
 schema_view = CustomSchemaView.as_view()
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -184,13 +184,13 @@ class RegisterViewSet(viewsets.ModelViewSet):
             headers=headers
         )
 
-
+@extend_schema(tags=['User'])
 class PersonViewSet(viewsets.ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
     permission_classes = [IsAdminUser]
 
-
+@extend_schema(tags=['User'])
 class WorkerViewSet(viewsets.ModelViewSet):
     queryset = Worker.objects.all()
     serializer_class = WorkerSerializer

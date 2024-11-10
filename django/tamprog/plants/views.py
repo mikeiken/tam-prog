@@ -8,6 +8,10 @@ from .serializers import PlantSerializer, BedPlantSerializer
 from .services import *
 from fertilizer.models import Fertilizer
 
+from drf_spectacular.utils import extend_schema, extend_schema_view, \
+    OpenApiResponse, OpenApiParameter, OpenApiExample
+
+@extend_schema(tags=['Plant'])
 class PlantViewSet(viewsets.ModelViewSet):
     queryset = Plant.objects.all()
     serializer_class = PlantSerializer
@@ -20,6 +24,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
+@extend_schema(tags=['Plant'])
 class BedPlantViewSet(viewsets.ModelViewSet):
     queryset = BedPlant.objects.all()
     serializer_class = BedPlantSerializer

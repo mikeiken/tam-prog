@@ -5,6 +5,10 @@ from .serializer import *
 from .models import Order
 from .services import OrderService
 
+from drf_spectacular.utils import extend_schema, extend_schema_view, \
+    OpenApiResponse, OpenApiParameter, OpenApiExample
+
+@extend_schema(tags=['Order'])
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer

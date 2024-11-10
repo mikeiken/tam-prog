@@ -6,6 +6,10 @@ from .permission import *
 from .serializers import FertilizerSerializer, BedPlantFertilizerSerializer
 from .services import FertilizerService
 
+from drf_spectacular.utils import extend_schema, extend_schema_view, \
+    OpenApiResponse, OpenApiParameter, OpenApiExample
+
+@extend_schema(tags=['Fertilizer'])
 class FertilizerViewSet(viewsets.ModelViewSet):
     queryset = Fertilizer.objects.all()
     serializer_class = FertilizerSerializer
@@ -17,6 +21,7 @@ class FertilizerViewSet(viewsets.ModelViewSet):
         compound = serializer.validated_data['compound']
         FertilizerService.create_fertilizer(name, boost, compound)
 
+@extend_schema(tags=['Bed'])
 class BedPlantFertilizerViewSet(viewsets.ModelViewSet):
     queryset = BedPlantFertilizer.objects.all()
     serializer_class = BedPlantFertilizerSerializer
