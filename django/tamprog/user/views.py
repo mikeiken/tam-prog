@@ -93,6 +93,7 @@ class LoginView(generics.GenericAPIView):
         return Response({"detail": "Invalid credentials"}, status=400)
 
 @extend_schema(tags=['User'])
+@extend_schema(methods=['PUT', 'GET', 'PATCH', 'DELETE'], exclude=True)
 class RegisterViewSet(viewsets.ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = RegisterSerializer
@@ -178,7 +179,7 @@ class RegisterViewSet(viewsets.ModelViewSet):
 
         # Возвращаем успешный ответ с данными о пользователе
         headers = self.get_success_headers(serializer.data)
-        return eRsponse(
+        return Response(
             {"message": "User created successfully", "user_id": user.id, "username": user.username},
             status=status.HTTP_201_CREATED,
             headers=headers
