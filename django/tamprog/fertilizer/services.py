@@ -9,4 +9,4 @@ class FertilizerService:
 
     @staticmethod
     def get_fertilizers_for_plant(bed_plant):
-        return BedPlantFertilizer.objects.filter(bed_plant=bed_plant.bed_plant)
+        return BedPlantFertilizer.objects.filter(bed_plant=bed_plant)
