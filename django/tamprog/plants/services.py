@@ -1,12 +1,25 @@
 from .models import BedPlant
 from fertilizer.models import BedPlantFertilizer
 from .queries import GetPlantsSortedByPrice
+from fuzzywuzzy import fuzz
+from .models import Plant
 
 class PlantService:
+
     @staticmethod
     def get_sorted_plants(ascending: bool = True):
         query = GetPlantsSortedByPrice(ascending)
         return query.execute()
+    
+    @staticmethod
+    def fuzzy_search(query, threshold=70):
+        results = []
+        plants = Plant.objects.all()
+        for plant in plants:
+            similarity = fuzz.ratio(query.lower(), plant.name.lower())
+            if similarity >= threshold:
+                results.append(plant)
+        return results
 
 
 class BedPlantService:
