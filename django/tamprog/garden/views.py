@@ -7,22 +7,31 @@ from .models import Field, Bed
 from .serializers import FieldSerializer, BedSerializer
 from .services import *
 
+from drf_spectacular.utils import extend_schema, extend_schema_view, \
+    OpenApiResponse, OpenApiParameter, OpenApiExample
 
 class FieldViewSet(viewsets.ModelViewSet):
     queryset = Field.objects.all()
     serializer_class = FieldSerializer
     permission_classes = [AgronomistPermission]
 
+    # post
+    @extend_schema(
+        summary='Post', 
+    )
     def perform_create(self, serializer):
         count_beds = self.request.data.get('count_beds', 0)
         serializer.save(count_beds=count_beds)
 
+    # sort
     def list(self, request, *args, **kwargs):
         sort_by = request.query_params.get('sort', 'price')
         ascending = request.query_params.get('asc', 'true').lower() == 'true'
         fields = FieldService.get_sorted_fields(sort_by, ascending)
         serializer = self.get_serializer(fields, many=True)
         return Response(serializer.data)
+    
+
 
 
 class BedViewSet(viewsets.ModelViewSet):

@@ -18,7 +18,16 @@ from django.contrib import admin
 from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
-schema_view = SpectacularAPIView.as_view()
+from drf_spectacular.utils import extend_schema, extend_schema_view, \
+    OpenApiResponse, OpenApiParameter, OpenApiExample
+
+@extend_schema(
+    tags=['API'] 
+)
+class CustomSchemaView(SpectacularAPIView):
+    pass
+
+schema_view = CustomSchemaView.as_view()
 
 
 urlpatterns = [
