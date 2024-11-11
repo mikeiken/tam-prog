@@ -9,25 +9,25 @@ from .services import FertilizerService
 from drf_spectacular.utils import extend_schema, extend_schema_view, \
     OpenApiResponse, OpenApiParameter, OpenApiExample
 
-def FertilizerParameters(requiered=False):
+def FertilizerParameters(required=False):
     return [
         OpenApiParameter(
             name="name",
             description="Fertilizer name",
             type=str,
-            required=requiered,
+            required=required,
         ),
         OpenApiParameter(
             name="boost",
             description="Fertilizer boost",
             type=int,
-            required=requiered,
+            required=required,
         ),
         OpenApiParameter(
             name="compound",
             description="Fertilizer compound",
             type=str,
-            required=requiered,
+            required=required,
         ),
     ]
 
@@ -68,7 +68,7 @@ class FertilizerViewSet(viewsets.ModelViewSet):
                 description='Successfull response',
             )
         },
-        parameters=FertilizerParameters(requiered=True),
+        parameters=FertilizerParameters(required=True),
     )
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
@@ -80,7 +80,7 @@ class FertilizerViewSet(viewsets.ModelViewSet):
                 description='Successfull response',
             )
         },
-        parameters=FertilizerParameters(requiered=True),
+        parameters=FertilizerParameters(required=True),
     )
     def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)
@@ -114,19 +114,19 @@ class FertilizerViewSet(viewsets.ModelViewSet):
         compound = serializer.validated_data['compound']
         FertilizerService.create_fertilizer(name, boost, compound)
 
-def BedPlantFertilizerParameters(requiered=False):
+def BedPlantFertilizerParameters(required=False):
     return [
         OpenApiParameter(
             name="bed_plant",
             description="Bed plant ID",
             type=int,
-            required=requiered,
+            required=required,
         ),
         OpenApiParameter(
             name="fertilizer",
             description="Fertilizer ID",
             type=int,
-            required=requiered,
+            required=required,
         ),
     ]
 
@@ -155,7 +155,7 @@ class BedPlantFertilizerViewSet(viewsets.ModelViewSet):
                 description='Successfull response',
             )
         },
-        parameters=BedPlantFertilizerParameters(requiered=True),
+        parameters=BedPlantFertilizerParameters(required=True),
     )
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
@@ -202,7 +202,7 @@ class BedPlantFertilizerViewSet(viewsets.ModelViewSet):
                 description='Successfull response',
             )
         },
-        parameters=BedPlantFertilizerParameters(requiered=True),
+        parameters=BedPlantFertilizerParameters(required=True),
     )
     def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)

@@ -8,43 +8,43 @@ from .services import OrderService
 from drf_spectacular.utils import extend_schema, extend_schema_view, \
     OpenApiResponse, OpenApiParameter, OpenApiExample
 
-def OrderParameters(requiered=False):
+def OrderParameters(required=False):
     return [
         OpenApiParameter(
             name="worker",
             description="Worker ID",
             type=int,
-            required=requiered,
+            required=required,
         ),
         OpenApiParameter(
             name="user",
             description="User ID",
             type=int,
-            required=requiered,
+            required=required,
         ),
         OpenApiParameter(
             name="bed",
             description="Bed ID",
             type=int,
-            required=requiered,
+            required=required,
         ),
         OpenApiParameter(
             name="plant",
             description="Plant ID",
             type=int,
-            required=requiered,
+            required=required,
         ),
         OpenApiParameter(
             name="action",
             description="Action to perform",
             type=str,
-            required=requiered,
+            required=required,
         ),
         OpenApiParameter(
             name="completed_at",
             description="Completion time",
             type=str,
-            required=requiered,
+            required=required,
         ),
     ]
 
@@ -66,7 +66,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 description="Not enough money on the account",
             )
         },
-        parameters=OrderParameters(requiered=True),
+        parameters=OrderParameters(required=True),
     )
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
@@ -105,7 +105,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 description="Order updated successfully",
             ),
         },
-        parameters=OrderParameters(requiered=True),
+        parameters=OrderParameters(required=True),
     )
     def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)

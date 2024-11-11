@@ -10,25 +10,25 @@ from .services import *
 from drf_spectacular.utils import extend_schema, extend_schema_view, \
     OpenApiResponse, OpenApiParameter, OpenApiExample
 
-def FieldParameters(requiered=False):
+def FieldParameters(required=False):
     return [
         OpenApiParameter(
             name="name",
             description="Field name",
             type=str,
-            required=requiered,
+            required=required,
         ),
         OpenApiParameter(
             name="count_beds",
             description="Count of beds",
             type=int,
-            required=requiered,
+            required=required,
         ),
         OpenApiParameter(
             name="price",
             description="Field price",
             type=float,
-            required=requiered,
+            required=required,
         ),
     ]
 
@@ -91,7 +91,7 @@ class FieldViewSet(viewsets.ModelViewSet):
                 description='Successful response with updated field',
             ),
         },
-        parameters=FieldParameters(requiered=True),
+        parameters=FieldParameters(required=True),
     )
     def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)
@@ -126,30 +126,30 @@ class FieldViewSet(viewsets.ModelViewSet):
                 description='Successful response with created field',
             ),
         },
-        parameters=FieldParameters(requiered=True),
+        parameters=FieldParameters(required=True),
     )
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
 
-def BedParameters(requiered=False):
+def BedParameters(required=False):
     return [
         OpenApiParameter(
             name="is_rented",
             description="Is bed rented",
             type=bool,
-            required=requiered,
+            required=required,
         ),
         OpenApiParameter(
             name="field",
             description="Field ID",
             type=int,
-            required=requiered,
+            required=required,
         ),
         OpenApiParameter(
             name="rented_by",
             description="User ID",
             type=int,
-            required=requiered,
+            required=required,
         ),
     ]
 
@@ -204,7 +204,7 @@ class BedViewSet(viewsets.ModelViewSet):
                 description='Successful response with updated bed',
             )
         },
-        parameters=BedParameters(requiered=True),
+        parameters=BedParameters(required=True),
     )
     def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)
@@ -261,7 +261,7 @@ class BedViewSet(viewsets.ModelViewSet):
                 description='Bad request',
             ),
         },
-        parameters=BedParameters(requiered=True),
+        parameters=BedParameters(required=True),
         examples=[
             OpenApiExample(
                 name='Rent bed for user',
@@ -294,7 +294,7 @@ class BedViewSet(viewsets.ModelViewSet):
                 description='Bad request',
             ),
         },
-        parameters=BedParameters(requiered=True),
+        parameters=BedParameters(required=True),
         examples=[
             OpenApiExample(
                 name='Release bed for user',
