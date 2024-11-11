@@ -16,12 +16,33 @@ class FieldViewSet(viewsets.ModelViewSet):
     serializer_class = FieldSerializer
     permission_classes = [AgronomistPermission]
 
-    # put
     def perform_create(self, serializer):
         count_beds = self.request.data.get('count_beds', 0)
         serializer.save(count_beds=count_beds)
 
-    # sort
+    @extend_schema(
+        summary='List all fields',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response with list of fields',
+                response=FieldSerializer(many=True),
+            ),
+        },
+        parameters=[
+            OpenApiParameter(
+                name='sort',
+                type=str,
+                description='Sort by field',
+                required=False,
+            ),
+            OpenApiParameter(
+                name='asc',
+                type=bool,
+                description='Ascending order',
+                required=False,
+            ),
+        ],
+    )
     def list(self, request, *args, **kwargs):
         sort_by = request.query_params.get('sort', 'price')
         ascending = request.query_params.get('asc', 'true').lower() == 'true'
@@ -29,6 +50,121 @@ class FieldViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(fields, many=True)
         return Response(serializer.data)
     
+    @extend_schema(
+        summary='Retrieve field',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response with field',
+                response=FieldSerializer,
+            ),
+        },
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Update field',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response with updated field',
+                response=FieldSerializer,
+            ),
+        },
+        parameters=[
+            OpenApiParameter(
+                name='name',
+                type=str,
+                description='Field name',
+                required=True,
+            ),
+            OpenApiParameter(
+                name='count_beds',
+                type=int,
+                description='Count of beds',
+                required=True,
+            ),
+            OpenApiParameter(
+                name='price',
+                type=float,
+                description='Field price',
+                required=True,
+            ),
+        ],
+    )
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Partial update field',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response with updated field',
+                response=FieldSerializer,
+            ),
+        },
+        parameters=[
+            OpenApiParameter(
+                name='name',
+                type=str,
+                description='Field name',
+            ),
+            OpenApiParameter(
+                name='count_beds',
+                type=int,
+                description='Count of beds',
+            ),
+            OpenApiParameter(
+                name='price',
+                type=float,
+                description='Field price',
+            ),
+        ],
+    )
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Destroy field',
+        responses={
+            status.HTTP_204_NO_CONTENT: OpenApiResponse(
+                description='Successful response',
+            ),
+        },
+    )
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Create field',
+        responses={
+            status.HTTP_201_CREATED: OpenApiResponse(
+                description='Successful response with created field',
+                response=FieldSerializer,
+            ),
+        },
+        parameters=[
+            OpenApiParameter(
+                name='name',
+                type=str,
+                description='Field name',
+                required=True,
+            ),
+            OpenApiParameter(
+                name='count_beds',
+                type=int,
+                description='Count of beds',
+                required=True,
+            ),
+            OpenApiParameter(
+                name='price',
+                type=float,
+                description='Field price',
+                required=True,
+            ),
+        ],
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
 
 
 @extend_schema(tags=['Bed'])
