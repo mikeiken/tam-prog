@@ -37,12 +37,115 @@ class BedViewSet(viewsets.ModelViewSet):
     serializer_class = BedSerializer
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='List all beds',
+        description='List all beds',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response with list of beds',
+                examples=[
+                    OpenApiExample(
+                        name='List of beds',
+                        value=[
+                            {
+                                "id": 1,
+                                "is_rented": True,
+                                "field": 1,
+                                "rented_by": 1
+                            },
+                            {
+                                "id": 2,
+                                "is_rented": True,
+                                "field": 2,
+                                "rented_by": 1
+                            }
+                        ]
+                    )
+                ],
+            response=BedSerializer,
+            )
+        },
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @extend_schema(
+        summary='List all beds for current user',
+        description='List all beds that are rented by the current user',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response with list of beds',
+                examples=[
+                    OpenApiExample(
+                        name='List of beds for user',
+                        value=[
+                            {
+                                "id": 1,
+                                "is_rented": True,
+                                "field": 1,
+                                "rented_by": 1
+                            },
+                            {
+                                "id": 2,
+                                "is_rented": True,
+                                "field": 2,
+                                "rented_by": 1
+                            }
+                        ]
+                    )
+                ],
+                response=BedSerializer,
+            )
+        },
+    )
     @action(detail=False, methods=['get'])
     def my_beds(self, request):
         beds = BedService.get_user_beds(request.user)
         serializer = self.get_serializer(beds, many=True)
         return Response(serializer.data)
 
+    @extend_schema(
+        summary='Rent bed',
+        description='Rent bed for',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response',
+            ),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+                description='Bad request',
+            ),
+        },
+        parameters=[
+            OpenApiParameter(
+                name='is_rented',
+                type=bool,
+                description='Is bed rented',
+                required=True,
+            ),
+            OpenApiParameter(
+                name='field',
+                type=int,
+                description='Field ID',
+                required=True,
+            ),
+            OpenApiParameter(
+                name='rented_by',
+                type=int,
+                description='User ID',
+                required=True,
+            ),
+        ],
+        examples=[
+            OpenApiExample(
+                name='Rent bed for user',
+                value={
+                    "is_rented": True,
+                    "field": 1,
+                    "rented_by": 1
+                }
+            )
+        ],
+    )
     @action(detail=True, methods=['post'])
     def rent(self, request, pk=None):
         bed = self.get_object()
@@ -53,7 +156,48 @@ class BedViewSet(viewsets.ModelViewSet):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-
+    @extend_schema(
+        summary='Release bed',
+        description='Release bed',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response',
+            ),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+                description='Bad request',
+            ),
+        },
+        parameters=[
+            OpenApiParameter(
+                name='is_rented',
+                type=bool,
+                description='Is bed rented',
+                required=True,
+            ),
+            OpenApiParameter(
+                name='field',
+                type=int,
+                description='Field ID',
+                required=True,
+            ),
+            OpenApiParameter(
+                name='rented_by',
+                type=int,
+                description='User ID',
+                required=True,
+            ),
+        ],
+        examples=[
+            OpenApiExample(
+                name='Release bed for user',
+                value={
+                    "is_rented": False,
+                    "field": 1,
+                    "rented_by": 1
+                }
+            )
+        ],
+    )
     @action(detail=True, methods=['post'])
     def release(self, request, pk=None):
         bed = self.get_object()
