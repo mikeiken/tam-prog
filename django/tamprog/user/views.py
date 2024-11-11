@@ -15,6 +15,22 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, \
 
 User = get_user_model()
 
+def LoginParameters(requiered=False):
+    return [
+        OpenApiParameter(
+            name="username",
+            description="Username",
+            type=str,
+            required=requiered,
+        ),
+        OpenApiParameter(
+            name="password",
+            description="Password",
+            type=str,
+            required=requiered,
+        ),
+    ]
+
 @extend_schema(tags=['User'])
 class LoginView(generics.GenericAPIView):
     permission_classes = (AllowAny,)
@@ -30,9 +46,9 @@ class LoginView(generics.GenericAPIView):
                     OpenApiExample(
                         name="Successful login",
                         value={
-                            "refresh": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9",
-                            "access": "eyJ0eXAi",
-                            "wallet_balance": 250.00,
+                            "refresh": "string",
+                            "access": "string",
+                            "wallet_balance": 0.00,
                         },
                     )
                 ],
@@ -51,30 +67,7 @@ class LoginView(generics.GenericAPIView):
                 response=LoginSerializer,
             )
         },
-        parameters=[
-            OpenApiParameter(
-                name="username",
-                location=OpenApiParameter.QUERY,
-                type=str,
-                description=None,
-            ),
-            OpenApiParameter(
-                name="password",
-                location=OpenApiParameter.QUERY,
-                type=str,
-                description=None,
-            )
-        ],
-        examples=[
-            OpenApiExample(
-                name="User login",
-                value={
-                    "username": "oleg189",
-                    "password": "i_l0v3_my_cat53"
-                },
-                request_only=True,
-            ),
-        ]
+        parameters=LoginParameters(requiered=True),
     )
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -91,6 +84,39 @@ class LoginView(generics.GenericAPIView):
                 'wallet_balance': user.wallet_balance,
             })
         return Response({"detail": "Invalid credentials"}, status=400)
+
+def RegisterParameters(requiered=False):
+    return [
+        OpenApiParameter(
+            name="username",
+            description="Username",
+            type=str,
+            required=requiered,
+        ),
+        OpenApiParameter(
+            name="full_name",
+            description="Full name",
+            type=str,
+            required=requiered,
+        ),
+        OpenApiParameter(
+            name="phone_number",
+            description="Phone number",
+            type=str,
+            required=requiered,
+        ),
+        OpenApiParameter(
+            name="password",
+            description="Password",
+            type=str,
+            required=requiered,
+        ),
+        OpenApiParameter(
+            name="wallet_balance",
+            description="Wallet balance",
+            type=float,
+        ),
+    ]
 
 @extend_schema(tags=['User'])
 @extend_schema(methods=['PUT', 'GET', 'PATCH', 'DELETE'], exclude=True)
@@ -110,55 +136,24 @@ class RegisterViewSet(viewsets.ModelViewSet):
                         name="Successful registration",
                         value={
                             "message": "User created successfully", 
-                            "user_id": 1,
-                            "username": "oleg189",
+                            "user_id": 0,
+                            "username": "string",
                         },
                     )
                 ],
                 response=LoginSerializer,
             ),
         },
-        parameters=[
-            OpenApiParameter(
-                name="username",
-                location=OpenApiParameter.QUERY,
-                type=str,
-                description=None,
-            ),
-            OpenApiParameter(
-                name="full_name",
-                location=OpenApiParameter.QUERY,
-                type=str,
-                description=None,
-            ),
-            OpenApiParameter(
-                name="phone_number",
-                location=OpenApiParameter.QUERY,
-                type=str,
-                description=None,
-            ),
-            OpenApiParameter(
-                name="password",
-                location=OpenApiParameter.QUERY,
-                type=str,
-                description=None,
-            ),
-            OpenApiParameter(
-                name="wallet_balance",
-                location=OpenApiParameter.QUERY,
-                type=float,
-                description=None,
-            ),
-        ],
+        parameters=RegisterParameters(requiered=True),
         examples=[
             OpenApiExample(
                 name="Register new user",
                 value={
-                    "username": "oleg189",
-                    "full_name": "Oleg Ivanov",
-                    "phone_number": "+79991234567",
-                    "password": "i_l0v3_my_cat53",
-                    "wallet_balance": 250.00
+                    "username": "string",
+                    "full_name": "string",
+                    "phone_number": "string",
+                    "password": "string",
+                    "wallet_balance": 0.00
                 },
                 request_only=True,
             ),
@@ -184,6 +179,28 @@ class RegisterViewSet(viewsets.ModelViewSet):
             status=status.HTTP_201_CREATED,
             headers=headers
         )
+
+def PersonParameters(requiered=False):
+    return [
+        OpenApiParameter(
+            name="wallet_balance",
+            description="User wallet balance",
+            type=float,
+            required=requiered,
+        ),
+        OpenApiParameter(
+            name="full_name",
+            description="User full name",
+            type=str,
+            required=requiered,
+        ),
+        OpenApiParameter(
+            name="phone_number",
+            description="User phone number",
+            type=str,
+            required=requiered,
+        ),
+    ]
 
 @extend_schema(tags=['User'])
 class PersonViewSet(viewsets.ModelViewSet):
@@ -223,26 +240,7 @@ class PersonViewSet(viewsets.ModelViewSet):
                 response=PersonSerializer,
             ),
         },
-        parameters=[
-            OpenApiParameter(
-                name="wallet_balance",
-                description="User wallet balance",
-                type=float,
-                required=True,
-            ),
-            OpenApiParameter(
-                name="full_name",
-                description="User full name",
-                type=str,
-                required=True,
-            ),
-            OpenApiParameter(
-                name="phone_number",
-                description="User phone number",
-                type=str,
-                required=True,
-            ),
-        ],
+        parameters=PersonParameters(requiered=True),
     )
     def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)
@@ -255,23 +253,7 @@ class PersonViewSet(viewsets.ModelViewSet):
                 response=PersonSerializer,
             ),
         },
-        parameters=[
-            OpenApiParameter(
-                name="wallet_balance",
-                description="User wallet balance",
-                type=float,
-            ),
-            OpenApiParameter(
-                name="full_name",
-                description="User full name",
-                type=str,
-            ),
-            OpenApiParameter(
-                name="phone_number",
-                description="User phone number",
-                type=str,
-            ),
-        ],
+        parameters=PersonParameters(),
     )
     def partial_update(self, request, *args, **kwargs):
         return super().partial_update(request, *args, **kwargs)
@@ -290,6 +272,28 @@ class PersonViewSet(viewsets.ModelViewSet):
     @extend_schema(exclude=True)
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
+
+def WorkerParameters(requiered=False):
+    return [
+        OpenApiParameter(
+            name="name",
+            description="Worker full name",
+            type=str,
+            required=requiered,
+        ),
+        OpenApiParameter(
+            name="price",
+            description="Worker salary",
+            type=float,
+            required=requiered,
+        ),
+        OpenApiParameter(
+            name="description",
+            description="Worker description",
+            type=str,
+            required=requiered,
+        ),
+    ]
 
 @extend_schema(tags=['User'])
 class WorkerViewSet(viewsets.ModelViewSet):
@@ -332,26 +336,7 @@ class WorkerViewSet(viewsets.ModelViewSet):
                 response=WorkerSerializer,
             ),
         },
-        parameters=[
-            OpenApiParameter(
-                name="name",
-                description="Worker full name",
-                type=str,
-                required=True,
-            ),
-            OpenApiParameter(
-                name="price",
-                description="Worker salary",
-                type=float,
-                required=True,
-            ),
-            OpenApiParameter(
-                name="description",
-                description="Worker description",
-                type=str,
-                required=True,
-            ),
-        ],
+        parameters=WorkerParameters(requiered=True),
     )
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
@@ -364,26 +349,7 @@ class WorkerViewSet(viewsets.ModelViewSet):
                 response=WorkerSerializer,
             ),
         },
-        parameters=[
-            OpenApiParameter(
-                name="name",
-                description="Worker full name",
-                type=str,
-                required=True,
-            ),
-            OpenApiParameter(
-                name="price",
-                description="Worker salary",
-                type=float,
-                required=True,
-            ),
-            OpenApiParameter(
-                name="description",
-                description="Worker description",
-                type=str,
-                required=True,
-            ),
-        ],
+        parameters=WorkerParameters(requiered=True),
     )
     def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)
@@ -396,23 +362,7 @@ class WorkerViewSet(viewsets.ModelViewSet):
                 response=WorkerSerializer,
             ),
         },
-        parameters=[
-            OpenApiParameter(
-                name="name",
-                description="Worker full name",
-                type=str,
-            ),
-            OpenApiParameter(
-                name="price",
-                description="Worker salary",
-                type=float,
-            ),
-            OpenApiParameter(
-                name="description",
-                description="Worker description",
-                type=str,
-            ),
-        ],
+        parameters=WorkerParameters(),
     )
     def partial_update(self, request, *args, **kwargs):
         return super().partial_update(request, *args, **kwargs)
