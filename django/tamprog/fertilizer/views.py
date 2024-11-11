@@ -15,6 +15,131 @@ class FertilizerViewSet(viewsets.ModelViewSet):
     serializer_class = FertilizerSerializer
     permission_classes = [AgronomistPermission]
 
+    @extend_schema(
+        summary='Get all fertilizers',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successfull response',
+                response=FertilizerSerializer(many=True)
+            )
+        },
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
+    @extend_schema(
+        summary='Get fertilizer by ID',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successfull response',
+                response=FertilizerSerializer
+            )
+        },
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+
+    @extend_schema(
+        summary='Create fertilizer',
+        responses={
+            status.HTTP_201_CREATED: OpenApiResponse(
+                description='Successfull response',
+            )
+        },
+        parameters=[
+            OpenApiParameter(
+                name='name',
+                description='Fertilizer name',
+                type=str,
+                required=True,
+            ),
+            OpenApiParameter(
+                name='boost',
+                description='Fertilizer boost',
+                type=int,
+                required=True,
+            ),
+            OpenApiParameter(
+                name='compound',
+                description='Fertilizer compound',
+                type=str,
+                required=True,
+            ),
+        ],
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @extend_schema(
+        summary='Update fertilizer',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successfull response',
+            )
+        },
+        parameters=[
+            OpenApiParameter(
+                name='name',
+                description='Fertilizer name',
+                type=str,
+                required=True,
+            ),
+            OpenApiParameter(
+                name='boost',
+                description='Fertilizer boost',
+                type=int,
+                required=True,
+            ),
+            OpenApiParameter(
+                name='compound',
+                description='Fertilizer compound',
+                type=str,
+                required=True,
+            ),
+        ],
+    )
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Partially update fertilizer',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successfull response',
+            )
+        },
+        parameters=[
+            OpenApiParameter(
+                name='name',
+                description='Fertilizer name',
+                type=str,
+            ),
+            OpenApiParameter(
+                name='boost',
+                description='Fertilizer boost',
+                type=int,
+            ),
+            OpenApiParameter(
+                name='compound',
+                description='Fertilizer compound',
+                type=str,
+            ),
+        ],
+    )
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Delete fertilizer',
+        responses={
+            status.HTTP_204_NO_CONTENT: OpenApiResponse(
+                description='Successfull response',
+            )
+        },
+    )
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+
     def perform_create(self, serializer):
         name = serializer.validated_data['name']
         boost = serializer.validated_data['boost']
