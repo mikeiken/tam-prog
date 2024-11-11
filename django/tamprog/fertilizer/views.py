@@ -41,7 +41,7 @@ class FertilizerViewSet(viewsets.ModelViewSet):
         summary='Get all fertilizers',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Successfull response',
+                description='Successful response',
                 response=FertilizerSerializer(many=True)
             )
         },
@@ -53,7 +53,7 @@ class FertilizerViewSet(viewsets.ModelViewSet):
         summary='Get fertilizer by ID',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Successfull response',
+                description='Successful response',
                 response=FertilizerSerializer
             )
         },
@@ -65,7 +65,7 @@ class FertilizerViewSet(viewsets.ModelViewSet):
         summary='Create fertilizer',
         responses={
             status.HTTP_201_CREATED: OpenApiResponse(
-                description='Successfull response',
+                description='Successful response',
             )
         },
         parameters=FertilizerParameters(required=True),
@@ -77,7 +77,7 @@ class FertilizerViewSet(viewsets.ModelViewSet):
         summary='Update fertilizer',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Successfull response',
+                description='Successful response',
             )
         },
         parameters=FertilizerParameters(required=True),
@@ -89,7 +89,7 @@ class FertilizerViewSet(viewsets.ModelViewSet):
         summary='Partially update fertilizer',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Successfull response',
+                description='Successful response',
             )
         },
         parameters=FertilizerParameters(),
@@ -101,7 +101,7 @@ class FertilizerViewSet(viewsets.ModelViewSet):
         summary='Delete fertilizer',
         responses={
             status.HTTP_204_NO_CONTENT: OpenApiResponse(
-                description='Successfull response',
+                description='Successful response',
             )
         },
     )
@@ -140,7 +140,7 @@ class BedPlantFertilizerViewSet(viewsets.ModelViewSet):
         summary='Get fertilizers applied to all plants',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Successfull response',
+                description='Successful response',
                 response=BedPlantFertilizerSerializer(many=True)
             )
         },
@@ -152,7 +152,7 @@ class BedPlantFertilizerViewSet(viewsets.ModelViewSet):
         summary='Apply fertilizer to a plant',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Successfull response',
+                description='Successful response',
             )
         },
         parameters=BedPlantFertilizerParameters(required=True),
@@ -164,7 +164,7 @@ class BedPlantFertilizerViewSet(viewsets.ModelViewSet):
         summary='Update fertilizer applied to a plant',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Successfull response',
+                description='Successful response',
             )
         },
         parameters=BedPlantFertilizerParameters(),
@@ -176,7 +176,7 @@ class BedPlantFertilizerViewSet(viewsets.ModelViewSet):
         summary='Delete fertilizer applied to a plant',
         responses={
             status.HTTP_204_NO_CONTENT: OpenApiResponse(
-                description='Successfull response',
+                description='Successful response',
             )
         },
     )
@@ -187,7 +187,7 @@ class BedPlantFertilizerViewSet(viewsets.ModelViewSet):
         summary='Get fertilizer applied to a plant',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Successfull response',
+                description='Successful response',
                 response=BedPlantFertilizerSerializer
             )
         },
@@ -199,7 +199,7 @@ class BedPlantFertilizerViewSet(viewsets.ModelViewSet):
         summary='Update fertilizer applied to a plant',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Successfull response',
+                description='Successful response',
             )
         },
         parameters=BedPlantFertilizerParameters(required=True),

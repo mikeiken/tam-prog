@@ -49,7 +49,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         summary='List all available plants',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Successfull response',
+                description='Successful response',
                 response=PlantSerializer(many=True)
             )
         },
@@ -79,7 +79,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         summary='Get a plant by ID',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Successfull response',
+                description='Successful response',
                 response=PlantSerializer
             )
         },
@@ -91,7 +91,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         summary='Partially update a plant',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Successfull update',
+                description='Successful update',
             )
         },
         parameters=PlantParameters(),
@@ -103,7 +103,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         summary='Update a plant',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Successfull update',
+                description='Successful update',
             )
         },
         parameters=PlantParameters(required=True),
@@ -179,7 +179,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
         summary='Get all planted plants',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Successfull response',
+                description='Successful response',
                 response=BedPlantSerializer(many=True)
             )
         },
@@ -191,7 +191,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
         summary='Get a planted plant by ID',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Successfull response',
+                description='Successful response',
                 response=BedPlantSerializer
             )
         },
@@ -203,7 +203,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
         summary='Update a planted plant',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Successfull update',
+                description='Successful update',
             )
         },
         parameters=BedPlantParameters(required=True),
@@ -215,7 +215,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
         summary='Partially update a planted plant',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Successfull update',
+                description='Successful update',
             )
         },
         parameters=BedPlantParameters(),

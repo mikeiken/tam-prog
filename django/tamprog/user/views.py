@@ -212,7 +212,7 @@ class PersonViewSet(viewsets.ModelViewSet):
         summary='Get all users', 
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description="Successfull response",
+                description="Successful response",
                 response=PersonSerializer(many=True),
             ),
         },
@@ -224,7 +224,7 @@ class PersonViewSet(viewsets.ModelViewSet):
         summary='Get user by ID', 
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description="Successfull response",
+                description="Successful response",
                 response=PersonSerializer,
             ),
         },
@@ -303,7 +303,7 @@ class WorkerViewSet(viewsets.ModelViewSet):
         summary='Get all workers', 
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description="Successfull response",
+                description="Successful response",
                 response=WorkerSerializer(many=True),
             ),
         },
@@ -318,7 +318,7 @@ class WorkerViewSet(viewsets.ModelViewSet):
         summary='Get worker by ID', 
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description="Successfull response",
+                description="Successful response",
                 response=WorkerSerializer,
             ),
         },
