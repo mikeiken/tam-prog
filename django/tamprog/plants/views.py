@@ -230,6 +230,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
 
     @extend_schema(
         summary='Harvest a plant',
+        description='Harvest a plant from a bed',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description='Plant harvested',
@@ -244,6 +245,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
 
     @extend_schema(
         summary='Fertilize a plant',
+        description='Fertilize a plant in a bed',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description='Plant fertilized',
@@ -277,6 +279,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
 
     @extend_schema(
         summary='Water a plant',
+        description='Water a plant in a bed',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description='Plant watered',
@@ -297,6 +300,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
 
     @extend_schema(
         summary='Dig up a plant',
+        description='Dig up a plant from a bed',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description='Plant dug up',
