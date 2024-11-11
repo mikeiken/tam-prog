@@ -37,7 +37,7 @@ def PlantParameters(required=False):
             description='Plant description',
             required=required,
         ),
-    ],
+    ]
 
 @extend_schema(tags=['Plant'])
 class PlantViewSet(viewsets.ModelViewSet):
@@ -148,7 +148,7 @@ def BedPlantParameters(required=False):
             description='Plant ID',
             required=required,
         ),
-    ],    
+    ]
 
 @extend_schema(tags=['Plant'])
 class BedPlantViewSet(viewsets.ModelViewSet):
@@ -253,7 +253,16 @@ class BedPlantViewSet(viewsets.ModelViewSet):
                         value={'status': 'plant fertilized'},
                     )
                 ]
-            )
+            ),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+                description='No suitable fertilizer found',
+                examples=[
+                    OpenApiExample(
+                        name='No suitable fertilizer',
+                        value={'error': 'No suitable fertilizer found'},
+                    )
+                ]
+            ),
         },
     )
     @action(detail=True, methods=['post'])
@@ -262,7 +271,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
         plant_name = bed_plant.plant.name
         fertilizer = Fertilizer.objects.filter(compound__icontains=plant_name).first()
         if not fertilizer:
-            return Response({'error': 'No suitable fertilizer found'}, status=404)
+            return Response({'error': 'No suitable fertilizer found'}, status=status.HTTP_400_BAD_REQUEST)
         BedPlantService.fertilize_plant(bed_plant, fertilizer)
         return Response({'status': 'plant fertilized'})
 

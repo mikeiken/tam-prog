@@ -61,7 +61,6 @@ class OrderViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_201_CREATED: OpenApiResponse(
                 description="Order created successfully",
-                response=OrderSerializer,
             ),
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(
                 description="Not enough money on the account",
@@ -104,7 +103,6 @@ class OrderViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description="Order updated successfully",
-                response=OrderSerializer,
             ),
         },
         parameters=OrderParameters(requiered=True),
@@ -118,7 +116,6 @@ class OrderViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description="Order updated successfully",
-                response=OrderSerializer,
             ),
         },
         parameters=OrderParameters(),

@@ -237,7 +237,6 @@ class PersonViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description="User updated successfully",
-                response=PersonSerializer,
             ),
         },
         parameters=PersonParameters(requiered=True),
@@ -250,7 +249,6 @@ class PersonViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description="User updated successfully",
-                response=PersonSerializer,
             ),
         },
         parameters=PersonParameters(),
@@ -333,7 +331,6 @@ class WorkerViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description="Worker updated successfully",
-                response=WorkerSerializer,
             ),
         },
         parameters=WorkerParameters(requiered=True),
@@ -346,7 +343,6 @@ class WorkerViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description="Worker updated successfully",
-                response=WorkerSerializer,
             ),
         },
         parameters=WorkerParameters(requiered=True),
@@ -359,7 +355,6 @@ class WorkerViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description="Worker updated successfully",
-                response=WorkerSerializer,
             ),
         },
         parameters=WorkerParameters(),
