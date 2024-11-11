@@ -204,6 +204,12 @@ class BedPlantViewSet(viewsets.ModelViewSet):
         responses={
             200: OpenApiResponse(
                 description='Plant fertilized',
+                examples=[
+                    OpenApiExample(
+                        name='Fertilized plant',
+                        value={'status': 'plant fertilized'},
+                    )
+                ]
             )
         },
     )
@@ -222,6 +228,12 @@ class BedPlantViewSet(viewsets.ModelViewSet):
         responses={
             200: OpenApiResponse(
                 description='Plant watered',
+                examples=[
+                    OpenApiExample(
+                        name='Watered plant',
+                        value={'status': 'plant watered'},
+                    )
+                ]
             )
         },
     )
@@ -236,6 +248,12 @@ class BedPlantViewSet(viewsets.ModelViewSet):
         responses={
             200: OpenApiResponse(
                 description='Plant dug up',
+                examples=[
+                    OpenApiExample(
+                        name='Dug up plant',
+                        value={'status': 'plant dug up'},
+                    )
+                ]
             )
         },
     )
