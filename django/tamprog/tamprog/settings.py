@@ -91,7 +91,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.getenv('POSTGRES_DB', 'garden'),
-        'HOST': os.getenv('DJANGO_DB_HOST', '127.0.0.1'),
+        'HOST': os.getenv('DJANGO_DB_HOST', '127.0.0.1') \
+            if (os.getenv('IS_IN_CONTAINER', 'false').lower() == 'true') \
+            else '127.0.0.1',
         'PORT': os.getenv('POSTGRES_PORT', '5432'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'root'),
         'USER': os.getenv('POSTGRES_USER', 'agronom'),
@@ -209,9 +211,14 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'My API',
-    'DESCRIPTION': 'API documentation for my project',
+    'TITLE': 'Tamprog API',
+    'DESCRIPTION': 'API documentation for Tamprog',
     'VERSION': '1.0.0',
+    "SERVE_INCLUDE_SCHEMA": True, # исключить эндпоинт /schema
+    "SWAGGER_UI_SETTINGS": {
+        "filter": True, # включить поиск по тегам
+    },
+    "COMPONENT_SPLIT_REQUEST": True,
 }
 
 
