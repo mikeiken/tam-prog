@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -11,6 +11,34 @@ from fertilizer.models import Fertilizer
 from drf_spectacular.utils import extend_schema, extend_schema_view, \
     OpenApiResponse, OpenApiParameter, OpenApiExample
 
+def PlantParameters(required=False):
+    return [
+        OpenApiParameter(
+            name='name',
+            type=str,
+            description='Plant name',
+            required=required,
+        ),
+        OpenApiParameter(
+            name='growth_time',
+            type=int,
+            description='Growth time of plant',
+            required=required,
+        ),
+        OpenApiParameter(
+            name='price',
+            type=float,
+            description='Plant price',
+            required=required,
+        ),
+        OpenApiParameter(
+            name='description',
+            type=str,
+            description='Plant description',
+            required=required,
+        ),
+    ],
+
 @extend_schema(tags=['Plant'])
 class PlantViewSet(viewsets.ModelViewSet):
     queryset = Plant.objects.all()
@@ -20,7 +48,7 @@ class PlantViewSet(viewsets.ModelViewSet):
     @extend_schema(
         summary='List all available plants',
         responses={
-            200: OpenApiResponse(
+            status.HTTP_200_OK: OpenApiResponse(
                 description='Successfull response',
                 response=PlantSerializer(many=True)
             )
@@ -35,43 +63,14 @@ class PlantViewSet(viewsets.ModelViewSet):
     @extend_schema(
         summary='Create a new plant',
         responses={
-            201: OpenApiResponse(
+            status.HTTP_201_CREATED: OpenApiResponse(
                 description='Plant created successfully',
             ),
-            400: OpenApiResponse(
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
                 description='Bad request',
             ),
         },
-        parameters=[
-            OpenApiParameter(
-                name='name',
-                location=OpenApiParameter.QUERY,
-                type=str,
-                description='Plant name',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='growth_time',
-                location=OpenApiParameter.QUERY,
-                type=int,
-                description='Growth time of plant',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='price',
-                location=OpenApiParameter.QUERY,
-                type=float,
-                description='Plant price',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='description',
-                location=OpenApiParameter.QUERY,
-                type=str,
-                description='Plant description',
-                required=True,
-            ),
-        ],
+        parameters=PlantParameters(required=True),
     )
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
@@ -79,7 +78,7 @@ class PlantViewSet(viewsets.ModelViewSet):
     @extend_schema(
         summary='Get a plant by ID',
         responses={
-            200: OpenApiResponse(
+            status.HTTP_200_OK: OpenApiResponse(
                 description='Successfull response',
                 response=PlantSerializer
             )
@@ -91,36 +90,11 @@ class PlantViewSet(viewsets.ModelViewSet):
     @extend_schema(
         summary='Partially update a plant',
         responses={
-            200: OpenApiResponse(
+            status.HTTP_200_OK: OpenApiResponse(
                 description='Successfull update',
             )
         },
-        parameters=[
-            OpenApiParameter(
-                name='name',
-                location=OpenApiParameter.QUERY,
-                type=str,
-                description='Plant name',
-            ),
-            OpenApiParameter(
-                name='growth_time',
-                location=OpenApiParameter.QUERY,
-                type=int,
-                description='Growth time of plant',
-            ),
-            OpenApiParameter(
-                name='price',
-                location=OpenApiParameter.QUERY,
-                type=float,
-                description='Plant price',
-            ),
-            OpenApiParameter(
-                name='description',
-                location=OpenApiParameter.QUERY,
-                type=str,
-                description='Plant description',
-            ),
-        ],
+        parameters=PlantParameters(),
     )
     def partial_update(self, request, *args, **kwargs):
         return super().partial_update(request, *args, **kwargs)
@@ -128,40 +102,11 @@ class PlantViewSet(viewsets.ModelViewSet):
     @extend_schema(
         summary='Update a plant',
         responses={
-            200: OpenApiResponse(
+            status.HTTP_200_OK: OpenApiResponse(
                 description='Successfull update',
             )
         },
-                parameters=[
-            OpenApiParameter(
-                name='name',
-                location=OpenApiParameter.QUERY,
-                type=str,
-                description='Plant name',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='growth_time',
-                location=OpenApiParameter.QUERY,
-                type=int,
-                description='Growth time of plant',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='price',
-                location=OpenApiParameter.QUERY,
-                type=float,
-                description='Plant price',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='description',
-                location=OpenApiParameter.QUERY,
-                type=str,
-                description='Plant description',
-                required=True,
-            ),
-        ],
+        parameters=PlantParameters(required=True),
     )
     def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)
@@ -169,13 +114,41 @@ class PlantViewSet(viewsets.ModelViewSet):
     @extend_schema(
         summary='Delete a plant',
         responses={
-            204: OpenApiResponse(
+            status.HTTP_204_NO_CONTENT: OpenApiResponse(
                 description='Plant deleted successfully',
             )
         },
     )
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
+
+def BedPlantParameters(required=False):
+    return [
+        OpenApiParameter(
+            name='ferilizer_applied',
+            type=bool,
+            description='Is created bed plant fertilized',
+            required=required,
+        ),
+        OpenApiParameter(
+            name='growth_time',
+            type=int,
+            description='Growth time of plant',
+            required=required,
+        ),
+        OpenApiParameter(
+            name='bed',
+            type=int,
+            description='Bed ID',
+            required=required,
+        ),
+        OpenApiParameter(
+            name='plant',
+            type=int,
+            description='Plant ID',
+            required=required,
+        ),
+    ],    
 
 @extend_schema(tags=['Plant'])
 class BedPlantViewSet(viewsets.ModelViewSet):
@@ -190,43 +163,14 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     @extend_schema(
         summary='Plant a new plant in a bed',
         responses={
-            201: OpenApiResponse(
+            status.HTTP_201_CREATED: OpenApiResponse(
                 description='Plant planted successfully',
             ),
-            400: OpenApiResponse(
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
                 description='Bad request',
             ),
         },
-        parameters=[
-            OpenApiParameter(
-                name='ferilizer_applied',
-                location=OpenApiParameter.QUERY,
-                type=bool,
-                description='Is created bed plant fertilized',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='growth_time',
-                location=OpenApiParameter.QUERY,
-                type=int,
-                description='Growth time of plant',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='bed',
-                location=OpenApiParameter.QUERY,
-                type=int,
-                description='Bed ID',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='plant',
-                location=OpenApiParameter.QUERY,
-                type=int,
-                description='Plant ID',
-                required=True,
-            ),
-        ],    
+        parameters=BedPlantParameters(required=True),    
     )
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
@@ -234,7 +178,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     @extend_schema(
         summary='Get all planted plants',
         responses={
-            200: OpenApiResponse(
+            status.HTTP_200_OK: OpenApiResponse(
                 description='Successfull response',
                 response=BedPlantSerializer(many=True)
             )
@@ -246,7 +190,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     @extend_schema(
         summary='Get a planted plant by ID',
         responses={
-            200: OpenApiResponse(
+            status.HTTP_200_OK: OpenApiResponse(
                 description='Successfull response',
                 response=BedPlantSerializer
             )
@@ -258,40 +202,11 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     @extend_schema(
         summary='Update a planted plant',
         responses={
-            200: OpenApiResponse(
+            status.HTTP_200_OK: OpenApiResponse(
                 description='Successfull update',
             )
         },
-        parameters=[
-            OpenApiParameter(
-                name='ferilizer_applied',
-                location=OpenApiParameter.QUERY,
-                type=bool,
-                description='Is bed plant fertilized',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='growth_time',
-                location=OpenApiParameter.QUERY,
-                type=int,
-                description='Growth time of plant',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='bed',
-                location=OpenApiParameter.QUERY,
-                type=int,
-                description='Bed ID',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='plant',
-                location=OpenApiParameter.QUERY,
-                type=int,
-                description='Plant ID',
-                required=True,
-            ),
-        ],
+        parameters=BedPlantParameters(required=True),
     )
     def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)
@@ -299,36 +214,11 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     @extend_schema(
         summary='Partially update a planted plant',
         responses={
-            200: OpenApiResponse(
+            status.HTTP_200_OK: OpenApiResponse(
                 description='Successfull update',
             )
         },
-        parameters=[
-            OpenApiParameter(
-                name='ferilizer_applied',
-                location=OpenApiParameter.QUERY,
-                type=bool,
-                description='Is bed plant fertilized',
-            ),
-            OpenApiParameter(
-                name='growth_time',
-                location=OpenApiParameter.QUERY,
-                type=int,
-                description='Growth time of plant',
-            ),
-            OpenApiParameter(
-                name='bed',
-                location=OpenApiParameter.QUERY,
-                type=int,
-                description='Bed ID',
-            ),
-            OpenApiParameter(
-                name='plant',
-                location=OpenApiParameter.QUERY,
-                type=int,
-                description='Plant ID',
-            ),
-        ],
+        parameters=BedPlantParameters(),
     )
     def partial_update(self, request, *args, **kwargs):
         return super().partial_update(request, *args, **kwargs)
@@ -341,7 +231,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     @extend_schema(
         summary='Harvest a plant',
         responses={
-            200: OpenApiResponse(
+            status.HTTP_200_OK: OpenApiResponse(
                 description='Plant harvested',
             )
         },
@@ -355,7 +245,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     @extend_schema(
         summary='Fertilize a plant',
         responses={
-            200: OpenApiResponse(
+            status.HTTP_200_OK: OpenApiResponse(
                 description='Plant fertilized',
                 examples=[
                     OpenApiExample(
@@ -379,7 +269,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     @extend_schema(
         summary='Water a plant',
         responses={
-            200: OpenApiResponse(
+            status.HTTP_200_OK: OpenApiResponse(
                 description='Plant watered',
                 examples=[
                     OpenApiExample(
@@ -399,7 +289,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     @extend_schema(
         summary='Dig up a plant',
         responses={
-            200: OpenApiResponse(
+            status.HTTP_200_OK: OpenApiResponse(
                 description='Plant dug up',
                 examples=[
                     OpenApiExample(
