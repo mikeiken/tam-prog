@@ -32,6 +32,16 @@ class FieldViewSet(viewsets.ModelViewSet):
 
 
 @extend_schema(tags=['Bed'])
+@extend_schema(
+    methods=['post'],
+    summary='Create bed',
+    responses={
+        status.HTTP_201_CREATED: OpenApiResponse(
+            description='Successful response with created bed',
+            response=BedSerializer,
+        ),
+    }
+)
 class BedViewSet(viewsets.ModelViewSet):
     queryset = Bed.objects.all()
     serializer_class = BedSerializer
@@ -62,12 +72,136 @@ class BedViewSet(viewsets.ModelViewSet):
                         ]
                     )
                 ],
-            response=BedSerializer,
+                response=BedSerializer,
             )
         },
     )
     def list(self, request, *args, **kwargs):
         return super().list(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Retrieve bed',
+        description='Retrieve bed by ID',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response with bed',
+                examples=[
+                    OpenApiExample(
+                        name='Bed',
+                        value={
+                            "id": 1,
+                            "is_rented": True,
+                            "field": 1,
+                            "rented_by": 1
+                        }
+                    )
+                ],
+                response=BedSerializer,
+            )
+        },
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Update bed',
+        description='Update bed by ID',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response with updated bed',
+                examples=[
+                    OpenApiExample(
+                        name='Updated bed',
+                        value={
+                            "id": 1,
+                            "is_rented": True,
+                            "field": 1,
+                            "rented_by": 1
+                        }
+                    )
+                ],
+                response=BedSerializer,
+            )
+        },
+        parameters=[
+            OpenApiParameter(
+                name='is_rented',
+                type=bool,
+                description='Is bed rented',
+                required=True,
+            ),
+            OpenApiParameter(
+                name='field',
+                type=int,
+                description='Field ID',
+                required=True,
+            ),
+            OpenApiParameter(
+                name='rented_by',
+                type=int,
+                description='User ID',
+                required=True,
+            ),
+        ],
+    )
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Destroy bed',
+        description='Destroy bed by ID',
+        responses={
+            status.HTTP_204_NO_CONTENT: OpenApiResponse(
+                description='Successful response',
+            )
+        },
+    )
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Partial update bed',
+        description='Partial update bed by ID',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response with updated bed',
+                examples=[
+                    OpenApiExample(
+                        name='Updated bed',
+                        value={
+                            "id": 1,
+                            "is_rented": True,
+                            "field": 1,
+                            "rented_by": 1
+                        }
+                    )
+                ],
+                response=BedSerializer,
+            )
+        },
+        parameters=[
+            OpenApiParameter(
+                name='is_rented',
+                type=bool,
+                description='Is bed rented',
+                required=True,
+            ),
+            OpenApiParameter(
+                name='field',
+                type=int,
+                description='Field ID',
+                required=True,
+            ),
+            OpenApiParameter(
+                name='rented_by',
+                type=int,
+                description='User ID',
+                required=True,
+            ),
+        ],
+    )
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
 
     @extend_schema(
         summary='List all beds for current user',
