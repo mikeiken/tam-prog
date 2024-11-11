@@ -10,6 +10,28 @@ from .services import *
 from drf_spectacular.utils import extend_schema, extend_schema_view, \
     OpenApiResponse, OpenApiParameter, OpenApiExample
 
+def FieldParameters(requiered=False):
+    return [
+        OpenApiParameter(
+            name="name",
+            description="Field name",
+            type=str,
+            required=requiered,
+        ),
+        OpenApiParameter(
+            name="count_beds",
+            description="Count of beds",
+            type=int,
+            required=requiered,
+        ),
+        OpenApiParameter(
+            name="price",
+            description="Field price",
+            type=float,
+            required=requiered,
+        ),
+    ]
+
 @extend_schema(tags=['Field'])
 class FieldViewSet(viewsets.ModelViewSet):
     queryset = Field.objects.all()
@@ -67,29 +89,9 @@ class FieldViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description='Successful response with updated field',
-                response=FieldSerializer,
             ),
         },
-        parameters=[
-            OpenApiParameter(
-                name='name',
-                type=str,
-                description='Field name',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='count_beds',
-                type=int,
-                description='Count of beds',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='price',
-                type=float,
-                description='Field price',
-                required=True,
-            ),
-        ],
+        parameters=FieldParameters(requiered=True),
     )
     def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)
@@ -99,26 +101,9 @@ class FieldViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description='Successful response with updated field',
-                response=FieldSerializer,
             ),
         },
-        parameters=[
-            OpenApiParameter(
-                name='name',
-                type=str,
-                description='Field name',
-            ),
-            OpenApiParameter(
-                name='count_beds',
-                type=int,
-                description='Count of beds',
-            ),
-            OpenApiParameter(
-                name='price',
-                type=float,
-                description='Field price',
-            ),
-        ],
+        parameters=FieldParameters(),
     )
     def partial_update(self, request, *args, **kwargs):
         return super().partial_update(request, *args, **kwargs)
@@ -139,49 +124,51 @@ class FieldViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_201_CREATED: OpenApiResponse(
                 description='Successful response with created field',
-                response=FieldSerializer,
             ),
         },
-        parameters=[
-            OpenApiParameter(
-                name='name',
-                type=str,
-                description='Field name',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='count_beds',
-                type=int,
-                description='Count of beds',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='price',
-                type=float,
-                description='Field price',
-                required=True,
-            ),
-        ],
+        parameters=FieldParameters(requiered=True),
     )
     def create(self, request, *args, **kwargs):
         return super().create(request, *args, **kwargs)
 
+def BedParameters(requiered=False):
+    return [
+        OpenApiParameter(
+            name="is_rented",
+            description="Is bed rented",
+            type=bool,
+            required=requiered,
+        ),
+        OpenApiParameter(
+            name="field",
+            description="Field ID",
+            type=int,
+            required=requiered,
+        ),
+        OpenApiParameter(
+            name="rented_by",
+            description="User ID",
+            type=int,
+            required=requiered,
+        ),
+    ]
 
 @extend_schema(tags=['Bed'])
-@extend_schema(
-    methods=['post'],
-    summary='Create bed',
-    responses={
-        status.HTTP_201_CREATED: OpenApiResponse(
-            description='Successful response with created bed',
-            response=BedSerializer,
-        ),
-    }
-)
 class BedViewSet(viewsets.ModelViewSet):
     queryset = Bed.objects.all()
     serializer_class = BedSerializer
     permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        summary='Create bed',
+        responses={
+            status.HTTP_201_CREATED: OpenApiResponse(
+                description='Successful response with created bed',
+            ),
+        }
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
 
     @extend_schema(
         summary='List all beds',
@@ -189,26 +176,7 @@ class BedViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description='Successful response with list of beds',
-                examples=[
-                    OpenApiExample(
-                        name='List of beds',
-                        value=[
-                            {
-                                "id": 1,
-                                "is_rented": True,
-                                "field": 1,
-                                "rented_by": 1
-                            },
-                            {
-                                "id": 2,
-                                "is_rented": True,
-                                "field": 2,
-                                "rented_by": 1
-                            }
-                        ]
-                    )
-                ],
-                response=BedSerializer,
+                response=BedSerializer(many=True),
             )
         },
     )
@@ -221,17 +189,6 @@ class BedViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description='Successful response with bed',
-                examples=[
-                    OpenApiExample(
-                        name='Bed',
-                        value={
-                            "id": 1,
-                            "is_rented": True,
-                            "field": 1,
-                            "rented_by": 1
-                        }
-                    )
-                ],
                 response=BedSerializer,
             )
         },
@@ -245,40 +202,9 @@ class BedViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description='Successful response with updated bed',
-                examples=[
-                    OpenApiExample(
-                        name='Updated bed',
-                        value={
-                            "id": 1,
-                            "is_rented": True,
-                            "field": 1,
-                            "rented_by": 1
-                        }
-                    )
-                ],
-                response=BedSerializer,
             )
         },
-        parameters=[
-            OpenApiParameter(
-                name='is_rented',
-                type=bool,
-                description='Is bed rented',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='field',
-                type=int,
-                description='Field ID',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='rented_by',
-                type=int,
-                description='User ID',
-                required=True,
-            ),
-        ],
+        parameters=BedParameters(requiered=True),
     )
     def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)
@@ -301,40 +227,9 @@ class BedViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description='Successful response with updated bed',
-                examples=[
-                    OpenApiExample(
-                        name='Updated bed',
-                        value={
-                            "id": 1,
-                            "is_rented": True,
-                            "field": 1,
-                            "rented_by": 1
-                        }
-                    )
-                ],
-                response=BedSerializer,
             )
         },
-        parameters=[
-            OpenApiParameter(
-                name='is_rented',
-                type=bool,
-                description='Is bed rented',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='field',
-                type=int,
-                description='Field ID',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='rented_by',
-                type=int,
-                description='User ID',
-                required=True,
-            ),
-        ],
+        parameters=BedParameters(),
     )
     def partial_update(self, request, *args, **kwargs):
         return super().partial_update(request, *args, **kwargs)
@@ -345,26 +240,7 @@ class BedViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description='Successful response with list of beds',
-                examples=[
-                    OpenApiExample(
-                        name='List of beds for user',
-                        value=[
-                            {
-                                "id": 1,
-                                "is_rented": True,
-                                "field": 1,
-                                "rented_by": 1
-                            },
-                            {
-                                "id": 2,
-                                "is_rented": True,
-                                "field": 2,
-                                "rented_by": 1
-                            }
-                        ]
-                    )
-                ],
-                response=BedSerializer,
+                response=BedSerializer(many=True),
             )
         },
     )
@@ -376,7 +252,7 @@ class BedViewSet(viewsets.ModelViewSet):
 
     @extend_schema(
         summary='Rent bed',
-        description='Rent bed for',
+        description='Rent bed',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description='Successful response',
@@ -385,26 +261,7 @@ class BedViewSet(viewsets.ModelViewSet):
                 description='Bad request',
             ),
         },
-        parameters=[
-            OpenApiParameter(
-                name='is_rented',
-                type=bool,
-                description='Is bed rented',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='field',
-                type=int,
-                description='Field ID',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='rented_by',
-                type=int,
-                description='User ID',
-                required=True,
-            ),
-        ],
+        parameters=BedParameters(requiered=True),
         examples=[
             OpenApiExample(
                 name='Rent bed for user',
@@ -437,26 +294,7 @@ class BedViewSet(viewsets.ModelViewSet):
                 description='Bad request',
             ),
         },
-        parameters=[
-            OpenApiParameter(
-                name='is_rented',
-                type=bool,
-                description='Is bed rented',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='field',
-                type=int,
-                description='Field ID',
-                required=True,
-            ),
-            OpenApiParameter(
-                name='rented_by',
-                type=int,
-                description='User ID',
-                required=True,
-            ),
-        ],
+        parameters=BedParameters(requiered=True),
         examples=[
             OpenApiExample(
                 name='Release bed for user',
