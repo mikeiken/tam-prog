@@ -30,17 +30,183 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     serializer_class = BedPlantSerializer
     permission_classes = [AgronomistOrRenterPermission, IsAuthenticated]
 
+    @extend_schema(exclude=True)
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+
+    @extend_schema(
+        summary='Plant a new plant in a bed',
+        responses={
+            201: OpenApiResponse(
+                description='Plant planted successfully',
+            ),
+            400: OpenApiResponse(
+                description='Bad request',
+            ),
+        },
+        parameters=[
+            OpenApiParameter(
+                name='ferilizer_applied',
+                location=OpenApiParameter.QUERY,
+                type=bool,
+                description='Is created bed plant fertilized',
+                required=True,
+            ),
+            OpenApiParameter(
+                name='growth_time',
+                location=OpenApiParameter.QUERY,
+                type=int,
+                description='Growth time of plant',
+                required=True,
+            ),
+            OpenApiParameter(
+                name='bed',
+                location=OpenApiParameter.QUERY,
+                type=int,
+                description='Bed ID',
+                required=True,
+            ),
+            OpenApiParameter(
+                name='plant',
+                location=OpenApiParameter.QUERY,
+                type=int,
+                description='Plant ID',
+                required=True,
+            ),
+        ],    
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Get all planted plants',
+        responses={
+            200: OpenApiResponse(
+                description='Successfull response',
+                response=BedPlantSerializer(many=True)
+            )
+        },
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Get a planted plant by ID',
+        responses={
+            200: OpenApiResponse(
+                description='Successfull response',
+                response=BedPlantSerializer
+            )
+        },
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Update a planted plant',
+        responses={
+            200: OpenApiResponse(
+                description='Successfull update',
+            )
+        },
+        parameters=[
+            OpenApiParameter(
+                name='ferilizer_applied',
+                location=OpenApiParameter.QUERY,
+                type=bool,
+                description='Is bed plant fertilized',
+                required=True,
+            ),
+            OpenApiParameter(
+                name='growth_time',
+                location=OpenApiParameter.QUERY,
+                type=int,
+                description='Growth time of plant',
+                required=True,
+            ),
+            OpenApiParameter(
+                name='bed',
+                location=OpenApiParameter.QUERY,
+                type=int,
+                description='Bed ID',
+                required=True,
+            ),
+            OpenApiParameter(
+                name='plant',
+                location=OpenApiParameter.QUERY,
+                type=int,
+                description='Plant ID',
+                required=True,
+            ),
+        ],
+    )
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Partially update a planted plant',
+        responses={
+            200: OpenApiResponse(
+                description='Successfull update',
+            )
+        },
+        parameters=[
+            OpenApiParameter(
+                name='ferilizer_applied',
+                location=OpenApiParameter.QUERY,
+                type=bool,
+                description='Is bed plant fertilized',
+            ),
+            OpenApiParameter(
+                name='growth_time',
+                location=OpenApiParameter.QUERY,
+                type=int,
+                description='Growth time of plant',
+            ),
+            OpenApiParameter(
+                name='bed',
+                location=OpenApiParameter.QUERY,
+                type=int,
+                description='Bed ID',
+            ),
+            OpenApiParameter(
+                name='plant',
+                location=OpenApiParameter.QUERY,
+                type=int,
+                description='Plant ID',
+            ),
+        ],
+    )
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
     def perform_create(self, serializer):
         bed = serializer.validated_data['bed']
         plant = serializer.validated_data['plant']
         BedPlantService.plant_in_bed(bed, plant)
 
+    @extend_schema(
+        summary='Harvest a plant',
+        responses={
+            200: OpenApiResponse(
+                description='Plant harvested',
+            )
+        },
+    )
     @action(detail=True, methods=['post'])
     def harvest(self, request, pk=None):
         bed_plant = self.get_object()
         BedPlantService.harvest_plant(bed_plant)
         return Response({'status': 'plant harvested'})
 
+    @extend_schema(
+        summary='Fertilize a plant',
+        responses={
+            200: OpenApiResponse(
+                description='Plant fertilized',
+            )
+        },
+    )
     @action(detail=True, methods=['post'])
     def fertilize(self, request, pk=None):
         bed_plant = self.get_object()
@@ -51,13 +217,29 @@ class BedPlantViewSet(viewsets.ModelViewSet):
         BedPlantService.fertilize_plant(bed_plant, fertilizer)
         return Response({'status': 'plant fertilized'})
 
+    @extend_schema(
+        summary='Water a plant',
+        responses={
+            200: OpenApiResponse(
+                description='Plant watered',
+            )
+        },
+    )
     @action(detail=True, methods=['post'])
     def water(self, request, pk=None):
         bed_plant = self.get_object()
         BedPlantService.water_plant(bed_plant)
         return Response({'status': 'plant watered'})
 
-    @action(detail=True, methods=['post'])
+    @extend_schema(
+        summary='Dig up a plant',
+        responses={
+            200: OpenApiResponse(
+                description='Plant dug up',
+            )
+        },
+    )
+    @action(detail=True, methods=['delete'])
     def dig_up(self, request, pk=None):
         bed_plant = self.get_object()
         BedPlantService.dig_up_plant(bed_plant)
