@@ -191,14 +191,240 @@ class PersonViewSet(viewsets.ModelViewSet):
     serializer_class = PersonSerializer
     permission_classes = [IsAdminUser]
 
+    @extend_schema(
+        summary='Get all users', 
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description="Successfull response",
+                response=PersonSerializer(many=True),
+            ),
+        },
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Get user by ID', 
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description="Successfull response",
+                response=PersonSerializer,
+            ),
+        },
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Update user', 
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description="User updated successfully",
+                response=PersonSerializer,
+            ),
+        },
+        parameters=[
+            OpenApiParameter(
+                name="wallet_balance",
+                description="User wallet balance",
+                type=float,
+                required=True,
+            ),
+            OpenApiParameter(
+                name="full_name",
+                description="User full name",
+                type=str,
+                required=True,
+            ),
+            OpenApiParameter(
+                name="phone_number",
+                description="User phone number",
+                type=str,
+                required=True,
+            ),
+        ],
+    )
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Partial update user', 
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description="User updated successfully",
+                response=PersonSerializer,
+            ),
+        },
+        parameters=[
+            OpenApiParameter(
+                name="wallet_balance",
+                description="User wallet balance",
+                type=float,
+            ),
+            OpenApiParameter(
+                name="full_name",
+                description="User full name",
+                type=str,
+            ),
+            OpenApiParameter(
+                name="phone_number",
+                description="User phone number",
+                type=str,
+            ),
+        ],
+    )
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Delete user', 
+        responses={
+            status.HTTP_204_NO_CONTENT: OpenApiResponse(
+                description="User deleted successfully",
+            ),
+        },
+    )
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+    
+    @extend_schema(exclude=True)
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
 @extend_schema(tags=['User'])
 class WorkerViewSet(viewsets.ModelViewSet):
     queryset = Worker.objects.all()
     serializer_class = WorkerSerializer
     permission_classes = [AgronomistPermission]
 
+    @extend_schema(
+        summary='Get all workers', 
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description="Successfull response",
+                response=WorkerSerializer(many=True),
+            ),
+        },
+    )
     def list(self, request, *args, **kwargs):
         ascending = request.query_params.get('asc', 'true').lower() == 'true'
         workers = WorkerService.get_sorted_workers(ascending)
         serializer = self.get_serializer(workers, many=True)
         return Response(serializer.data)
+    
+    @extend_schema(
+        summary='Get worker by ID', 
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description="Successfull response",
+                response=WorkerSerializer,
+            ),
+        },
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Update worker', 
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description="Worker updated successfully",
+                response=WorkerSerializer,
+            ),
+        },
+        parameters=[
+            OpenApiParameter(
+                name="name",
+                description="Worker full name",
+                type=str,
+                required=True,
+            ),
+            OpenApiParameter(
+                name="price",
+                description="Worker salary",
+                type=float,
+                required=True,
+            ),
+            OpenApiParameter(
+                name="description",
+                description="Worker description",
+                type=str,
+                required=True,
+            ),
+        ],
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Update worker', 
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description="Worker updated successfully",
+                response=WorkerSerializer,
+            ),
+        },
+        parameters=[
+            OpenApiParameter(
+                name="name",
+                description="Worker full name",
+                type=str,
+                required=True,
+            ),
+            OpenApiParameter(
+                name="price",
+                description="Worker salary",
+                type=float,
+                required=True,
+            ),
+            OpenApiParameter(
+                name="description",
+                description="Worker description",
+                type=str,
+                required=True,
+            ),
+        ],
+    )
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Partial update worker', 
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description="Worker updated successfully",
+                response=WorkerSerializer,
+            ),
+        },
+        parameters=[
+            OpenApiParameter(
+                name="name",
+                description="Worker full name",
+                type=str,
+            ),
+            OpenApiParameter(
+                name="price",
+                description="Worker salary",
+                type=float,
+            ),
+            OpenApiParameter(
+                name="description",
+                description="Worker description",
+                type=str,
+            ),
+        ],
+    )
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Delete worker', 
+        responses={
+            status.HTTP_204_NO_CONTENT: OpenApiResponse(
+                description="Worker deleted successfully",
+            ),
+        },
+    )
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+    

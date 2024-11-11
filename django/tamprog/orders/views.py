@@ -8,87 +8,69 @@ from .services import OrderService
 from drf_spectacular.utils import extend_schema, extend_schema_view, \
     OpenApiResponse, OpenApiParameter, OpenApiExample
 
-@extend_schema(tags=['Order'])
-@extend_schema(
-    methods=['post'],
-    summary='Place order',
-    description='Place an order for a worker to perform an action on a bed with a plant',
-    request=OrderSerializer,
-    responses={
-        status.HTTP_201_CREATED: OpenApiResponse(
-            description="Order created successfully",
-            examples=[
-                OpenApiExample(
-                    name="Successful order",
-                    value={},
-                )
-            ],
-            response=OrderSerializer,
-        ),
-        status.HTTP_400_BAD_REQUEST: OpenApiResponse(
-            description="Not enough money on the account",
-            examples=[
-                OpenApiExample(
-                    name="Not enough money",
-                    value={
-                        "detail": "Top up your account"
-                    },
-                )
-            ],
-            response=OrderSerializer,
-        )
-    },
-    parameters=[
+def OrderParameters(requiered=False):
+    return [
         OpenApiParameter(
             name="worker",
-            location=OpenApiParameter.QUERY,
+            description="Worker ID",
             type=int,
+            required=requiered,
         ),
         OpenApiParameter(
             name="user",
-            location=OpenApiParameter.QUERY,
+            description="User ID",
             type=int,
+            required=requiered,
         ),
         OpenApiParameter(
             name="bed",
-            location=OpenApiParameter.QUERY,
+            description="Bed ID",
             type=int,
+            required=requiered,
         ),
         OpenApiParameter(
             name="plant",
-            location=OpenApiParameter.QUERY,
+            description="Plant ID",
             type=int,
+            required=requiered,
         ),
         OpenApiParameter(
             name="action",
-            location=OpenApiParameter.QUERY,
+            description="Action to perform",
             type=str,
+            required=requiered,
         ),
         OpenApiParameter(
             name="completed_at",
-            location=OpenApiParameter.QUERY,
+            description="Completion time",
             type=str,
-        ),
-    ],
-    examples=[
-        OpenApiExample(
-            name="Place order",
-            value={
-                "worker": 1,
-                "user": 1,
-                "bed": 1,
-                "plant": 1,
-                "action": "water",
-                "completed_at": "2022-01-01T00:00:00Z"
-            },
-            request_only=True,
+            required=requiered,
         ),
     ]
-)
+
+@extend_schema(tags=['Order'])
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
+
+    @extend_schema(
+        summary='Place order',
+        description='Place an order for a worker to perform an action on a bed with a plant',
+        request=OrderSerializer,
+        responses={
+            status.HTTP_201_CREATED: OpenApiResponse(
+                description="Order created successfully",
+                response=OrderSerializer,
+            ),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+                description="Not enough money on the account",
+            )
+        },
+        parameters=OrderParameters(requiered=True),
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
 
     @extend_schema(
         summary='Get all orders',
@@ -96,14 +78,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description="Orders retrieved successfully",
-                examples=[
-                    OpenApiExample(
-                        name="Successful orders",
-                        # TODO: OrderViewSet: write response example
-                        value={},
-                    )
-                ],
-                response=OrderSerializer,
+                response=OrderSerializer(many=True),
             ),
         },
     )
@@ -116,13 +91,6 @@ class OrderViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description="Order retrieved successfully",
-                examples=[
-                    OpenApiExample(
-                        name="Successful order",
-                        # TODO: OrderViewSet: write response example
-                        value={},
-                    )
-                ],
                 response=OrderSerializer,
             ),
         },
@@ -136,62 +104,10 @@ class OrderViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description="Order updated successfully",
-                examples=[
-                    OpenApiExample(
-                        name="Successful update",
-                        # TODO: OrderViewSet: write response example
-                        value={},
-                    )
-                ],
                 response=OrderSerializer,
             ),
         },
-        parameters=[
-            OpenApiParameter(
-                name="worker",
-                location=OpenApiParameter.QUERY,
-                type=int,
-            ),
-            OpenApiParameter(
-                name="user",
-                location=OpenApiParameter.QUERY,
-                type=int,
-            ),
-            OpenApiParameter(
-                name="bed",
-                location=OpenApiParameter.QUERY,
-                type=int,
-            ),
-            OpenApiParameter(
-                name="plant",
-                location=OpenApiParameter.QUERY,
-                type=int,
-            ),
-            OpenApiParameter(
-                name="action",
-                location=OpenApiParameter.QUERY,
-                type=str,
-            ),
-            OpenApiParameter(
-                name="completed_at",
-                location=OpenApiParameter.QUERY,
-                type=str,
-            ),
-        ],
-        examples=[
-            OpenApiExample(
-                name="Update order",
-                value={
-                    "worker": 1,
-                    "user": 1,
-                    "bed": 1,
-                    "plant": 1,
-                    "action": "water",
-                    "completed_at": "2022-01-01T00:00:00Z"
-                },
-                request_only=True,
-            ),
-        ]
+        parameters=OrderParameters(requiered=True),
     )
     def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)
@@ -202,48 +118,10 @@ class OrderViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description="Order updated successfully",
-                examples=[
-                    OpenApiExample(
-                        name="Successful update",
-                        # TODO: OrderViewSet: write response example
-                        value={},
-                    )
-                ],
                 response=OrderSerializer,
             ),
         },
-        parameters=[
-            OpenApiParameter(
-                name="worker",
-                location=OpenApiParameter.QUERY,
-                type=int,
-            ),
-            OpenApiParameter(
-                name="user",
-                location=OpenApiParameter.QUERY,
-                type=int,
-            ),
-            OpenApiParameter(
-                name="bed",
-                location=OpenApiParameter.QUERY,
-                type=int,
-            ),
-            OpenApiParameter(
-                name="plant",
-                location=OpenApiParameter.QUERY,
-                type=int,
-            ),
-            OpenApiParameter(
-                name="action",
-                location=OpenApiParameter.QUERY,
-                type=str,
-            ),
-            OpenApiParameter(
-                name="completed_at",
-                location=OpenApiParameter.QUERY,
-                type=str,
-            ),
-        ],
+        parameters=OrderParameters(),
         examples=[
             OpenApiExample(
                 name="Update completion time",
@@ -281,10 +159,10 @@ class OrderViewSet(viewsets.ModelViewSet):
         summary='Delete order',
         request=OrderSerializer,
         responses={
-            # TODO: OrderViewSet: write response codes
-            
-            # TODO: OrderViewSet: write response example
-        }
+            status.HTTP_204_NO_CONTENT: OpenApiResponse(
+                description="Order deleted successfully",
+            ),
+        },
     )
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
