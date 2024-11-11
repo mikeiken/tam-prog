@@ -28,7 +28,7 @@ class BedPlantFertilizerViewSet(viewsets.ModelViewSet):
     permission_classes = [BedPlantF]
 
     @extend_schema(
-        summary='Get fertilizers applied to a plant',
+        summary='Get fertilizers applied to all plants',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description='Successfull response',
@@ -134,19 +134,3 @@ class BedPlantFertilizerViewSet(viewsets.ModelViewSet):
     )
     def update(self, request, *args, **kwargs):
         return super().update(request, *args, **kwargs)
-
-    @extend_schema(
-        summary='Get fertilizers applied to a plant',
-        responses={
-            status.HTTP_200_OK: OpenApiResponse(
-                description='Successfull response',
-                response=BedPlantFertilizerSerializer(many=True)
-            )
-        },
-    )
-    @action(detail=True, methods=['get'])
-    def fertilizers(self, request, pk=None):
-        bed_plant = self.get_object()
-        fertilizers = FertilizerService.get_fertilizers_for_plant(bed_plant)
-        serializer = BedPlantFertilizerSerializer(fertilizers, many=True)
-        return Response(serializer.data)
