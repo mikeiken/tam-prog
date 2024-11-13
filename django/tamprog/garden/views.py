@@ -56,6 +56,7 @@ class FieldViewSet(viewsets.ModelViewSet):
                 type=str,
                 description='Sort by field',
                 required=False,
+                enum=['id', 'name', 'count_beds', 'price'],
             ),
             OpenApiParameter(
                 name='asc',
@@ -66,7 +67,7 @@ class FieldViewSet(viewsets.ModelViewSet):
         ],
     )
     def list(self, request, *args, **kwargs):
-        sort_by = request.query_params.get('sort', 'price')
+        sort_by = request.query_params.get('sort', 'id')
         ascending = request.query_params.get('asc', 'true').lower() == 'true'
         fields = FieldService.get_sorted_fields(sort_by, ascending)
         serializer = self.get_serializer(fields, many=True)

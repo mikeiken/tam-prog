@@ -9,5 +9,5 @@ try {
 }
 finally {
     Set-Location -Path $originalLocation
-    Write-Host "Restored location to: $originalLocation"
+    Write-Host "[DJANGO-RUNSERVER] Restored location to: $originalLocation"
 }
