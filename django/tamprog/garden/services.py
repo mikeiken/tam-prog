@@ -2,17 +2,28 @@ from user.models import Person
 from .models import Bed
 from .queries import *
 
+from celery import shared_task
+from celery.result import AsyncResult
+from django.forms.models import model_to_dict
+
+@shared_task
+def get_sorted_fields_task(sort_by: str = 'price', ascending: bool = True):
+    if sort_by == 'count_beds':
+        query = GetFieldsSortedByBeds(ascending)
+    else:
+        query = GetFieldsSortedByPrice(ascending)
+    
+    # Convert QuerySet to list of dictionaries
+    queryset = query.execute()
+    return [model_to_dict(field) for field in queryset]
+
 class FieldService:
-    @staticmethod
+    @staticmethod 
     def get_sorted_fields(sort_by: str = 'price', ascending: bool = True):
-        if sort_by == 'beds':
-            query = GetFieldsSortedByBeds(ascending)
-        else:  # По умолчанию сортируем по цене
-            query = GetFieldsSortedByPrice(ascending)
-
-        return query.execute()
-
-
+        task = get_sorted_fields_task.delay(sort_by, ascending)
+        result = AsyncResult(task.id)
+        return result.get(timeout=10)
+    
 class BedService:
     @staticmethod
     def rent_bed(bed_id: int, person: Person):

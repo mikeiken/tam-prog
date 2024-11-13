@@ -310,7 +310,7 @@ class WorkerViewSet(viewsets.ModelViewSet):
     )
     def list(self, request, *args, **kwargs):
         ascending = request.query_params.get('asc', 'true').lower() == 'true'
-        workers = WorkerService.get_sorted_workers(ascending)
+        workers = WorkerService.get_sorted_workers.delay(ascending)
         serializer = self.get_serializer(workers, many=True)
         return Response(serializer.data)
     

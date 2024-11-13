@@ -235,3 +235,29 @@ REST_FRAMEWORK = {
     #'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     #'PAGE_SIZE': 30
 }
+
+RABBITMQ_USER = os.getenv('RABBITMQ_DEFAULT_USER', 'guest')
+RABBITMQ_PASSWORD = os.getenv('RABBITMQ_DEFAULT_PASS', 'guest')
+RABBITMQ_PORT = os.getenv('RABBITMQ_PORT', '5672')
+RABBITMQ_VHOST = os.getenv('RABBITMQ_VHOST', '/')
+
+CELERY_BROKER_URL = f'amqp://{RABBITMQ_USER}:{RABBITMQ_PASSWORD}@localhost:{RABBITMQ_PORT}/{RABBITMQ_VHOST}'
+
+CELERY_BROKER_CONNECTION_RETRY = True
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_BROKER_CONNECTION_MAX_RETRIES = 5
+CELERY_BROKER_HEARTBEAT = 10
+CELERY_WORKER_CONCURRENCY = 1  # Reduce for Windows
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+
+CELERY_RESULT_BACKEND = 'rpc://'
+# Acknowledge tasks after they are done [True/False]
+CELERY_TASK_ACKS_LATE = True 
+# Run tasks synchronously [True/False]
+CELERY_TASK_ALWAYS_EAGER = False 
+# Use a single worker process ['solo', 'prefork']
+CELERY_WORKER_POOL = 'solo' 
+# Restart worker after each task
+CELERY_WORKER_MAX_TASKS_PER_CHILD = 1 
+# Number of worker processes
+CELERY_WORKER_CONCURRENCY = 1 

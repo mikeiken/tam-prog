@@ -1,0 +1,1 @@
+celery -A tamprog worker -l info --pool solo -E

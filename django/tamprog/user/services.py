@@ -1,6 +1,8 @@
 from django.contrib.auth import get_user_model
 from .queries import *
 
+from celery import shared_task
+
 User = get_user_model()
 
 class PersonService:
