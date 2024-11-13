@@ -307,10 +307,26 @@ class WorkerViewSet(viewsets.ModelViewSet):
                 response=WorkerSerializer(many=True),
             ),
         },
+        parameters=[
+            OpenApiParameter(
+                name='sort',
+                type=str,
+                description='Sort by field',
+                required=False,
+                enum=['id', 'name', 'price', 'description'],
+            ),
+            OpenApiParameter(
+                name='asc',
+                type=bool,
+                description='Ascending order',
+                required=False,
+            ),
+        ],
     )
     def list(self, request, *args, **kwargs):
+        sort_by = request.query_params.get('sort', 'id')
         ascending = request.query_params.get('asc', 'true').lower() == 'true'
-        workers = WorkerService.get_sorted_workers(ascending)
+        workers = WorkerService.get_sorted_workers('price', ascending)
         serializer = self.get_serializer(workers, many=True)
         return Response(serializer.data)
     

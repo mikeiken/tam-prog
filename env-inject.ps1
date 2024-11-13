@@ -15,7 +15,7 @@ function Load-DotEnv {
             }
         }
     } else {
-        Write-Error "The .env file does not exist at path: $envFilePath"
+        Write-Error "[ENV-INJECT] The .env file does not exist at path: $envFilePath"
     }
 }
 
@@ -24,10 +24,9 @@ Load-DotEnv
 
 # Check if a command is provided as arguments
 if ($args.Count -eq 0) {
-    Write-Error "No command provided. Please provide a command to run."
-    exit 1
+    Write-Host "[ENV-INJECT] No command provided. Ran as standalone script."
+} else {
+    # Join all arguments into a single command string
+    $command = $args -join " "
+    Invoke-Expression $command
 }
-
-# Join all arguments into a single command string
-$command = $args -join " "
-Invoke-Expression $command

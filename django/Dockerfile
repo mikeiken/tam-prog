@@ -31,4 +31,4 @@ EXPOSE 8000
 HEALTHCHECK --interval=10s --timeout=5s --retries=5 CMD curl --fail http://localhost:8000/admin || exit 1
 
 # Run migrations and start the Django development server
-CMD ["sh", "-c", "python tamprog/manage.py migrate && python tamprog/manage.py runserver 0.0.0.0:8000"]
+CMD ["./entrypoint.sh"]
