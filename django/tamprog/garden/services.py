@@ -5,6 +5,8 @@ from .queries import *
 from celery import shared_task
 from celery.result import AsyncResult
 from django.forms.models import model_to_dict
+# import DJANGO_ASYNC_TIMEOUT_S from settings
+from django.conf import settings
 
 @shared_task
 def get_sorted_fields_task(sort_by: str = 'price', ascending: bool = True):
@@ -22,7 +24,7 @@ class FieldService:
     def get_sorted_fields(sort_by: str = 'price', ascending: bool = True):
         task = get_sorted_fields_task.delay(sort_by, ascending)
         result = AsyncResult(task.id)
-        return result.get(timeout=10)
+        return result.get(timeout=settings.DJANGO_ASYNC_TIMEOUT_S)
     
 class BedService:
     @staticmethod
