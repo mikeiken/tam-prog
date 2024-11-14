@@ -114,6 +114,7 @@ services:
       - "${DJANGO_PORT}:8000"
     restart: always
     environment:
+      - IS_IN_CONTAINER=true
       - DJANGO_SETTINGS_MODULE=tamprog.settings
       - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
       - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}

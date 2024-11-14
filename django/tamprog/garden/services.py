@@ -2,17 +2,36 @@ from user.models import Person
 from .models import Bed
 from .queries import *
 
+# These \/ imports for the Celery
+from celery import shared_task
+from celery.result import AsyncResult
+from django.forms.models import model_to_dict
+from django.conf import settings
+
+@shared_task
+def get_sorted_fields_task(sort_by: str = 'id', ascending: bool = True):
+    if sort_by == 'id':
+        query = GetFieldsSortedByID(ascending)
+    elif sort_by == 'name':
+        query = GetFieldsSortedByName(ascending)
+    elif sort_by == 'count_beds':
+        query = GetFieldsSortedByCountBeds(ascending)
+    elif sort_by == 'price':
+        query = GetFieldsSortedByPrice(ascending)
+    else:
+        return []
+    
+    # Convert QuerySet to list of dictionaries
+    queryset = query.execute()
+    return [model_to_dict(field) for field in queryset]
+
 class FieldService:
-    @staticmethod
+    @staticmethod 
     def get_sorted_fields(sort_by: str = 'price', ascending: bool = True):
-        if sort_by == 'beds':
-            query = GetFieldsSortedByBeds(ascending)
-        else:  # По умолчанию сортируем по цене
-            query = GetFieldsSortedByPrice(ascending)
-
-        return query.execute()
-
-
+        task = get_sorted_fields_task.delay(sort_by, ascending)
+        result = AsyncResult(task.id)
+        return result.get(timeout=settings.DJANGO_ASYNC_TIMEOUT_S)
+    
 class BedService:
     @staticmethod
     def rent_bed(bed_id: int, person: Person):
