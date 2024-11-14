@@ -6,7 +6,6 @@ export default function AuthFormBackgroundComponent() {
   return (
     <div className='intro'>
       <div className='video'>
-        {/* Заменяем тег video на img */}
         <img 
           src={process.env.PUBLIC_URL + '/tenor.gif'} 
           alt="Background GIF" 

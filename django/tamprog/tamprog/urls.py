@@ -18,8 +18,16 @@ from django.contrib import admin
 from django.urls import path, include
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
-schema_view = SpectacularAPIView.as_view()
+from drf_spectacular.utils import extend_schema
 
+@extend_schema(
+    tags=['API'],
+    summary='API schema',
+)
+class CustomSchemaView(SpectacularAPIView):
+    pass
+
+schema_view = CustomSchemaView.as_view()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,6 +37,6 @@ urlpatterns = [
     path('api/v1/', include('orders.urls')),
     path('api/v1/', include('plants.urls')),
     path('api/v1/', include('user.urls')),
-    path('api/v1/api/schema/', schema_view, name='schema'),
+    path('api/v1/schema/', schema_view, name='schema'),
     path('api/v1/swagger/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]
