@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'plants',
     'fertilizer',
     'drf_spectacular',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -236,6 +237,11 @@ REST_FRAMEWORK = {
     ),
     #'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     #'PAGE_SIZE': 30
+}
+
+SIMPLE_JWT = {
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,
 }
 
 DJANGO_ASYNC_TIMEOUT_S = float(os.getenv('DJANGO_ASYNC_TIMEOUT_S', '30'))
