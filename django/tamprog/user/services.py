@@ -1,6 +1,12 @@
 from django.contrib.auth import get_user_model
 from .queries import *
 
+# These \/ imports for the Celery
+from celery import shared_task
+from celery.result import AsyncResult
+from django.forms.models import model_to_dict
+from django.conf import settings
+
 User = get_user_model()
 
 class PersonService:
@@ -23,9 +29,25 @@ class PersonService:
             return True
         return False
 
+@shared_task
+def get_sorted_workers_task(sort_by: str = 'id', ascending: bool = True):
+    if sort_by == 'id':
+        query = GetWorkersSortedByID(ascending)
+    elif sort_by == 'name':
+        query = GetWorkersSortedByName(ascending)
+    elif sort_by == 'price':
+        query = GetWorkersSortedByPrice(ascending)
+    elif sort_by == 'description':
+        query = GetWorkersSortedByDescription(ascending)
+    else:
+        return []
+    # Convert QuerySet to list of dictionaries
+    queryset = query.execute()
+    return [model_to_dict(field) for field in queryset]
 
 class WorkerService:
     @staticmethod
-    def get_sorted_workers(ascending: bool = True):
-        query = GetWorkersSortedByPrice(ascending)
-        return query.execute()
+    def get_sorted_workers(sort_by: str = 'price', ascending: bool = True):
+        task = get_sorted_workers_task.delay('price', ascending)
+        result = AsyncResult(task.id)
+        return result.get(timeout=settings.DJANGO_ASYNC_TIMEOUT_S)
