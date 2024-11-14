@@ -59,7 +59,26 @@ class PlantViewSet(viewsets.ModelViewSet):
         plants = PlantService.get_sorted_plants(ascending)
         serializer = self.get_serializer(plants, many=True)
         return Response(serializer.data)
+        
+    @action(detail=False, methods=['get'])
+    def search(self, request):
+        query = request.query_params.get('q', '').lower()
+        if not query:
+            return Response([])
+
+        plants = PlantService.fuzzy_search(query)
+        serializer = self.get_serializer(plants, many=True)
+        return Response(serializer.data)
     
+    @action(detail=False, methods=['get'])
+    def suggestions(self, request):
+        query = request.query_params.get('q', '').lower()
+        if not query:
+            return Response([])
+
+        suggestions = PlantService.get_suggestions(query)
+        return Response(suggestions)
+
     @extend_schema(
         summary='Create a new plant',
         responses={
