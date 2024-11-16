@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, Routes, Route, useNavigate } from 'react-router-dom';
-import axios from '../../api/instance';
-import Header from '../../header/Header';
+import axios from '../../../api/instance';
+import RegisterForm from '../../register/RegisterForm';
 
 export default function Form() {
   const [username, setUsername] = useState('');
@@ -23,7 +23,7 @@ export default function Form() {
       // Handle error (e.g., display message to the user)
     }
   };
-  
+
   const handleChangeName = (event) => {
     setUsername(event.target.value);
   }
@@ -37,28 +37,28 @@ export default function Form() {
       <form onSubmit={handleSubmit}>
         <h1>Login</h1>
         <div className='input-box'>
-          <input className='' type='text' required onChange={handleChangeName}/>
+          <input className='' type='text' required onChange={handleChangeName} />
           <label>Enter your name</label>
           <img style={{
             position: 'absolute', left: '10px', top: '50%',
             transform: 'translateY(-50%)',
-            width: '24px', 
+            width: '24px',
             height: '24px'
           }}
             src={process.env.PUBLIC_URL + '/user.png'} alt='text'></img>
         </div>
 
         <div className='input-box'>
-          <input className='' type='password' required onChange={handleChangePassword}/>
+          <input className='' type='password' required onChange={handleChangePassword} />
           <label>Enter your password</label>
           <img
             style={{
               position: 'absolute', left: '10px', top: '50%',
               transform: 'translateY(-50%)',
-              width: '24px', 
+              width: '24px',
               height: '24px'
             }}
-            src={process.env.PUBLIC_URL + '/lock.png'} alt='text'>
+            src={process.env.PUBLIC_URL + '/key-chain.png'} alt='text'>
           </img>
         </div>
 
@@ -70,13 +70,13 @@ export default function Form() {
         <button type='submit' className='btn'>Login</button>
         <div className='register-link'>
           <p>Don't have an account?
-            <Link to='/navigate/garden'>Register</Link> 
+            <Link to='/register'>Register</Link>
           </p>
         </div>
       </form>
 
       <Routes>
-        <Route path='/navigate/garden' element={<Header/>} />
+        <Route path='/register' element={<RegisterForm />} />
       </Routes>
     </div>
   );

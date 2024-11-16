@@ -4,7 +4,7 @@ import AuthFormBackgroundComponent from './components/background'
 export default function AuthForm() {
   return (
     <div>
-        <AuthFormBackgroundComponent />
+      <AuthFormBackgroundComponent />
     </div>
   )
 }
