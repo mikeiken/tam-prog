@@ -26,7 +26,7 @@ export default function RegisterForm() {
         try {
             const response = await axios.post('/register/', {
                 username,
-                password: passwordFirst,
+                passwordFirst,
                 email,
             });
             localStorage.setItem('accessToken', response.data.access);
