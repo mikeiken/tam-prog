@@ -5,7 +5,6 @@ import About from '../main-page/About/about';
 import License from '../main-page/License/License';
 import Contractor from '../main-page/Contractor/Contractor';
 import { CSSTransition, SwitchTransition } from "react-transition-group";
-import NotFound from '../not-found/NotFound';
 import '../main-page/style.css';
 import Logout from '../auth/logout/Logout';
 export default function Header() {

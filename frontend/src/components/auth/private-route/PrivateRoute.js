@@ -1,5 +1,4 @@
 import React from 'react';
-import { Navigate } from 'react-router-dom';
 import NotFound from '../../not-found/NotFound';
 
 // Функция, которая проверяет, авторизован ли пользователь
