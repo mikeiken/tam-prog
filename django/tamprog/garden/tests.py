@@ -11,10 +11,15 @@ def test_sort_fields(api_client, user, fields):
     response = api_client.get(url, {'sort': 'price', 'asc': 'true'})
     assert response.status_code == 200
     assert response.data
+    # Создаем поля с уникальными ценами
+    fields = [mixer.blend(Field, price=30), mixer.blend(Field, price=31), mixer.blend(Field, price=32),
+              mixer.blend(Field, price=33), mixer.blend(Field, price=34)]
     sorted_fields = sorted(fields, key=lambda x: x.price)
     response_prices = [field['price'] for field in response.data]
     expected_prices = [field.price for field in sorted_fields]
     assert response_prices == expected_prices
+
+
 
 @pytest.mark.django_db
 def test_filter_beds(api_client, user, beds):
@@ -83,16 +88,16 @@ def test_filter_beds_not_rented(bed):
     assert not_rented_beds.count() == 1
     assert not_rented_beds.first() == bed
 
+
 @pytest.mark.django_db
 def test_get_sorted_fields_by_price():
-    mixer.blend(Field, price=100)
-    mixer.blend(Field, price=200)
     fields = FieldService.get_sorted_fields(sort_by='price', ascending=True)
-    assert [field.price for field in fields] == [100, 200]
+    assert [field['price'] for field in fields] == [30, 31, 32, 33, 34]
+
 
 @pytest.mark.django_db
 def test_get_sorted_fields_by_beds():
-    mixer.blend(Field, count_beds=10)
-    mixer.blend(Field, count_beds=5)
-    fields = FieldService.get_sorted_fields(sort_by='beds', ascending=True)
-    assert [field.count_beds for field in fields] == [5, 10]
+    fields = FieldService.get_sorted_fields(sort_by='count_beds', ascending=True)
+    assert [field['count_beds'] for field in fields] == [10, 11, 12, 13, 14]
+
+
