@@ -7,7 +7,7 @@ import Contractor from '../main-page/Contractor/Contractor';
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import NotFound from '../not-found/NotFound';
 import '../main-page/style.css';
-
+import Logout from '../auth/logout/Logout';
 export default function Header() {
     const location = useLocation();
 
@@ -53,23 +53,18 @@ export default function Header() {
                         О нас
                     </Link>
                 </nav>
-                <Link
-                    to='/login'
-                    onClick={e => isActivePath('/login') && e.preventDefault()}
-                >
-                    <button className='login-btn'>Выйти</button>
-                </Link>
+                <Logout />
             </header>
 
             <SwitchTransition>
                 <CSSTransition
-                    nodeRef={transitionRef} 
+                    nodeRef={transitionRef}
                     key={location.key}
                     timeout={530}
                     classNames="main"
                     unmountOnExit
                 >
-                    <div ref={transitionRef}> 
+                    <div ref={transitionRef}>
                         <Routes location={location}>
                             {routes.map(({ path, Component }) => (
                                 <Route key={path} path={path} element={<Component />} />
