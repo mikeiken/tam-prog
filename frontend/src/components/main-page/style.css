@@ -155,8 +155,6 @@ html {
     /* Блокирует взаимодействие после скрытия */
 }
 
-
-
 @keyframes filling {
     from {
         background-position: center 25%;
@@ -223,7 +221,6 @@ html {
     }
 }
 
-
 .header {
     display: flex;
     justify-content: space-between;
@@ -284,7 +281,6 @@ html {
 .navbar a:hover::before {
     transform: scaleX(0);
 }
-
 
 .login-btn {
     padding: 10px 20px;
@@ -498,7 +494,6 @@ html {
         flex-direction: row;
     }
 }
-
 
 @media (min-width: 1200px) and (max-height: 1080px) {
     .box1 {
