@@ -1,18 +1,25 @@
-#!/bin/sh
-
-# Load .env file and run a specified command
+#!/bin/bash
 
 # Function to load .env file and set environment variables
 load_dotenv() {
-    env_file_path=".env"
-    if [ -f "$env_file_path" ]; then
-        while IFS='=' read -r name value; do
-            if [ -n "$name" ] && [ "${name:0:1}" != "#" ]; then
-                export "$name"="$value"
+    local env_file="${1:-.env}"
+
+    if [ -f "$env_file" ]; then
+        while IFS= read -r line || [ -n "$line" ]; do
+            # Skip comments and empty lines
+            if [[ $line =~ ^[[:space:]]*#.*$ ]] || [[ -z $line ]]; then
+                continue
             fi
-        done < "$env_file_path"
+
+            # Extract variable name and value
+            if [[ $line =~ ^[[:space:]]*([^#][^=]*)[[:space:]]*=[[:space:]]*(.*)[[:space:]]*$ ]]; then
+                local name="${BASH_REMATCH[1]}"
+                local value="${BASH_REMATCH[2]}"
+                export "$name=$value"
+            fi
+        done < "$env_file"
     else
-        echo "The .env file does not exist at path: $env_file_path" >&2
+        echo "[ENV-INJECT] The .env file does not exist at path: $env_file" >&2
         exit 1
     fi
 }
@@ -21,11 +28,9 @@ load_dotenv() {
 load_dotenv
 
 # Check if a command is provided as arguments
-if [ "$#" -eq 0 ]; then
-    echo "No command provided. Please provide a command to run." >&2
-    exit 1
+if [ $# -eq 0 ]; then
+    echo "[ENV-INJECT] No command provided. Ran as standalone script."
+else
+    # Execute the command with all arguments
+    eval "$@"
 fi
-
-# Join all arguments into a single command string
-command="$*"
-eval "$command"
