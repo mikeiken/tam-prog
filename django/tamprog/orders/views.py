@@ -148,10 +148,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         bed = serializer.validated_data['bed']
         plant = serializer.validated_data['plant']
         action = serializer.validated_data['action']
-        order = OrderService.create_order(user, bed, plant, action)
-        if order:
-            return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
-        return Response({'detail': 'Top up your account'}, status=status.HTTP_400_BAD_REQUEST)
+        return OrderService.create_order(user, bed, plant, action)
 
     def perform_update(self, serializer):
         order = serializer.save()
