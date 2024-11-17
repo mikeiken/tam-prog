@@ -3,7 +3,6 @@ from django.utils import timezone
 from .services import OrderService
 from orders.models import Order
 
-
 @pytest.mark.django_db
 def test_filter_orders(api_client, user, orders):
     api_client.force_authenticate(user=user)
@@ -28,12 +27,11 @@ def test_calculate_total_cost(bed1, plant, worker):
 
 @pytest.mark.django_db
 def test_create_order_success(user1, worker, bed1, plant, mocker):
-    # Мокаем метод обновления баланса в PersonService
     mocker.patch("user.services.PersonService.update_wallet_balance", return_value=True)
-
     action = "planting"
     order = OrderService.create_order(user1, worker, bed1, plant, action)
-
+    print(f"Order: {order}")
+    print(f"User: {user1}, Worker: {worker}, Bed: {bed1}, Plant: {plant}, Action: {action}")
     assert order is not None
     assert order.user == user1
     assert order.worker == worker
@@ -44,35 +42,34 @@ def test_create_order_success(user1, worker, bed1, plant, mocker):
 
 @pytest.mark.django_db
 def test_create_order_insufficient_funds(user1, worker, bed1, plant, mocker):
-    # Если баланс недостаточный, метод вернет None
     mocker.patch("user.services.PersonService.update_wallet_balance", return_value=False)
-
     action = "planting"
     order = OrderService.create_order(user1, worker, bed1, plant, action)
-
+    print(f"Order: {order}")
+    print(f"User: {user1}, Worker: {worker}, Bed: {bed1}, Plant: {plant}, Action: {action}")
     assert order is None
+
+
 
 
 @pytest.mark.django_db
 def test_complete_order(order):
     completed_order = OrderService.complete_order(order)
-
     assert completed_order.completed_at is not None
     assert completed_order.completed_at <= timezone.now()
 
 
 @pytest.mark.django_db
 def test_filter_orders_completed(order, mocker):
-    # Мокаем `timezone.now()` для предсказуемого времени завершения
     mock_time = timezone.now()
     mocker.patch("django.utils.timezone.now", return_value=mock_time)
-
-    # Завершаем заказ
     OrderService.complete_order(order)
-
+    print(f"Completed Order: {order}")
     completed_orders = OrderService.filter_orders(is_completed=True)
+    print(f"Completed Orders: {completed_orders}")
     assert completed_orders.count() == 1
     assert completed_orders.first() == order
+
 
 
 @pytest.mark.django_db
