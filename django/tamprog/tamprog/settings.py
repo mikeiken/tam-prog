@@ -21,6 +21,8 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+IS_IN_CONTAINER = bool(os.getenv('IS_IN_CONTAINER', 'false').lower() == 'true')
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -51,6 +53,7 @@ INSTALLED_APPS = [
     'plants',
     'fertilizer',
     'drf_spectacular',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 MIDDLEWARE = [
@@ -91,7 +94,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.getenv('POSTGRES_DB', 'garden'),
-        'HOST': os.getenv('DJANGO_DB_HOST', '127.0.0.1'),
+        'HOST': os.getenv('DJANGO_DB_HOST', '127.0.0.1') \
+            if IS_IN_CONTAINER \
+            else '127.0.0.1',
         'PORT': os.getenv('POSTGRES_PORT', '5432'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'root'),
         'USER': os.getenv('POSTGRES_USER', 'agronom'),
@@ -209,9 +214,14 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'My API',
-    'DESCRIPTION': 'API documentation for my project',
+    'TITLE': 'Tamprog API',
+    'DESCRIPTION': 'API documentation for Tamprog',
     'VERSION': '1.0.0',
+    "SERVE_INCLUDE_SCHEMA": True, # исключить эндпоинт /schema
+    "SWAGGER_UI_SETTINGS": {
+        "filter": True, # включить поиск по тегам
+    },
+    "COMPONENT_SPLIT_REQUEST": True,
 }
 
 
@@ -228,3 +238,69 @@ REST_FRAMEWORK = {
     #'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     #'PAGE_SIZE': 30
 }
+
+SIMPLE_JWT = {
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,
+}
+
+DJANGO_ASYNC_TIMEOUT_S = float(os.getenv('DJANGO_ASYNC_TIMEOUT_S', '30'))
+
+RABBITMQ_USER = os.getenv('RABBITMQ_DEFAULT_USER', 'guest')
+RABBITMQ_PASSWORD = os.getenv('RABBITMQ_DEFAULT_PASS', 'guest')
+RABBITMQ_HOST = os.getenv('RABBITMQ_HOST', 'localhost') \
+    if IS_IN_CONTAINER \
+    else 'localhost'
+RABBITMQ_PORT = os.getenv('RABBITMQ_PORT', '5672')
+RABBITMQ_VHOST = os.getenv('RABBITMQ_VHOST', '/')
+
+CELERY_BROKER_URL = f'amqp://{RABBITMQ_USER}:{RABBITMQ_PASSWORD}@{RABBITMQ_HOST}:{RABBITMQ_PORT}/{RABBITMQ_VHOST}'
+
+CELERY_BROKER_CONNECTION_RETRY = bool(os.getenv(
+    'CELERY_BROKER_CONNECTION_RETRY', 'True').lower() == 'true')
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = bool(os.getenv(
+    'CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP', 'True').lower() == 'true')
+CELERY_BROKER_CONNECTION_MAX_RETRIES = int(os.getenv(
+    'CELERY_BROKER_CONNECTION_MAX_RETRIES', '10'))
+CELERY_BROKER_HEARTBEAT = int(os.getenv(
+    'CELERY_BROKER_HEARTBEAT', '60'))
+CELERY_WORKER_PREFETCH_MULTIPLIER = int(os.getenv(
+    'CELERY_WORKER_PREFETCH_MULTIPLIER', '1') \
+    if IS_IN_CONTAINER \
+    else '1')
+
+CELERY_RESULT_BACKEND = os.getenv(
+    'CELERY_RESULT_BACKEND', 'rpc://')
+# Acknowledge tasks after they are done [True/False]
+CELERY_TASK_ACKS_LATE = bool(os.getenv(
+    'CELERY_TASK_ACKS_LATE', 'True').lower() == 'true')
+# Run tasks synchronously [True/False]
+CELERY_TASK_ALWAYS_EAGER = bool(os.getenv(
+    'CELERY_TASK_ALWAYS_EAGER', 'False').lower() == 'true')
+# Use a single worker process ['solo', 'prefork']
+CELERY_WORKER_POOL = os.getenv(
+    'CELERY_WORKER_POOL', 'solo') \
+    if IS_IN_CONTAINER \
+    else 'solo'
+# Restart worker after each task
+CELERY_WORKER_MAX_TASKS_PER_CHILD = int(os.getenv(
+    'CELERY_WORKER_MAX_TASKS_PER_CHILD', '1') \
+    if IS_IN_CONTAINER \
+    else '1')
+# Number of worker processes
+CELERY_WORKER_CONCURRENCY = int(os.getenv(
+    'CELERY_WORKER_CONCURRENCY', '1') \
+    if IS_IN_CONTAINER \
+    else '1')
+# Disable result printing
+CELERY_TASK_IGNORE_RESULT = bool(os.getenv(
+    'CELERY_TASK_IGNORE_RESULT', 'False').lower() == 'true')
+# Configure task logging
+CELERY_WORKER_REDIRECT_STDOUTS = bool(os.getenv(
+    'CELERY_WORKER_REDIRECT_STDOUTS', 'True').lower() == 'true')
+CELERY_WORKER_REDIRECT_STDOUTS_LEVEL = os.getenv(
+    'CELERY_WORKER_REDIRECT_STDOUTS_LEVEL', 'INFO')
+# Custom logging format for tasks
+CELERY_WORKER_TASK_LOG_FORMAT = (
+    os.getenv('CELERY_WORKER_TASK_LOG_FORMAT', '%(asctime)s - %(message)s')
+)

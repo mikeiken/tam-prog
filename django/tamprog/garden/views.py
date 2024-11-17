@@ -7,7 +7,32 @@ from .models import Field, Bed
 from .serializers import FieldSerializer, BedSerializer
 from .services import *
 
+from drf_spectacular.utils import extend_schema, extend_schema_view, \
+    OpenApiResponse, OpenApiParameter, OpenApiExample
 
+def FieldParameters(required=False):
+    return [
+        OpenApiParameter(
+            name="name",
+            description="Field name",
+            type=str,
+            required=required,
+        ),
+        OpenApiParameter(
+            name="count_beds",
+            description="Count of beds",
+            type=int,
+            required=required,
+        ),
+        OpenApiParameter(
+            name="price",
+            description="Field price",
+            type=float,
+            required=required,
+        ),
+    ]
+
+@extend_schema(tags=['Field'])
 class FieldViewSet(viewsets.ModelViewSet):
     queryset = Field.objects.all()
     serializer_class = FieldSerializer
@@ -17,25 +42,238 @@ class FieldViewSet(viewsets.ModelViewSet):
         count_beds = self.request.data.get('count_beds', 0)
         serializer.save(count_beds=count_beds)
 
+    @extend_schema(
+        summary='List all fields',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response with list of fields',
+                response=FieldSerializer(many=True),
+            ),
+        },
+        parameters=[
+            OpenApiParameter(
+                name='sort',
+                type=str,
+                description='Sort by field',
+                required=False,
+                enum=['id', 'name', 'count_beds', 'price'],
+            ),
+            OpenApiParameter(
+                name='asc',
+                type=bool,
+                description='Ascending order',
+                required=False,
+            ),
+        ],
+    )
     def list(self, request, *args, **kwargs):
-        sort_by = request.query_params.get('sort', 'price')
+        sort_by = request.query_params.get('sort', 'id')
         ascending = request.query_params.get('asc', 'true').lower() == 'true'
         fields = FieldService.get_sorted_fields(sort_by, ascending)
         serializer = self.get_serializer(fields, many=True)
         return Response(serializer.data)
+    
+    @extend_schema(
+        summary='Retrieve field',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response with field',
+                response=FieldSerializer,
+            ),
+        },
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Update field',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response with updated field',
+            ),
+        },
+        parameters=FieldParameters(required=True),
+    )
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Partial update field',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response with updated field',
+            ),
+        },
+        parameters=FieldParameters(),
+    )
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Destroy field',
+        responses={
+            status.HTTP_204_NO_CONTENT: OpenApiResponse(
+                description='Successful response',
+            ),
+        },
+    )
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Create field',
+        responses={
+            status.HTTP_201_CREATED: OpenApiResponse(
+                description='Successful response with created field',
+            ),
+        },
+        parameters=FieldParameters(required=True),
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
 
+def BedParameters(required=False):
+    return [
+        OpenApiParameter(
+            name="is_rented",
+            description="Is bed rented",
+            type=bool,
+            required=required,
+        ),
+        OpenApiParameter(
+            name="field",
+            description="Field ID",
+            type=int,
+            required=required,
+        ),
+        OpenApiParameter(
+            name="rented_by",
+            description="User ID",
+            type=int,
+            required=required,
+        ),
+    ]
 
+@extend_schema(tags=['Bed'])
 class BedViewSet(viewsets.ModelViewSet):
     queryset = Bed.objects.all()
     serializer_class = BedSerializer
     permission_classes = [IsAuthenticated]
 
+    @extend_schema(
+        summary='Create bed',
+        responses={
+            status.HTTP_201_CREATED: OpenApiResponse(
+                description='Successful response with created bed',
+            ),
+        }
+    )
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
+
+    @extend_schema(
+        summary='List all beds',
+        description='List all beds',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response with list of beds',
+                response=BedSerializer(many=True),
+            )
+        },
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Retrieve bed',
+        description='Retrieve bed by ID',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response with bed',
+                response=BedSerializer,
+            )
+        },
+    )
+    def retrieve(self, request, *args, **kwargs):
+        return super().retrieve(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Update bed',
+        description='Update bed by ID',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response with updated bed',
+            )
+        },
+        parameters=BedParameters(required=True),
+    )
+    def update(self, request, *args, **kwargs):
+        return super().update(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Destroy bed',
+        description='Destroy bed by ID',
+        responses={
+            status.HTTP_204_NO_CONTENT: OpenApiResponse(
+                description='Successful response',
+            )
+        },
+    )
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+    
+    @extend_schema(
+        summary='Partial update bed',
+        description='Partial update bed by ID',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response with updated bed',
+            )
+        },
+        parameters=BedParameters(),
+    )
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
+    @extend_schema(
+        summary='List all beds for current user',
+        description='List all beds that are rented by the current user',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response with list of beds',
+                response=BedSerializer(many=True),
+            )
+        },
+    )
     @action(detail=False, methods=['get'])
     def my_beds(self, request):
         beds = BedService.get_user_beds(request.user)
         serializer = self.get_serializer(beds, many=True)
         return Response(serializer.data)
 
+    @extend_schema(
+        summary='Rent bed',
+        description='Rent bed',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response',
+            ),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+                description='Bad request',
+            ),
+        },
+        parameters=BedParameters(required=True),
+        examples=[
+            OpenApiExample(
+                name='Rent bed for user',
+                value={
+                    "is_rented": True,
+                    "field": 1,
+                    "rented_by": 1
+                }
+            )
+        ],
+    )
     @action(detail=True, methods=['post'])
     def rent(self, request, pk=None):
         bed = self.get_object()
@@ -46,7 +284,29 @@ class BedViewSet(viewsets.ModelViewSet):
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-
+    @extend_schema(
+        summary='Release bed',
+        description='Release bed',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response',
+            ),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+                description='Bad request',
+            ),
+        },
+        parameters=BedParameters(required=True),
+        examples=[
+            OpenApiExample(
+                name='Release bed for user',
+                value={
+                    "is_rented": False,
+                    "field": 1,
+                    "rented_by": 1
+                }
+            )
+        ],
+    )
     @action(detail=True, methods=['post'])
     def release(self, request, pk=None):
         bed = self.get_object()
