@@ -23,8 +23,6 @@ html {
     /* Относительное позиционирование для контейнера */
     width: 100%;
     /* Занимает всю ширину */
-
-
 }
 
 .text-overlay {
@@ -88,6 +86,73 @@ html {
 
 .landing-login-btn a {
     font-weight: 500;
+    align-items: center;
+}
+
+.landing-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.landing-register-btn {
+    transition: .3s ease;
+    cursor: pointer;
+}
+
+.landing-register-btn:hover {
+    transform: scale(1.05);
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+.alert {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3em;
+    gap: 3px;
+    padding: 20px;
+    border-radius: 20px;
+    width: 100%;
+    height: 60px;
+    background-color: rgba(255, 205, 117, 0.7);
+    animation: fade-in 0.5s ease forwards;
+    /* Плавное появление */
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    /* Переходы для плавного исчезновения */
+}
+
+.alert.hide {
+    animation: fade-out 0.5s ease forwards;
+    /* Плавное исчезновение */
+    opacity: 0;
+    transform: translateY(-10px);
+    pointer-events: none;
+    /* Блокирует взаимодействие после скрытия */
 }
 
 @keyframes filling {
@@ -156,7 +221,6 @@ html {
     }
 }
 
-
 .header {
     display: flex;
     justify-content: space-between;
@@ -218,7 +282,6 @@ html {
     transform: scaleX(0);
 }
 
-
 .login-btn {
     padding: 10px 20px;
     border-radius: 10px;
@@ -240,7 +303,7 @@ html {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
-    padding: 20px;
+    padding: 20px 20px 2px 20px;
     height: 46.4vw;
     justify-content: center;
 }
@@ -266,8 +329,6 @@ html {
     gap: 40px;
     transition: 0.3s ease;
 }
-
-
 
 .centered-into-wrappers {
     display: flex;
@@ -340,6 +401,41 @@ html {
     height: 100%;
 }
 
+.not-found-container {
+    position: absolute;
+    z-index: 99999;
+    width: 100%;
+    height: 100vh;
+    background-color: #96c2a8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 100px;
+}
+
+.not-found-container>div {
+    padding: 2%;
+    width: 30%;
+    height: 50%;
+    /* background-color: #3498db; */
+}
+
+.not-found-container h1 {
+    font-size: 10em;
+    margin: 0;
+}
+
+.not-found-container p {
+    /* font-size: 1em; */
+    margin: 0;
+    font-weight: 600;
+}
+
+.not-found-container img {
+    width: 100%;
+    /* height: auto; */
+}
+
 @keyframes spin {
     0% {
         transform: rotate(0deg);
@@ -350,8 +446,6 @@ html {
     }
 }
 
-/* Адаптивные стили */
-/* Ограничение размеров для широких экранов */
 @media (max-width: 684px) and (max-height: 1080px) {
     .navbar {
         display: none;
@@ -401,7 +495,6 @@ html {
     }
 }
 
-
 @media (min-width: 1200px) and (max-height: 1080px) {
     .box1 {
         max-width: 300px;
@@ -415,7 +508,7 @@ html {
         display: flex;
         justify-content: center;
         height: 89vw;
-        max-height: 89vh;
+        max-height: 86vh;
         overflow: hidden;
     }
 }
