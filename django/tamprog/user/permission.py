@@ -17,3 +17,9 @@ class AgronomistPermission(BasePermission):
                 return True
             return request.method in ['GET', 'HEAD', 'OPTIONS']
         return False
+
+class NoPostAllowed(BasePermission):
+    def has_permission(self, request, view):
+        if request.method == "POST":
+            return False
+        return True

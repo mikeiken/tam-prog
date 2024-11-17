@@ -219,7 +219,7 @@ def PersonParameters(required=False):
 class PersonViewSet(viewsets.ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAdminUser, NoPostAllowed]
 
     @extend_schema(
         summary='Get all users', 
