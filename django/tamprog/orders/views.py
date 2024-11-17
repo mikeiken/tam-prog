@@ -175,7 +175,6 @@ class OrderViewSet(viewsets.ModelViewSet):
             return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
         return Response({'detail': 'Top up your account'}, status=status.HTTP_400_BAD_REQUEST)
 
-
     def perform_update(self, serializer):
         order = serializer.save()
         if order.completed_at:
