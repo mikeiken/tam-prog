@@ -114,7 +114,7 @@ jobs:
     needs: check-no-ci
     if: needs.check-no-ci.outputs.no_ci == 'false'
     steps:
-      - name: checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
         
       - name: Set up Docker Buildx
@@ -128,6 +128,13 @@ jobs:
       - name: Login to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
         
+      - name: Create env file from GitHub Environment
+      # use loop to create env file from env variables
+        run: |
+          for key in $(env | grep -E '^[A-Z_]+=' | cut -d= -f1); do
+            echo "$key=${!key}" >> .env
+          done
+
       - name: Build and run containers
         run: |
           docker compose -f docker-compose-build.yml up -d
