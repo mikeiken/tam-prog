@@ -2,6 +2,8 @@ import pytest
 from plants.services import PlantService, BedPlantService
 from fertilizer.models import BedPlantFertilizer
 from plants.models import BedPlant
+from django.urls import reverse
+
 
 @pytest.mark.django_db
 def test_sort_bed_plants(api_client, user, bed_plants):
@@ -60,3 +62,24 @@ def test_filter_bed_plants(bed_plant, fertilizer):
 
     assert bed_plant in fertilized_plants
     assert bed_plant not in non_fertilized_plants
+
+@pytest.mark.django_db
+def test_fuzzy_search(api_client, create_plants, user):
+    api_client.force_authenticate(user=user)
+
+    url = '/api/v1/plant/search/'
+    response = api_client.get(url, {'q': 'ros'})
+    assert response.status_code == 200
+    assert len(response.data) == 1
+    assert response.data[0]['name'] == 'Rose'
+
+
+@pytest.mark.django_db
+def test_get_suggestions(api_client, create_plants, user):
+    api_client.force_authenticate(user=user)
+    url = '/api/v1/plant/suggestions/'
+    response = api_client.get(url, {'q': 't'})
+    assert response.status_code == 200
+    assert len(response.data) == 2
+    assert 'Tulip' in response.data
+    assert 'Tul' in response.data

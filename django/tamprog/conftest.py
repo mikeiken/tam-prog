@@ -12,6 +12,19 @@ def api_client():
     return APIClient()
 
 @pytest.fixture
+def plant_data():
+    return [
+        Plant(name="Rose"),
+        Plant(name="Tulip"),
+        Plant(name="Tul"),
+        Plant(name="Daisy"),
+    ]
+
+@pytest.fixture
+def create_plants(plant_data):
+    Plant.objects.bulk_create(plant_data)
+
+@pytest.fixture
 def fertilizer():
     return mixer.blend(Fertilizer, name="NPK", boost=5, compound="Nitrogen-Phosphorus-Potassium")
 
