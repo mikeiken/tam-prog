@@ -1,4 +1,6 @@
+import random
 from django.utils import timezone
+from user.models import Worker
 from user.services import PersonService
 from .models import Order
 
@@ -12,7 +14,11 @@ class OrderService:
         return field_price + plant_price + worker_price
 
     @staticmethod
-    def create_order(user, worker, bed, plant, action):
+    def create_order(user, bed, plant, action):
+        available_workers = Worker.objects.all()
+        if not available_workers.exists():
+            return None
+        worker = random.choice(available_workers)
         total_cost = OrderService.calculate_total_cost(bed, plant, worker)
         if PersonService.update_wallet_balance(user, total_cost):
             order = Order.objects.create(

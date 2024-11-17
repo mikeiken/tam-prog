@@ -11,18 +11,6 @@ from drf_spectacular.utils import extend_schema, extend_schema_view, \
 def OrderParameters(required=False):
     return [
         OpenApiParameter(
-            name="worker",
-            description="Worker ID",
-            type=int,
-            required=required,
-        ),
-        OpenApiParameter(
-            name="user",
-            description="User ID",
-            type=int,
-            required=required,
-        ),
-        OpenApiParameter(
             name="bed",
             description="Bed ID",
             type=int,
@@ -131,19 +119,10 @@ class OrderViewSet(viewsets.ModelViewSet):
                 name="Full update order",
                 description="Update all fields. Prefferebly use PUT method for this operation",
                 value={
-                    "worker": 1,
-                    "user": 1,
                     "bed": 1,
                     "plant": 1,
                     "action": "water",
                     "completed_at": "2022-01-01T00:00:00Z"
-                },
-                request_only=True,
-            ),
-            OpenApiExample(
-                name="Change worker",
-                value={
-                    "worker": 56
                 },
                 request_only=True,
             ),
@@ -166,11 +145,10 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         user = self.request.user
-        worker = serializer.validated_data['worker']
         bed = serializer.validated_data['bed']
         plant = serializer.validated_data['plant']
         action = serializer.validated_data['action']
-        order = OrderService.create_order(user, worker, bed, plant, action)
+        order = OrderService.create_order(user, bed, plant, action)
         if order:
             return Response(OrderSerializer(order).data, status=status.HTTP_201_CREATED)
         return Response({'detail': 'Top up your account'}, status=status.HTTP_400_BAD_REQUEST)
