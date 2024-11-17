@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './style.css';
 import LoginBtn from './ui/login-btn/LoginBtn';
-
+import RegisterBtn from './ui/register-btn/RegisterBtn';
 export default function MainPage() {
     const [loaded, setLoaded] = useState(false);
 
@@ -12,8 +12,11 @@ export default function MainPage() {
     return (
         <>
             <header className='header-for-landing'>
-                <div >TAMPROG</div>
-                <LoginBtn />
+                <div>TAMPROG</div>
+                <div className='landing-buttons'>
+                    <LoginBtn />
+                    <RegisterBtn />
+                </div>
             </header>
             <div className='landing-page'>
                 <center>
