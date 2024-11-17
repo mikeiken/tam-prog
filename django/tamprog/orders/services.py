@@ -1,4 +1,6 @@
 import random
+from rest_framework.response import Response
+from rest_framework import status
 from django.utils import timezone
 from user.models import Worker
 from user.services import PersonService
@@ -17,20 +19,28 @@ class OrderService:
     def create_order(user, bed, plant, action):
         available_workers = Worker.objects.all()
         if not available_workers.exists():
-            return None
+            return Response(
+                {'error': 'No available workers'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         worker = random.choice(available_workers)
         total_cost = OrderService.calculate_total_cost(bed, plant, worker)
-        if PersonService.update_wallet_balance(user, total_cost):
-            order = Order.objects.create(
-                user=user,
-                worker=worker,
-                bed=bed,
-                plant=plant,
-                action=action,
-                total_cost=total_cost
-            )
-            return order
-        return None
+        wallet_response = PersonService.update_wallet_balance(user, total_cost)
+        if wallet_response.status_code != status.HTTP_200_OK:
+            return wallet_response
+
+        order = Order.objects.create(
+            user=user,
+            worker=worker,
+            bed=bed,
+            plant=plant,
+            action=action,
+            total_cost=total_cost
+        )
+        return Response(
+            {'status': 'Order created successfully', 'order_id': order.id},
+            status=status.HTTP_201_CREATED
+        )
 
     @staticmethod
     def complete_order(order):
