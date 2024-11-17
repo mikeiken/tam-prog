@@ -175,17 +175,19 @@ class RegisterViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
-        # Вызываем сервисную функцию для создания пользователя
-        user = PersonService.create_user(
-            username=serializer.validated_data['username'],
-            full_name=serializer.validated_data['full_name'],
-            phone_number=serializer.validated_data['phone_number'],
-            password=serializer.validated_data['password'],
-            wallet_balance=serializer.validated_data.get('wallet_balance', 0.00)
-        )
-
-        # Возвращаем успешный ответ с данными о пользователе
+        try:
+            user = PersonService.create_user(
+                username=serializer.validated_data['username'],
+                full_name=serializer.validated_data['full_name'],
+                phone_number=serializer.validated_data['phone_number'],
+                password=serializer.validated_data['password'],
+                wallet_balance=serializer.validated_data.get('wallet_balance', 0.00)
+            )
+        except ValueError as e:
+            return Response(
+                {'error': str(e)},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         headers = self.get_success_headers(serializer.data)
         return Response(
             {"message": "User created successfully", "user_id": user.id, "username": user.username},
