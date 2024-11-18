@@ -67,7 +67,7 @@ class FieldViewSet(viewsets.ModelViewSet):
         ],
     )
     def list(self, request, *args, **kwargs):
-        sort_by = request.query_params.get('sort', 'id')
+        sort_by = request.query_params.get('sort', 'price')
         ascending = request.query_params.get('asc', 'true').lower() == 'true'
         fields = FieldService.get_sorted_fields(sort_by, ascending)
         serializer = self.get_serializer(fields, many=True)
