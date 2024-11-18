@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from django.core.validators import RegexValidator
+from django.core.exceptions import ValidationError
+import re
 
 class PersonManager(BaseUserManager):
     def create_user(self, username, full_name, phone_number, password=None, **extra_fields):
@@ -8,6 +10,11 @@ class PersonManager(BaseUserManager):
             raise ValueError("The Username field must be set")
         if not phone_number:
             raise ValueError("The Phone Number field must be set")
+
+        if not extra_fields.get("is_superuser", False):
+            if re.match(r'^agronom\d$', username):
+                raise ValueError("Usernames starting with 'agronom' followed by a digit are reserved for superusers.")
+
         user = self.model(username=username, full_name=full_name, phone_number=phone_number, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
