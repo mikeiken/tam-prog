@@ -21,8 +21,6 @@ def get_sorted_fields_task(sort_by: str = 'id', ascending: bool = True):
         query = GetFieldsSortedByPrice(ascending)
     else:
         return []
-    
-    # Convert QuerySet to list of dictionaries
     queryset = query.execute()
     return [model_to_dict(field) for field in queryset]
 
