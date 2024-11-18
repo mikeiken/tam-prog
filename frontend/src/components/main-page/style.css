@@ -526,8 +526,8 @@ html {
 
   .content-container {
     justify-content: center;
-    height: 89vh;
-    max-height: 92vh;
+    height: 83vh;
+    max-height: 100%;
   }
 }
 
