@@ -38,7 +38,7 @@ def test_rent_bed_already_rented(beds, person):
         bed.is_rented = True
         bed.save()
         result = BedService.rent_bed(bed_id=bed.id, person=person)
-        assert result is False
+        assert result.status_code == 400
 
 
 @pytest.mark.django_db
@@ -47,7 +47,7 @@ def test_rent_bed_success(beds, person):
     initial_count = bed.field.count_beds
     result = BedService.rent_bed(bed_id=bed.id, person=person)
     bed.refresh_from_db()
-    assert result is True
+    assert result.status_code == 200
     assert bed.is_rented is True
     assert bed.rented_by == person
     assert bed.field.count_beds == initial_count - 1
@@ -62,7 +62,7 @@ def test_release_bed_success(beds, person):
     initial_count = bed.field.count_beds
     result = BedService.release_bed(bed_id=bed.id)
     bed.refresh_from_db()
-    assert result is True
+    assert result.status_code == 200
     assert bed.is_rented is False
     assert bed.rented_by is None
     assert bed.field.count_beds == initial_count + 1
@@ -74,7 +74,7 @@ def test_release_bed_not_rented(beds):
         bed.is_rented = False
         bed.save()
         result = BedService.release_bed(bed_id=bed.id)
-        assert result is False
+        assert result.status_code == 400
 
 @pytest.mark.django_db
 def test_get_user_beds(beds, person):
