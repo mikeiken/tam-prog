@@ -18,6 +18,7 @@ export default function Form() {
       localStorage.setItem("accessToken", response.data.access);
       localStorage.setItem("refreshToken", response.data.refresh);
       navigate("/navigate/garden");
+      alert("Приветствуем вас!");
     } catch (error) {
       console.error("Login failed:", error);
       // Handle error (e.g., display message to the user)
@@ -45,14 +46,7 @@ export default function Form() {
           />
           <label>Enter your name</label>
           <img
-            style={{
-              position: "absolute",
-              left: "10px",
-              top: "50%",
-              transform: "translateY(-50%)",
-              width: "24px",
-              height: "24px",
-            }}
+            className="user-icon-auth"
             src={process.env.PUBLIC_URL + "/user.png"}
             alt="text"
           ></img>
@@ -67,14 +61,7 @@ export default function Form() {
           />
           <label>Enter your password</label>
           <img
-            style={{
-              position: "absolute",
-              left: "10px",
-              top: "50%",
-              transform: "translateY(-50%)",
-              width: "24px",
-              height: "24px",
-            }}
+            className="user-icon-auth"
             src={process.env.PUBLIC_URL + "/key-chain.png"}
             alt="text"
           ></img>
