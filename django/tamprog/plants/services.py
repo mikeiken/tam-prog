@@ -2,6 +2,8 @@ from .models import BedPlant
 from fertilizer.models import BedPlantFertilizer
 from .queries import GetPlantsSortedByPrice
 from fuzzywuzzy import fuzz
+from rest_framework.response import Response
+from rest_framework import status
 from .models import Plant
 
 class PlantService:
@@ -36,16 +38,37 @@ class BedPlantService:
 
     @staticmethod
     def harvest_plant(bed_plant):
+        if not bed_plant:
+            return Response(
+                {'error': 'Plant not found'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         bed_plant.delete()
+        return Response(
+            {'status': 'plant dug up'},
+            status=status.HTTP_200_OK
+        )
+
 
     @staticmethod
     def fertilize_plant(bed_plant, fertilizer):
+        if not fertilizer:
+            return Response(
+                {'error': 'No suitable fertilizer found'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         new_growth_time = bed_plant.growth_time - fertilizer.boost
         bed_plant.growth_time = new_growth_time
         BedPlantFertilizer.objects.create(bed_plant=bed_plant, fertilizer=fertilizer)
         bed_plant.fertilizer_applied = True
         bed_plant.save(update_fields=["fertilizer_applied", "growth_time"])
         bed_plant.save()
+        return Response(
+            {'status': 'plant fertilized'},
+            status=status.HTTP_200_OK
+        )
+
 
     @staticmethod
     def water_plant(bed_plant):
@@ -53,7 +76,17 @@ class BedPlantService:
 
     @staticmethod
     def dig_up_plant(bed_plant):
+        if not bed_plant:
+            return Response(
+                {'error': 'Plant not found'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
         bed_plant.delete()
+        return Response(
+            {'status': 'plant dug up'},
+            status=status.HTTP_200_OK
+        )
 
 
     @staticmethod

@@ -256,10 +256,13 @@ class BedViewSet(viewsets.ModelViewSet):
         description='Rent bed',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Successful response',
+                description='Bed successfully rented.',
             ),
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(
-                description='Bad request',
+                description='Bad request: Bed is already rented.',
+            ),
+            status.HTTP_404_NOT_FOUND: OpenApiResponse(
+                description='Bed not found.',
             ),
         },
         parameters=BedParameters(required=True),
@@ -278,21 +281,20 @@ class BedViewSet(viewsets.ModelViewSet):
     def rent(self, request, pk=None):
         bed = self.get_object()
         person = request.user
-        result = BedService.rent_bed(bed.id, person)
-        if result:
-            return Response(status=status.HTTP_200_OK)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return BedService.rent_bed(bed.id, person)
 
     @extend_schema(
         summary='Release bed',
         description='Release bed',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Successful response',
+                description='Bed successfully released.',
             ),
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(
-                description='Bad request',
+                description='Bad request: Bed is not rented.',
+            ),
+            status.HTTP_404_NOT_FOUND: OpenApiResponse(
+                description='Bed not found.',
             ),
         },
         parameters=BedParameters(required=True),
@@ -310,11 +312,7 @@ class BedViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def release(self, request, pk=None):
         bed = self.get_object()
-        result = BedService.release_bed(bed.id)
-        if result:
-            return Response(status=status.HTTP_200_OK)
-        else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return BedService.release_bed(bed.id)
 
 
     def get_queryset(self):

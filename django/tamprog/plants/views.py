@@ -253,7 +253,10 @@ class BedPlantViewSet(viewsets.ModelViewSet):
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description='Plant harvested',
-            )
+            ),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+                description='Plant not found',
+            ),
         },
     )
     @action(detail=True, methods=['post'])
@@ -261,6 +264,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
         bed_plant = self.get_object()
         BedPlantService.harvest_plant(bed_plant)
         return Response({'status': 'plant harvested'})
+
 
     @extend_schema(
         summary='Fertilize a plant',
@@ -291,10 +295,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
         bed_plant = self.get_object()
         plant_name = bed_plant.plant.name
         fertilizer = Fertilizer.objects.filter(compound__icontains=plant_name).first()
-        if not fertilizer:
-            return Response({'error': 'No suitable fertilizer found'}, status=status.HTTP_400_BAD_REQUEST)
-        BedPlantService.fertilize_plant(bed_plant, fertilizer)
-        return Response({'status': 'plant fertilized'})
+        return BedPlantService.fertilize_plant(bed_plant, fertilizer)
 
     @extend_schema(
         summary='Water a plant',
@@ -329,14 +330,23 @@ class BedPlantViewSet(viewsets.ModelViewSet):
                         value={'status': 'plant dug up'},
                     )
                 ]
-            )
+            ),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+                description='Plant not found',
+                examples=[
+                    OpenApiExample(
+                        name='Plant not found',
+                        value={'error': 'Plant not found'}
+                    )
+                ]
+            ),
         },
     )
-    @action(detail=True, methods=['delete'])
+    @action(detail=True, methods=['post'])
     def dig_up(self, request, pk=None):
         bed_plant = self.get_object()
-        BedPlantService.dig_up_plant(bed_plant)
-        return Response({'status': 'plant dug up'})
+        return BedPlantService.dig_up_plant(bed_plant)
+
 
     def get_queryset(self):
         fertilizer_applied = self.request.query_params.get('fertilizer_applied', None)
