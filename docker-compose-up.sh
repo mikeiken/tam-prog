@@ -1,2 +1,3 @@
 #!/bin/sh
-./env-inject.sh docker-compose up -d
+./env-inject.sh
+docker-compose --env-file ./.env up -d
