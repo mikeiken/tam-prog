@@ -1,11 +1,18 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
 export default function Logout() {
-    return (
-        <Link
-            to='/'
-        >
-            <button className='login-btn'>Выйти</button>
-        </Link>
-    )
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+
+    navigate("/");
+  };
+
+  return (
+    <button className="login-btn" onClick={handleLogout}>
+      Выйти
+    </button>
+  );
 }
