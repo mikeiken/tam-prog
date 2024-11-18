@@ -10,6 +10,8 @@ export default function Form() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
       const response = await Instance.post("/login/", {
         username,
         password,
