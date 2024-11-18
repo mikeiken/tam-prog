@@ -19,7 +19,7 @@ export default function Form() {
       localStorage.setItem("accessToken", response.data.access);
       localStorage.setItem("refreshToken", response.data.refresh);
       navigate("/navigate/garden");
-      alert("Приветствуем вас!");
+      //alert("Приветствуем вас!");
     } catch (error) {
       console.error("Login failed:", error);
       // Handle error (e.g., display message to the user)
