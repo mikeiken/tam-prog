@@ -308,3 +308,6 @@ CELERY_WORKER_REDIRECT_STDOUTS_LEVEL = os.getenv(
 CELERY_WORKER_TASK_LOG_FORMAT = (
     os.getenv('CELERY_WORKER_TASK_LOG_FORMAT', '%(asctime)s - %(message)s')
 )
+
+DJANGO_SUPER_USER = os.environ.get('DJANGO_SUPER_USER', 'admin')
+DJANGO_SUPER_PASSWORD = os.environ.get('DJANGO_SUPER_PASSWORD', 'admin')

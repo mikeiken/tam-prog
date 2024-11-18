@@ -1,17 +1,17 @@
 import React from 'react'
 import { Routes, Route, Link } from 'react-router-dom';
-import AuthForm from '../../../auth/login/auth';
-export default function LoginBtn() {
+import RegisterForm from '../../../auth/register/RegisterForm';
+export default function RegisterBtn() {
     return (
         <>
-            <Link className='landing-link' to='/login'>
+            <Link className='landing-link' to='/register'>
                 <div className='landing-login-btn'>
+                    <p>Sing Up</p>
                     <img className='user-interface-login' src={process.env.PUBLIC_URL + '/user-interface-login.png'} alt='user-icon'></img>
-                    <p>Sing In</p>
                 </div>
             </Link>
             <Routes >
-                <Route path="/login" element={<AuthForm />} />
+                <Route path="/register" element={<RegisterForm />} />
 
             </Routes>
         </>

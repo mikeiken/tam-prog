@@ -105,25 +105,40 @@ def test_login_user_missing_fields(api_client):
     assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert "password" in response.data
 
-
 @pytest.mark.django_db
-@patch('user.services.GetWorkersSortedByPrice')
-def test_get_sorted_workers_ascending(mock_get_sorted_by_price, workers):
-    mock_query_instance = MagicMock()
-    mock_query_instance.execute.return_value = sorted(workers, key=lambda w: w.price)
-    mock_get_sorted_by_price.return_value = mock_query_instance
+@patch('user.services.get_sorted_workers_task')
+@patch('user.services.AsyncResult')
+def test_get_sorted_workers_ascending(mock_async_result, mock_task, workers):
+    mock_task_instance = MagicMock()
+    mock_task_instance.id = 'task_id'
+    mock_task.delay.return_value = mock_task_instance
+
+    mock_async_result_instance = MagicMock()
+    mock_async_result_instance.get.return_value = sorted(workers, key=lambda w: w.price)
+    mock_async_result.return_value = mock_async_result_instance
+
     sorted_workers = WorkerService.get_sorted_workers(ascending=True)
-    mock_query_instance.execute.assert_called_once()
+    mock_task.delay.assert_called_once_with('price', True)
+    mock_async_result.assert_called_once_with('task_id')
+    mock_async_result_instance.get.assert_called_once()
     assert [worker.price for worker in sorted_workers] == sorted([worker.price for worker in workers])
 
-
 @pytest.mark.django_db
-@patch('user.services.GetWorkersSortedByPrice')
-def test_get_sorted_workers_descending(mock_get_sorted_by_price, workers):
-    mock_query_instance = MagicMock()
-    mock_query_instance.execute.return_value = sorted(workers, key=lambda w: w.price,reverse=True)
-    mock_get_sorted_by_price.return_value = mock_query_instance
+@patch('user.services.get_sorted_workers_task')
+@patch('user.services.AsyncResult')
+def test_get_sorted_workers_descending(mock_async_result, mock_task, workers):
+    mock_task_instance = MagicMock()
+    mock_task_instance.id = 'task_id'
+    mock_task.delay.return_value = mock_task_instance
+
+    mock_async_result_instance = MagicMock()
+    mock_async_result_instance.get.return_value = sorted(workers, key=lambda w: w.price, reverse=True)
+    mock_async_result.return_value = mock_async_result_instance
+
     sorted_workers = WorkerService.get_sorted_workers(ascending=False)
-    mock_query_instance.execute.assert_called_once()
+    mock_task.delay.assert_called_once_with('price', False)
+    mock_async_result.assert_called_once_with('task_id')
+    mock_async_result_instance.get.assert_called_once()
     assert [worker.price for worker in sorted_workers] == sorted([worker.price for worker in workers], reverse=True)
+
 
