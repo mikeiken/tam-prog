@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Link, Routes, Route, useNavigate } from "react-router-dom";
 import AuthForm from "../login/auth";
 import "../login/components/auth-style.css";
-import axios from "../../api/instance";
 import Alert from "../alert/Alert";
+import Instance from "../../api/instance";
 
 export default function RegisterForm() {
   const [login, setLogin] = useState("");
@@ -25,7 +25,7 @@ export default function RegisterForm() {
     }
 
     try {
-      const response = await axios.post("/register/", {
+      const response = await Instance.post("/register/", {
         username: login,
         full_name: username,
         phone_number: phone,

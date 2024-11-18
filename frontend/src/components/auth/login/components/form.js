@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Link, Routes, Route, useNavigate } from "react-router-dom";
-import axios from "../../../api/instance";
 import RegisterForm from "../../register/RegisterForm";
-
+import Instance from "../../../api/instance";
 export default function Form() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -11,7 +10,7 @@ export default function Form() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/login/", {
+      const response = await Instance.post("/login/", {
         username,
         password,
       });
