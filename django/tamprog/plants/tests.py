@@ -94,7 +94,7 @@ def test_fuzzy_search(api_client, plants, user):
     assert response.status_code == 200
     expected_matches = [
         plant.name for plant in plants
-        if fuzz.ratio(plant_name.lower(), plant.name.lower()) >= 70
+        if fuzz.partial_ratio(plant_name.lower(), plant.name.lower()) >= 75
     ]
     response_names = [plant['name'] for plant in response.data]
     assert len(response_names) == len(expected_matches)
