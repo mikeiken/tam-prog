@@ -12,16 +12,54 @@ class PlantService:
     def get_sorted_plants(ascending: bool = True):
         query = GetPlantsSortedByPrice(ascending)
         return query.execute()
-    
+
     @staticmethod
-    def fuzzy_search(query, threshold=70):
-        results = []
+    def fuzzy_search(query, threshold=75):
         plants = Plant.objects.all()
+        query_lower = query.lower()
+
+        exact_matches = []
+        sequence_matches = []
+        partial_matches = []
+
         for plant in plants:
-            similarity = fuzz.ratio(query.lower(), plant.name.lower())
-            if similarity >= threshold:
-                results.append(plant)
-        return results
+            name_lower = plant.name.lower()
+
+            if name_lower == query_lower:
+                exact_matches.append((100, plant))
+                continue
+
+            if query_lower in name_lower:
+                sequence_matches.append((len(query_lower), plant))
+                continue
+
+        if exact_matches or sequence_matches:
+            exact_matches.sort(key=lambda x: (-x[0], x[1].name))
+            sequence_matches.sort(key=lambda x: (-x[0], x[1].name))
+
+            sorted_results = (
+                [plant for _, plant in exact_matches]
+                + [plant for _, plant in sequence_matches]
+            )
+        else:
+            for plant in plants:
+                name_lower = plant.name.lower()
+                similarity = fuzz.partial_ratio(query_lower, name_lower)
+                if similarity >= threshold:
+                    partial_matches.append((similarity, plant))
+
+            partial_matches.sort(key=lambda x: (-x[0], x[1].name))
+
+            sorted_results = [plant for _, plant in partial_matches]
+
+        unique_results = []
+        added_ids = set()
+        for plant in sorted_results:
+            if plant.id not in added_ids:
+                unique_results.append(plant)
+                added_ids.add(plant.id)
+
+        return unique_results
     
     @staticmethod
     def get_suggestions(query):

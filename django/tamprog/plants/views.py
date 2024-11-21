@@ -59,24 +59,72 @@ class PlantViewSet(viewsets.ModelViewSet):
         plants = PlantService.get_sorted_plants(ascending)
         serializer = self.get_serializer(plants, many=True)
         return Response(serializer.data)
-        
-    @action(detail=False, methods=['get'])
+
+    @extend_schema(
+        summary='Search for plants by query',
+        description='Search for plants using a query string. The search is case-insensitive and can match any part of the plant name or description.',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='List of plants matching the search query',
+                response=PlantSerializer(many=True)
+            ),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+                description='Invalid query if the search string is empty or incorrect',
+            ),
+        },
+        parameters=[
+            OpenApiParameter(
+                name='q',
+                type=str,
+                description='Search query (plant name or description)',
+                required=True,
+            ),
+        ]
+    )
+    @action(detail=False, methods=['get'])    
     def search(self, request):
         query = request.query_params.get('q', '').lower()
         if not query:
-            return Response([])
+            return Response({'error': 'Search query is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         plants = PlantService.fuzzy_search(query)
+        if not plants:
+            return Response({'message': 'No plants found matching the query'}, status=status.HTTP_200_OK)
+
         serializer = self.get_serializer(plants, many=True)
         return Response(serializer.data)
     
+    @extend_schema(
+        summary='Get search suggestions for plants',
+        description='Get plant suggestions based on a query string. This endpoint returns a list of suggestions for autocomplete or partial search.',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='List of plant suggestions based on the query',
+                response=str
+            ),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+                description='Invalid query if the search string is empty or incorrect',
+            )
+        },
+        parameters=[
+            OpenApiParameter(
+                name='q',
+                type=str,
+                description='Query string for suggestions (partial plant name)',
+                required=True,
+            ),
+        ]
+    )
     @action(detail=False, methods=['get'])
     def suggestions(self, request):
         query = request.query_params.get('q', '').lower()
         if not query:
-            return Response([])
+            return Response({'error': 'Query string is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         suggestions = PlantService.get_suggestions(query)
+        if not suggestions:
+            return Response({'message': 'No suggestions found for the given query'}, status=status.HTTP_200_OK)
+
         return Response(suggestions)
 
     @extend_schema(
