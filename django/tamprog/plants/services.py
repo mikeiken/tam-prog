@@ -14,15 +14,12 @@ class PlantService:
         return query.execute()
 
     @staticmethod
-    def fuzzy_search(query, threshold=70):
+    def fuzzy_search(query, threshold=75):
         plants = Plant.objects.all()
         query_lower = query.lower()
 
-        results = set()
-
         exact_matches = []
         sequence_matches = []
-        unordered_matches = []
         partial_matches = []
 
         for plant in plants:
@@ -30,38 +27,33 @@ class PlantService:
 
             if name_lower == query_lower:
                 exact_matches.append((100, plant))
-                results.add(plant)
                 continue
 
-            if all(char in name_lower for char in query_lower):
-                index_ordered = [name_lower.index(char) for char in query_lower if char in name_lower]
-                if index_ordered == sorted(index_ordered):
-                    sequence_matches.append((len(query_lower), plant))
-                    results.add(plant)
-                else:
-                    unordered_matches.append((len(query_lower), plant))
-                    results.add(plant)
+            if query_lower in name_lower:
+                sequence_matches.append((len(query_lower), plant))
+                continue
 
-            similarity = fuzz.partial_ratio(query_lower, name_lower)
-            if similarity >= threshold:
-                partial_matches.append((similarity, plant))
-                results.add(plant)
+        if exact_matches or sequence_matches:
+            exact_matches.sort(key=lambda x: (-x[0], x[1].name))
+            sequence_matches.sort(key=lambda x: (-x[0], x[1].name))
 
-        sequence_matches.sort(key=lambda x: (-x[0], x[1].name))
-        unordered_matches.sort(key=lambda x: (-x[0], x[1].name))
-        partial_matches.sort(key=lambda x: (-x[0], x[1].name))
-        exact_matches.sort(key=lambda x: (-x[0], x[1].name))
+            sorted_results = (
+                [plant for _, plant in exact_matches]
+                + [plant for _, plant in sequence_matches]
+            )
+        else:
+            for plant in plants:
+                name_lower = plant.name.lower()
+                similarity = fuzz.partial_ratio(query_lower, name_lower)
+                if similarity >= threshold:
+                    partial_matches.append((similarity, plant))
 
-        sorted_results = (
-            [plant for _, plant in exact_matches]
-            + [plant for _, plant in sequence_matches]
-            + [plant for _, plant in unordered_matches]
-            + [plant for _, plant in partial_matches]
-        )
+            partial_matches.sort(key=lambda x: (-x[0], x[1].name))
+
+            sorted_results = [plant for _, plant in partial_matches]
 
         unique_results = []
         added_ids = set()
-
         for plant in sorted_results:
             if plant.id not in added_ids:
                 unique_results.append(plant)
