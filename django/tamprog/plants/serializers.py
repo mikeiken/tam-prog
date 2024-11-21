@@ -9,4 +9,5 @@ class PlantSerializer(serializers.ModelSerializer):
 class BedPlantSerializer(serializers.ModelSerializer):
     class Meta:
         model = BedPlant
-        fields = '__all__'
+        fields = ['id', 'bed', 'plant', 'planted_at', 'fertilizer_applied', 'growth_time', 'growth_percentage', 'remaining_growth_time']
+        read_only_fields = ['growth_time', 'is_harvested', 'planted_at', 'fertilizer_applied', 'growth_percentage', 'remaining_growth_time', 'is_grown']

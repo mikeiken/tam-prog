@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import Field, Bed
-import re
 
 class FieldSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,4 +9,5 @@ class FieldSerializer(serializers.ModelSerializer):
 class BedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bed
-        fields = '__all__'
+        fields = ['id', 'field', 'is_rented', 'rented_by']
+        read_only_fields = ['is_rented', 'rented_by']

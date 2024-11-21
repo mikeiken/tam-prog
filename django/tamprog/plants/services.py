@@ -33,20 +33,32 @@ class BedPlantService:
     @staticmethod
     def plant_in_bed(bed, plant):
         growth_time = plant.growth_time
-        bed_plant = BedPlant.objects.create(bed=bed, plant=plant, growth_time=growth_time)
-        return bed_plant
+
+        if BedPlant.objects.filter(bed=bed, plant=plant).exists():
+            raise ValueError("This bed already has a plant.")
+        return BedPlant.objects.create(bed=bed, plant=plant, growth_time=growth_time)
+
+
+    @staticmethod
+    def check_and_harvest_plant(bed_plant):
+        if bed_plant.is_grown:
+            bed_plant.is_harvested = True
+            bed_plant.save(update_fields=['is_harvested'])
+            return BedPlantService.harvest_plant(bed_plant)
+        return None
+
 
     @staticmethod
     def harvest_plant(bed_plant):
-        if not bed_plant:
+        if not bed_plant.is_grown:
             return Response(
-                {'error': 'Plant not found'},
+                {'error': 'Plant is not fully grown yet'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-
-        bed_plant.delete()
+        bed_plant.is_harvested = True
+        bed_plant.save(update_fields=['is_harvested'])
         return Response(
-            {'status': 'plant dug up'},
+            {'status': 'Plant harvested'},
             status=status.HTTP_200_OK
         )
 
@@ -63,7 +75,6 @@ class BedPlantService:
         BedPlantFertilizer.objects.create(bed_plant=bed_plant, fertilizer=fertilizer)
         bed_plant.fertilizer_applied = True
         bed_plant.save(update_fields=["fertilizer_applied", "growth_time"])
-        bed_plant.save()
         return Response(
             {'status': 'plant fertilized'},
             status=status.HTTP_200_OK
@@ -76,18 +87,16 @@ class BedPlantService:
 
     @staticmethod
     def dig_up_plant(bed_plant):
-        if not bed_plant:
+        if not bed_plant.is_harvested:
             return Response(
-                {'error': 'Plant not found'},
+                {'error': 'Plant must be harvested before digging up'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-
         bed_plant.delete()
         return Response(
-            {'status': 'plant dug up'},
+            {'status': 'Bed is now empty'},
             status=status.HTTP_200_OK
         )
-
 
     @staticmethod
     def filter_bed_plants(fertilizer_applied=None):
