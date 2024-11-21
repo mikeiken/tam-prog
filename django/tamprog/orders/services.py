@@ -5,6 +5,8 @@ from django.utils import timezone
 from user.models import Worker
 from user.services import PersonService
 from .models import Order
+from garden.services import BedService
+from plants.services import BedPlantService
 
 
 class OrderService:
@@ -28,6 +30,18 @@ class OrderService:
         wallet_response = PersonService.update_wallet_balance(user, total_cost)
         if wallet_response.status_code != status.HTTP_200_OK:
             return wallet_response
+
+        rent_response = BedService.rent_bed(bed.id, user)
+        if rent_response.status_code != 200:
+            return rent_response
+
+        try:
+            BedPlantService.plant_in_bed(bed, plant)
+        except ValueError as e:
+            return Response(
+                {"error": str(e)},
+               status=status.HTTP_400_BAD_REQUEST
+            )
 
         order = Order.objects.create(
             user=user,
