@@ -5,6 +5,9 @@ from .models import Fertilizer, BedPlantFertilizer
 from .permission import *
 from .serializers import FertilizerSerializer, BedPlantFertilizerSerializer
 from .services import FertilizerService
+from logging import getLogger
+
+log = getLogger(__name__)
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, \
     OpenApiResponse, OpenApiParameter, OpenApiExample
@@ -47,6 +50,7 @@ class FertilizerViewSet(viewsets.ModelViewSet):
         },
     )
     def list(self, request, *args, **kwargs):
+        log.debug('Calling FertilizerViewSet::list method')
         return super().list(request, *args, **kwargs)
 
     @extend_schema(
@@ -59,6 +63,7 @@ class FertilizerViewSet(viewsets.ModelViewSet):
         },
     )
     def retrieve(self, request, *args, **kwargs):
+        log.debug('Calling FertilizerViewSet::retrieve method')
         return super().retrieve(request, *args, **kwargs)
 
     @extend_schema(
@@ -71,6 +76,7 @@ class FertilizerViewSet(viewsets.ModelViewSet):
         parameters=FertilizerParameters(required=True),
     )
     def create(self, request, *args, **kwargs):
+        log.debug('Calling FertilizerViewSet::create method')
         return super().create(request, *args, **kwargs)
 
     @extend_schema(
@@ -83,6 +89,7 @@ class FertilizerViewSet(viewsets.ModelViewSet):
         parameters=FertilizerParameters(required=True),
     )
     def update(self, request, *args, **kwargs):
+        log.debug('Calling FertilizerViewSet::update method')
         return super().update(request, *args, **kwargs)
     
     @extend_schema(
@@ -95,6 +102,7 @@ class FertilizerViewSet(viewsets.ModelViewSet):
         parameters=FertilizerParameters(),
     )
     def partial_update(self, request, *args, **kwargs):
+        log.debug('Calling FertilizerViewSet::partial_update method')
         return super().partial_update(request, *args, **kwargs)
     
     @extend_schema(
@@ -106,9 +114,11 @@ class FertilizerViewSet(viewsets.ModelViewSet):
         },
     )
     def destroy(self, request, *args, **kwargs):
+        log.debug('Calling FertilizerViewSet::destroy method')
         return super().destroy(request, *args, **kwargs)
 
     def perform_create(self, serializer):
+        log.debug('Calling perform_create method')
         name = serializer.validated_data['name']
         boost = serializer.validated_data['boost']
         compound = serializer.validated_data['compound']
@@ -146,6 +156,7 @@ class BedPlantFertilizerViewSet(viewsets.ModelViewSet):
         },
     )
     def list(self, request, *args, **kwargs):
+        log.debug('Calling BedPlantFertilizerViewSet::list method')
         return super().list(request, *args, **kwargs)
 
     @extend_schema(
@@ -158,6 +169,7 @@ class BedPlantFertilizerViewSet(viewsets.ModelViewSet):
         parameters=BedPlantFertilizerParameters(required=True),
     )
     def create(self, request, *args, **kwargs):
+        log.debug('Calling BedPlantFertilizerViewSet::create method')
         return super().create(request, *args, **kwargs)
 
     @extend_schema(
@@ -170,6 +182,7 @@ class BedPlantFertilizerViewSet(viewsets.ModelViewSet):
         parameters=BedPlantFertilizerParameters(),
     )
     def partial_update(self, request, *args, **kwargs):
+        log.debug('Calling BedPlantFertilizerViewSet::partial_update method')
         return super().partial_update(request, *args, **kwargs)
 
     @extend_schema(
@@ -181,6 +194,7 @@ class BedPlantFertilizerViewSet(viewsets.ModelViewSet):
         },
     )
     def destroy(self, request, *args, **kwargs):
+        log.debug('Calling BedPlantFertilizerViewSet::destroy method')
         return super().destroy(request, *args, **kwargs)
     
     @extend_schema(
@@ -193,6 +207,7 @@ class BedPlantFertilizerViewSet(viewsets.ModelViewSet):
         },
     )
     def retrieve(self, request, *args, **kwargs):
+        log.debug('Calling BedPlantFertilizerViewSet::retrieve method')
         return super().retrieve(request, *args, **kwargs)
     
     @extend_schema(
@@ -205,4 +220,5 @@ class BedPlantFertilizerViewSet(viewsets.ModelViewSet):
         parameters=BedPlantFertilizerParameters(required=True),
     )
     def update(self, request, *args, **kwargs):
+        log.debug('Calling BedPlantFertilizerViewSet::update method')
         return super().update(request, *args, **kwargs)

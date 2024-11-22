@@ -333,7 +333,27 @@ LOGGING = {
         },
     },
     'loggers': {
-        'db': {
+        'tamprog': {
+            'handlers': ['db_log'],
+            'level': 'DEBUG'
+        },
+        'fertilizer': {
+            'handlers': ['db_log'],
+            'level': 'DEBUG'
+        },
+        'garden': {
+            'handlers': ['db_log'],
+            'level': 'DEBUG'
+        },
+        'orders': {
+            'handlers': ['db_log'],
+            'level': 'DEBUG'
+        },
+        'plans': {
+            'handlers': ['db_log'],
+            'level': 'DEBUG'
+        },
+        'user': {
             'handlers': ['db_log'],
             'level': 'DEBUG'
         },
