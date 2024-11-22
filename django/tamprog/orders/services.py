@@ -1,5 +1,6 @@
 import random
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 from rest_framework import status
 from django.utils import timezone
 from user.models import Worker
@@ -19,30 +20,24 @@ class OrderService:
 
     @staticmethod
     def create_order(user, bed, plant, action):
+        rent_response = BedService.rent_bed(bed.id, user)
+        if rent_response.status_code != 200:
+            return rent_response
+
         available_workers = Worker.objects.all()
         if not available_workers.exists():
             return Response(
                 {'error': 'No available workers'},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
         worker = random.choice(available_workers)
         total_cost = OrderService.calculate_total_cost(bed, plant, worker)
         wallet_response = PersonService.update_wallet_balance(user, total_cost)
         if wallet_response.status_code != status.HTTP_200_OK:
             return wallet_response
 
-        rent_response = BedService.rent_bed(bed.id, user)
-        if rent_response.status_code != 200:
-            return rent_response
-
-        try:
-            BedPlantService.plant_in_bed(bed, plant)
-        except ValueError as e:
-            return Response(
-                {"error": str(e)},
-               status=status.HTTP_400_BAD_REQUEST
-            )
-
+        BedPlantService.plant_in_bed(bed, plant)
         order = Order.objects.create(
             user=user,
             worker=worker,
@@ -55,6 +50,8 @@ class OrderService:
             {'status': 'Order created successfully', 'order_id': order.id},
             status=status.HTTP_201_CREATED
         )
+
+
 
     @staticmethod
     def complete_order(order):

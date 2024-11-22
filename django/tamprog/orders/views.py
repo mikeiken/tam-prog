@@ -1,6 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 from .serializer import *
 from .models import Order
 from .services import OrderService
@@ -148,7 +149,11 @@ class OrderViewSet(viewsets.ModelViewSet):
         bed = serializer.validated_data['bed']
         plant = serializer.validated_data['plant']
         action = serializer.validated_data['action']
-        return OrderService.create_order(user, bed, plant, action)
+        response = OrderService.create_order(user, bed, plant, action)
+
+        if isinstance(response, Response) and response.status_code != status.HTTP_201_CREATED:
+            raise ValidationError(response.data["error"])
+        serializer.save()
 
     def perform_update(self, serializer):
         order = serializer.save()
