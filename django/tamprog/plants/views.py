@@ -7,6 +7,9 @@ from .models import Plant, BedPlant
 from .serializers import PlantSerializer, BedPlantSerializer
 from .services import *
 from fertilizer.models import Fertilizer
+from logging import getLogger
+
+log = getLogger(__name__)
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, \
     OpenApiResponse, OpenApiParameter, OpenApiExample
@@ -58,6 +61,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         ascending = request.query_params.get('asc', 'true').lower() == 'true'
         plants = PlantService.get_sorted_plants(ascending)
         serializer = self.get_serializer(plants, many=True)
+        log.debug('Listing all plants')
         return Response(serializer.data)
 
     @extend_schema(
@@ -85,13 +89,16 @@ class PlantViewSet(viewsets.ModelViewSet):
     def search(self, request):
         query = request.query_params.get('q', '').lower()
         if not query:
+            log.warning('Search query is required')
             return Response({'error': 'Search query is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         plants = PlantService.fuzzy_search(query)
         if not plants:
+            log.info('No plants found matching the query')
             return Response({'message': 'No plants found matching the query'}, status=status.HTTP_200_OK)
 
         serializer = self.get_serializer(plants, many=True)
+        log.debug(f'Found {len(plants)} plants for query: {query}')
         return Response(serializer.data)
     
     @extend_schema(
@@ -119,12 +126,15 @@ class PlantViewSet(viewsets.ModelViewSet):
     def suggestions(self, request):
         query = request.query_params.get('q', '').lower()
         if not query:
+            log.warning('Query string is required')
             return Response({'error': 'Query string is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         suggestions = PlantService.get_suggestions(query)
         if not suggestions:
+            log.info('No suggestions found for the given query')
             return Response({'message': 'No suggestions found for the given query'}, status=status.HTTP_200_OK)
 
+        log.debug(f'Found {len(suggestions)} suggestions for query: {query}')
         return Response(suggestions)
 
     @extend_schema(
@@ -140,6 +150,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         parameters=PlantParameters(required=True),
     )
     def create(self, request, *args, **kwargs):
+        log.debug('Creating a new plant')
         return super().create(request, *args, **kwargs)
 
     @extend_schema(
@@ -152,6 +163,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         },
     )
     def retrieve(self, request, *args, **kwargs):
+        log.debug('Retrieving a plant by ID')
         return super().retrieve(request, *args, **kwargs)
 
     @extend_schema(
@@ -164,6 +176,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         parameters=PlantParameters(),
     )
     def partial_update(self, request, *args, **kwargs):
+        log.debug('Partially updating a plant')
         return super().partial_update(request, *args, **kwargs)
     
     @extend_schema(
@@ -176,6 +189,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         parameters=PlantParameters(required=True),
     )
     def update(self, request, *args, **kwargs):
+        log.debug('Updating a plant')
         return super().update(request, *args, **kwargs)
     
     @extend_schema(
@@ -187,6 +201,7 @@ class PlantViewSet(viewsets.ModelViewSet):
         },
     )
     def destroy(self, request, *args, **kwargs):
+        log.debug('Deleting a plant')
         return super().destroy(request, *args, **kwargs)
 
 def BedPlantParameters(required=False):
@@ -225,6 +240,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
 
     @extend_schema(exclude=True)
     def destroy(self, request, *args, **kwargs):
+        log.debug('Deleting a bed plant')
         return super().destroy(request, *args, **kwargs)
 
     @extend_schema(
@@ -240,6 +256,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
         parameters=BedPlantParameters(required=True),    
     )
     def create(self, request, *args, **kwargs):
+        log.debug('Planting a new plant in a bed')
         return super().create(request, *args, **kwargs)
     
     @extend_schema(
@@ -252,6 +269,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
         },
     )
     def list(self, request, *args, **kwargs):
+        log.debug('Listing all planted plants')
         return super().list(request, *args, **kwargs)
     
     @extend_schema(
@@ -264,6 +282,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
         },
     )
     def retrieve(self, request, *args, **kwargs):
+        log.debug('Retrieving a planted plant by ID')
         return super().retrieve(request, *args, **kwargs)
     
     @extend_schema(
@@ -276,6 +295,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
         parameters=BedPlantParameters(required=True),
     )
     def update(self, request, *args, **kwargs):
+        log.debug('Updating a planted plant')
         return super().update(request, *args, **kwargs)
     
     @extend_schema(
@@ -288,12 +308,14 @@ class BedPlantViewSet(viewsets.ModelViewSet):
         parameters=BedPlantParameters(),
     )
     def partial_update(self, request, *args, **kwargs):
+        log.debug('Partially updating a planted plant')
         return super().partial_update(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         bed = serializer.validated_data['bed']
         plant = serializer.validated_data['plant']
         BedPlantService.plant_in_bed(bed, plant)
+        log.info(f"Plant {plant.name} planted in bed with ID={bed.id}")
 
     @extend_schema(
         summary='Harvest a plant',
@@ -311,6 +333,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     def harvest(self, request, pk=None):
         bed_plant = self.get_object()
         BedPlantService.harvest_plant(bed_plant)
+        log.info("Plant harvested")
         return Response({'status': 'plant harvested'})
 
 
@@ -343,6 +366,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
         bed_plant = self.get_object()
         plant_name = bed_plant.plant.name
         fertilizer = Fertilizer.objects.filter(compound__icontains=plant_name).first()
+        log.debug(f"Fertilizing plant {plant_name} with {fertilizer.name}")
         return BedPlantService.fertilize_plant(bed_plant, fertilizer)
 
     @extend_schema(
@@ -364,6 +388,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     def water(self, request, pk=None):
         bed_plant = self.get_object()
         BedPlantService.water_plant(bed_plant)
+        log.debug("Watering plants is not implemented yet")
         return Response({'status': 'plant watered'})
 
     @extend_schema(
@@ -393,11 +418,14 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def dig_up(self, request, pk=None):
         bed_plant = self.get_object()
+        log.debug("Digging up a plant")
         return BedPlantService.dig_up_plant(bed_plant)
 
 
     def get_queryset(self):
         fertilizer_applied = self.request.query_params.get('fertilizer_applied', None)
         if fertilizer_applied is not None:
+            log.debug(f"Filtering bed plants by fertilizer_applied={fertilizer_applied}")
             return BedPlantService.filter_bed_plants(fertilizer_applied=fertilizer_applied.lower() == 'true')
+        log.debug("Listing all bed plants")
         return BedPlant.objects.all()
