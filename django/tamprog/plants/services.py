@@ -1,3 +1,4 @@
+from orders.models import Order
 from .models import BedPlant
 from fertilizer.models import BedPlantFertilizer
 from .queries import GetPlantsSortedByPrice
@@ -32,11 +33,22 @@ class BedPlantService:
 
     @staticmethod
     def plant_in_bed(bed, plant):
-        growth_time = plant.growth_time
-
+        if not Order.objects.filter(bed=bed, completed_at__isnull=True).exists():
+            return Response(
+                {"error": "Planting is only allowed through an active order."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         if BedPlant.objects.filter(bed=bed, plant=plant).exists():
-            raise ValueError("This bed already has a plant.")
-        return BedPlant.objects.create(bed=bed, plant=plant, growth_time=growth_time)
+            return Response(
+                {"error": "This bed already has the specified plant."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        growth_time = plant.growth_time
+        BedPlant.objects.create(bed=bed, plant=plant, growth_time=growth_time)
+        return Response(
+            {"message": "Plant successfully planted in the bed."},
+            status=status.HTTP_201_CREATED
+        )
 
 
     @staticmethod

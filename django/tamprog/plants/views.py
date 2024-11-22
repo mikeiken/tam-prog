@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .permissions import *
+from rest_framework.exceptions import ValidationError
 from .models import Plant, BedPlant
 from .serializers import PlantSerializer, BedPlantSerializer
 from .services import *
@@ -245,7 +246,10 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         bed = serializer.validated_data['bed']
         plant = serializer.validated_data['plant']
-        BedPlantService.plant_in_bed(bed, plant)
+        response = BedPlantService.plant_in_bed(bed, plant)
+        if isinstance(response, Response) and response.status_code != status.HTTP_201_CREATED:
+            raise ValidationError(response.data["error"])
+        serializer.save()
 
     @extend_schema(
         summary='Сhecking growth status',

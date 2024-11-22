@@ -1,3 +1,4 @@
+from orders.models import Order
 from user.models import Person
 from .models import Bed
 from .queries import *
@@ -36,11 +37,19 @@ class BedService:
     def rent_bed(bed_id: int, person: Person):
         try:
             bed = Bed.objects.get(id=bed_id)
+
             if bed.is_rented:
                 return Response(
                     {"error": "This bed is already rented."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
+
+            if not Order.objects.filter(bed=bed, completed_at__isnull=True).exists():
+                return Response(
+                    {"error": "This bed can only be rented through an active order."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
             bed.is_rented = True
             bed.rented_by = person
             bed.save()
@@ -58,11 +67,18 @@ class BedService:
                 status=status.HTTP_404_NOT_FOUND
             )
 
+
     @staticmethod
     def release_bed(bed_id: int):
         try:
             bed = Bed.objects.get(id=bed_id)
-            field = bed.field
+
+            if Order.objects.filter(bed=bed, completed_at__isnull=True).exists():
+                return Response(
+                    {"error": "This bed is linked to an active order and cannot be released."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
             if not bed.is_rented:
                 return Response(
                     {"error": "This bed is not currently rented."},
@@ -72,6 +88,7 @@ class BedService:
             bed.rented_by = None
             bed.save()
 
+            field = bed.field
             field.count_beds += 1
             field.save()
             return Response(
