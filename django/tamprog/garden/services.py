@@ -34,11 +34,8 @@ class FieldService:
     @staticmethod 
     def get_sorted_fields(sort_by: str = 'price', ascending: bool = True):
         task = get_sorted_fields_task.delay(sort_by, ascending)
-        log.debug(f"Calling get_sorted_fields_task with sort_by={sort_by}, ascending={ascending}")
-        log.debug(f"Waiting for the result of get_sorted_fields_task with task_id={task.id}")
         result = AsyncResult(task.id)
         result = result.get(timeout=settings.DJANGO_ASYNC_TIMEOUT_S)
-        log.debug(f"get_sorted_fields_task with task_id={task.id} returned the result: {result}")
         return result
     
 class BedService:
