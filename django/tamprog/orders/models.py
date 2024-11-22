@@ -2,6 +2,7 @@ from django.db import models
 from user.models import Person, Worker
 from garden.models import Bed
 from plants.models import Plant
+from django.core.validators import MinValueValidator
 
 class Order(models.Model):
     user = models.ForeignKey(Person, on_delete=models.CASCADE)
@@ -11,4 +12,4 @@ class Order(models.Model):
     action = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     completed_at = models.DateTimeField(null=True, blank=True)
-    total_cost = models.FloatField(default=0.00)
+    total_cost = models.FloatField(default=0.00, validators=[MinValueValidator(0)])

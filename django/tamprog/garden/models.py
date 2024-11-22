@@ -1,10 +1,11 @@
 from django.db import models
 from user.models import Person
+from django.core.validators import MinValueValidator
 
 class Field(models.Model):
     name = models.CharField(max_length=100)
     count_beds = models.IntegerField(default=0)
-    price = models.FloatField(default=0.00)
+    price = models.FloatField(default=0.00, validators=[MinValueValidator(0)])
 
 class Bed(models.Model):
     field = models.ForeignKey(Field, on_delete=models.CASCADE)

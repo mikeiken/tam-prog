@@ -1,11 +1,12 @@
 from django.db import models
 from garden.models import Bed
 from django.utils import timezone
+from django.core.validators import MinValueValidator
 
 class Plant(models.Model):
     name = models.CharField(max_length=100)
     growth_time = models.IntegerField(default=0)
-    price = models.FloatField(default=0.00)
+    price = models.FloatField(default=0.00, validators=[MinValueValidator(0)])
     description = models.TextField()
 
 class BedPlant(models.Model):

@@ -1,4 +1,5 @@
 from orders.models import Order
+from user.services import PersonService
 from .models import BedPlant
 from fertilizer.models import BedPlantFertilizer
 from .queries import GetPlantsSortedByPrice
@@ -76,12 +77,30 @@ class BedPlantService:
 
 
     @staticmethod
-    def fertilize_plant(bed_plant, fertilizer):
+    def fertilize_plant(bed_plant, fertilizer, user):
         if not fertilizer:
             return Response(
                 {'error': 'No suitable fertilizer found'},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+        if bed_plant.fertilizer_applied:
+            return Response(
+                {'error': 'Fertilizer can only be applied once to a plant.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        required_min_growth_time = fertilizer.boost + 5
+        if bed_plant.growth_time <= required_min_growth_time:
+            return Response(
+                {'error':  "The plant's growth time must be at least 5 days longer than the fertilizer's boost time." },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        balance_response = PersonService.update_wallet_balance(user, fertilizer.price)
+        if balance_response.status_code != status.HTTP_200_OK:
+            return balance_response
+
         new_growth_time = bed_plant.growth_time - fertilizer.boost
         bed_plant.growth_time = new_growth_time
         BedPlantFertilizer.objects.create(bed_plant=bed_plant, fertilizer=fertilizer)

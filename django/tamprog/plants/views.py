@@ -306,11 +306,33 @@ class BedPlantViewSet(viewsets.ModelViewSet):
                 ]
             ),
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(
-                description='No suitable fertilizer found',
+                description='Error with the fertilization process',
                 examples=[
                     OpenApiExample(
                         name='No suitable fertilizer',
                         value={'error': 'No suitable fertilizer found'},
+                    ),
+                    OpenApiExample(
+                        name='Fertilizer already applied',
+                        value={'error': 'Fertilizer can only be applied once to a plant.'},
+                    ),
+                    OpenApiExample(
+                        name='Insufficient funds',
+                        value={'error': 'Insufficient funds in the wallet. Please top up your balance.'},
+                    ),
+                    OpenApiExample(
+                        name='Growth time is too short',
+                        value={
+                            'error': "The plant's growth time must be at least 5 days longer than the fertilizer's boost time."},
+                    ),
+                ]
+            ),
+            status.HTTP_500_INTERNAL_SERVER_ERROR: OpenApiResponse(
+                description='Unexpected error occurred',
+                examples=[
+                    OpenApiExample(
+                        name='Unexpected error occurred',
+                        value={'error': 'Unexpected error occurred'},
                     )
                 ]
             ),
@@ -318,10 +340,18 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     )
     @action(detail=True, methods=['post'])
     def fertilize(self, request, pk=None):
+        user = self.request.user
         bed_plant = self.get_object()
         plant_name = bed_plant.plant.name
         fertilizer = Fertilizer.objects.filter(compound__icontains=plant_name).first()
-        return BedPlantService.fertilize_plant(bed_plant, fertilizer)
+        response = BedPlantService.fertilize_plant(bed_plant, fertilizer, user)
+
+        if not isinstance(response, Response):
+            return Response(
+                {'error': 'Unexpected error occurred'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        return response
 
     @extend_schema(
         summary='Water a plant',
