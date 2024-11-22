@@ -3,6 +3,7 @@ from user.models import Person
 from .models import Bed
 from .queries import *
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 from rest_framework import status
 # These \/ imports for the Celery
 from celery import shared_task
@@ -16,7 +17,9 @@ def get_sorted_fields_task(sort_by: str = 'id', ascending: bool = True):
         query = GetFieldsSortedByID(ascending)
     elif sort_by == 'name':
         query = GetFieldsSortedByName(ascending)
-    elif sort_by == 'count_beds':
+    elif sort_by == 'count_free_beds':
+        query = GetFieldsSortedByCountBeds(ascending)
+    elif sort_by == 'all_beds':
         query = GetFieldsSortedByCountBeds(ascending)
     elif sort_by == 'price':
         query = GetFieldsSortedByPrice(ascending)
@@ -26,6 +29,16 @@ def get_sorted_fields_task(sort_by: str = 'id', ascending: bool = True):
     return [model_to_dict(field) for field in queryset]
 
 class FieldService:
+    @staticmethod
+    def create_field(name: str, all_beds: int, price: float):
+        field = Field.objects.create(
+            name=name,
+            all_beds=all_beds,
+            count_free_beds=all_beds,
+            price=price,
+        )
+        return field
+
     @staticmethod 
     def get_sorted_fields(sort_by: str = 'price', ascending: bool = True):
         task = get_sorted_fields_task.delay(sort_by, ascending)
@@ -33,6 +46,19 @@ class FieldService:
         return result.get(timeout=settings.DJANGO_ASYNC_TIMEOUT_S)
     
 class BedService:
+    @staticmethod
+    def create_bed(field: Field, rented_by: Person = None):
+        if Bed.objects.filter(field=field).count() >= field.all_beds:
+            return Response(
+                {"error": f"There is no space left on the field '{field.name}'."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        bed = Bed.objects.create(field=field, rented_by=rented_by)
+        return Response(
+            {"message": "Bed successfully created."},
+            status=status.HTTP_201_CREATED
+        )
+
     @staticmethod
     def rent_bed(bed_id: int, person: Person):
         try:
@@ -55,7 +81,7 @@ class BedService:
             bed.save()
 
             field = bed.field
-            field.count_beds -= 1
+            field.count_free_beds -= 1
             field.save()
             return Response(
                 {"message": "Bed successfully rented."},
@@ -89,7 +115,7 @@ class BedService:
             bed.save()
 
             field = bed.field
-            field.count_beds += 1
+            field.count_free_beds += 1
             field.save()
             return Response(
                 {"message": "Bed successfully released."},

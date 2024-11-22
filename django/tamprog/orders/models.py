@@ -9,7 +9,7 @@ class Order(models.Model):
     worker = models.ForeignKey(Worker, on_delete=models.CASCADE)
     bed = models.ForeignKey(Bed, on_delete=models.CASCADE)
     plant = models.ForeignKey(Plant, on_delete=models.CASCADE)
-    action = models.CharField(max_length=100)
+    comments = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     completed_at = models.DateTimeField(null=True, blank=True)
     total_cost = models.FloatField(default=0.00, validators=[MinValueValidator(0)])

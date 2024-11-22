@@ -2,7 +2,6 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import BedPlant
 from .services import BedPlantService
-
 from rest_framework.response import Response
 from rest_framework import status
 from garden.services import BedService

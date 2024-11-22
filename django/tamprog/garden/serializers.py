@@ -4,7 +4,8 @@ from .models import Field, Bed
 class FieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = Field
-        fields = '__all__'
+        fields = ['id', 'name', 'count_free_beds', 'all_beds', 'price']
+        read_only_fields = ['count_free_beds']
 
 class BedSerializer(serializers.ModelSerializer):
     class Meta:

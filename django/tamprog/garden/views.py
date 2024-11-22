@@ -2,6 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 from .permission import *
 from .models import Field, Bed
 from .serializers import FieldSerializer, BedSerializer
@@ -19,8 +20,14 @@ def FieldParameters(required=False):
             required=required,
         ),
         OpenApiParameter(
-            name="count_beds",
-            description="Count of beds",
+            name="count_free_beds",
+            description="Count of free beds",
+            type=int,
+            required=required,
+        ),
+        OpenApiParameter(
+            name="all_beds",
+            description="Count of all beds",
             type=int,
             required=required,
         ),
@@ -39,8 +46,10 @@ class FieldViewSet(viewsets.ModelViewSet):
     permission_classes = [AgronomistPermission]
 
     def perform_create(self, serializer):
-        count_beds = self.request.data.get('count_beds', 0)
-        serializer.save(count_beds=count_beds)
+        name = serializer.validated_data['name']
+        all_beds = serializer.validated_data['all_beds']
+        price = serializer.validated_data['price']
+        FieldService.create_field(name, all_beds, price)
 
     @extend_schema(
         summary='List all fields',
@@ -56,7 +65,7 @@ class FieldViewSet(viewsets.ModelViewSet):
                 type=str,
                 description='Sort by field',
                 required=False,
-                enum=['id', 'name', 'count_beds', 'price'],
+                enum=['id', 'name', 'count_free_beds', 'all_beds', 'price'],
             ),
             OpenApiParameter(
                 name='asc',
@@ -234,6 +243,13 @@ class BedViewSet(viewsets.ModelViewSet):
     )
     def partial_update(self, request, *args, **kwargs):
         return super().partial_update(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        field = serializer.validated_data['field']
+        rented_by = serializer.validated_data.get('rented_by', None)
+        response = BedService.create_bed(field, rented_by)
+        if isinstance(response, Response) and response.status_code != status.HTTP_201_CREATED:
+            raise ValidationError(response.data["error"])
 
     @extend_schema(
         summary='List all beds for current user',

@@ -24,8 +24,8 @@ def OrderParameters(required=False):
             required=required,
         ),
         OpenApiParameter(
-            name="action",
-            description="Action to perform",
+            name="comments",
+            description="Comment to perform",
             type=str,
             required=required,
         ),
@@ -122,7 +122,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 value={
                     "bed": 1,
                     "plant": 1,
-                    "action": "water",
+                    "comments": "water",
                     "completed_at": "2022-01-01T00:00:00Z"
                 },
                 request_only=True,
@@ -148,12 +148,11 @@ class OrderViewSet(viewsets.ModelViewSet):
         user = self.request.user
         bed = serializer.validated_data['bed']
         plant = serializer.validated_data['plant']
-        action = serializer.validated_data['action']
-        response = OrderService.create_order(user, bed, plant, action)
+        comments = serializer.validated_data['action']
+        response = OrderService.create_order(user, bed, plant, comments)
 
         if isinstance(response, Response) and response.status_code != status.HTTP_201_CREATED:
             raise ValidationError(response.data["error"])
-        serializer.save()
 
     def perform_update(self, serializer):
         order = serializer.save()
