@@ -10,6 +10,10 @@ from celery.result import AsyncResult
 from django.forms.models import model_to_dict
 from django.conf import settings
 
+from logging import getLogger
+
+log = getLogger(__name__)
+
 @shared_task
 def get_sorted_fields_task(sort_by: str = 'id', ascending: bool = True):
     if sort_by == 'id':
@@ -23,8 +27,10 @@ def get_sorted_fields_task(sort_by: str = 'id', ascending: bool = True):
     elif sort_by == 'price':
         query = GetFieldsSortedByPrice(ascending)
     else:
+        log.warning(f"Invalid sort_by parameter: {sort_by}")
         return []
     queryset = query.execute()
+    log.debug(f"Fields sorted by {sort_by} in {'ascending' if ascending else 'descending'} order")
     return [model_to_dict(field) for field in queryset]
 
 class FieldService:
@@ -42,7 +48,8 @@ class FieldService:
     def get_sorted_fields(sort_by: str = 'price', ascending: bool = True):
         task = get_sorted_fields_task.delay(sort_by, ascending)
         result = AsyncResult(task.id)
-        return result.get(timeout=settings.DJANGO_ASYNC_TIMEOUT_S)
+        result = result.get(timeout=settings.DJANGO_ASYNC_TIMEOUT_S)
+        return result
     
 class BedService:
     @staticmethod
@@ -64,6 +71,7 @@ class BedService:
             bed = Bed.objects.get(id=bed_id)
 
             if bed.is_rented:
+                log.warning(f"Bed with ID={bed_id} is already rented.")
                 return Response(
                     {"error": "This bed is already rented."},
                     status=status.HTTP_400_BAD_REQUEST
@@ -82,11 +90,13 @@ class BedService:
             field = bed.field
             field.count_free_beds -= 1
             field.save()
+            log.info(f"Bed with ID={bed_id} successfully rented.")
             return Response(
                 {"message": "Bed successfully rented."},
                 status=status.HTTP_200_OK
             )
-        except Bed.DoesNotExist:
+        except Bed.DoesNotExist as e:
+            log.exception(e)
             return Response(
                 {"error": "Bed with the given ID does not exist."},
                 status=status.HTTP_404_NOT_FOUND
@@ -105,6 +115,7 @@ class BedService:
                 )
 
             if not bed.is_rented:
+                log.warning(f"Bed with ID={bed_id} is not currently rented.")
                 return Response(
                     {"error": "This bed is not currently rented."},
                     status=status.HTTP_400_BAD_REQUEST
@@ -116,11 +127,13 @@ class BedService:
             field = bed.field
             field.count_free_beds += 1
             field.save()
+            log.info(f"Bed with ID={bed_id} successfully released.")
             return Response(
                 {"message": "Bed successfully released."},
                 status=status.HTTP_200_OK
             )
-        except Bed.DoesNotExist:
+        except Bed.DoesNotExist as e:
+            log.exception(e)
             return Response(
                 {"error": "Bed with the given ID does not exist."},
                 status=status.HTTP_404_NOT_FOUND
@@ -129,10 +142,13 @@ class BedService:
 
     @staticmethod
     def get_user_beds(user):
+        log.debug(f"Getting beds rented by user with ID={user.id}")
         return Bed.objects.filter(rented_by=user)
 
     @staticmethod
     def filter_beds(is_rented=None):
         if is_rented is not None:
+            log.debug(f"Filtering beds by is_rented={is_rented}")
             return Bed.objects.filter(is_rented=is_rented)
+        log.debug("Getting all beds")
         return Bed.objects.all()

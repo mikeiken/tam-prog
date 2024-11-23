@@ -2,6 +2,8 @@ import pytest
 from django.utils import timezone
 from .services import OrderService
 from orders.models import Order
+from rest_framework import status
+from rest_framework.response import Response
 
 @pytest.mark.django_db
 def test_filter_orders(api_client, user, orders):
@@ -28,29 +30,34 @@ def test_calculate_total_cost(beds, plants, workers):
 
 @pytest.mark.django_db
 def test_create_order_success(user, workers, beds, plants, mocker):
-    mocker.patch("user.services.PersonService.update_wallet_balance", return_value=True)
+    mocker.patch(
+        "user.services.PersonService.update_wallet_balance",
+        return_value=Response(status=status.HTTP_200_OK)
+    )
     action = "planting"
-
-    # Проверяем создание заказа для каждой комбинации worker, bed, plant
     for worker, bed, plant in zip(workers, beds, plants):
-        order = OrderService.create_order(user, worker, bed, plant, action)
-        assert order is not None
+        response = OrderService.create_order(user, bed, plant, action)
+        assert response.status_code == status.HTTP_201_CREATED
+        order_id = response.data['order_id']
+        order = Order.objects.get(id=order_id)
         assert order.user == user
-        assert order.worker == worker
+        assert order.worker is not None
         assert order.bed == bed
         assert order.plant == plant
-        assert order.total_cost == bed.field.price + plant.price + worker.price
+        assert order.total_cost == bed.field.price + plant.price + order.worker.price
 
 
 @pytest.mark.django_db
 def test_create_order_insufficient_funds(user, workers, beds, plants, mocker):
-    mocker.patch("user.services.PersonService.update_wallet_balance", return_value=False)
+    mocker.patch(
+        "user.services.PersonService.update_wallet_balance",
+        return_value=Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "Insufficient funds"})
+    )
     action = "planting"
-
-    # Проверяем создание заказа для каждой комбинации worker, bed, plant
     for worker, bed, plant in zip(workers, beds, plants):
-        order = OrderService.create_order(user, worker, bed, plant, action)
-        assert order is None
+        response = OrderService.create_order(user, bed, plant, action)
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert response.data['error'] == "Insufficient funds"
 
 
 @pytest.mark.django_db
@@ -66,14 +73,9 @@ def test_complete_order(orders):
 def test_filter_orders_completed(orders, mocker):
     mock_time = timezone.now()
     mocker.patch("django.utils.timezone.now", return_value=mock_time)
-
-    # Завершаем все заказы
     for order in orders:
         OrderService.complete_order(order)
-
     completed_orders = OrderService.filter_orders(is_completed=True)
-
-    # Проверяем, что все заказы в completed_orders имеют заполненное поле completed_at
     assert all(order.completed_at is not None for order in completed_orders)
     assert len(completed_orders) == sum(1 for order in orders if order.completed_at is not None)
 
@@ -81,8 +83,6 @@ def test_filter_orders_completed(orders, mocker):
 @pytest.mark.django_db
 def test_filter_orders_not_completed(orders):
     not_completed_orders = OrderService.filter_orders(is_completed=False)
-
-    # Проверяем, что все заказы в not_completed_orders не имеют значения в completed_at
     assert all(order.completed_at is None for order in not_completed_orders)
     assert len(not_completed_orders) == sum(1 for order in orders if order.completed_at is None)
 

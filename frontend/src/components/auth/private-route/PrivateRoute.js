@@ -1,17 +1,16 @@
-import React from 'react';
-import NotFound from '../../not-found/NotFound';
+import React from "react";
+import { Navigate } from "react-router-dom";
 
-// Функция, которая проверяет, авторизован ли пользователь
 const PrivateRoute = ({ children }) => {
-    const isAuthenticated = localStorage.getItem('accessToken'); // или другой механизм авторизации
+  const isAuthenticated = localStorage.getItem("accessToken"); // Проверка авторизации
 
-    // Если пользователь не авторизован, показываем страницу NotFound
-    if (!isAuthenticated) {
-        return <NotFound />;
-    }
+  // Если пользователь не авторизован, перенаправляем на страницу 404 или на логин
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
 
-    // Если авторизован, рендерим переданные дочерние компоненты
-    return children;
+  // Возвращаем дочерние элементы или вложенные маршруты через Outlet
+  return <>{children}</>;
 };
 
 export default PrivateRoute;

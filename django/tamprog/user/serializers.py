@@ -3,6 +3,9 @@ from .models import Person, Worker
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from rest_framework_simplejwt.tokens import RefreshToken
+from logging import getLogger
+
+log = getLogger(__name__)
 
 User = get_user_model()
 
@@ -19,7 +22,10 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def validate_phone_number(self, value):
         if User.objects.filter(phone_number=value).exists():
-            raise serializers.ValidationError("User with this phone number already exists.")
+            e = serializers.ValidationError("User with this phone number already exists.")
+            log.exception(e)
+            raise e
+        log.debug("Phone number is valid")
         return value
 
 class LoginSerializer(serializers.Serializer):

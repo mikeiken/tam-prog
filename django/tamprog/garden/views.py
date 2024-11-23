@@ -2,11 +2,13 @@ from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.exceptions import ValidationError
 from .permission import *
 from .models import Field, Bed
 from .serializers import FieldSerializer, BedSerializer
 from .services import *
+from logging import getLogger
+
+log = getLogger(__name__)
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, \
     OpenApiResponse, OpenApiParameter, OpenApiExample
@@ -46,6 +48,7 @@ class FieldViewSet(viewsets.ModelViewSet):
     permission_classes = [AgronomistPermission]
 
     def perform_create(self, serializer):
+        log.debug(f"Creating field with data: {self.request.data}")
         name = serializer.validated_data['name']
         all_beds = serializer.validated_data['all_beds']
         price = serializer.validated_data['price']
@@ -80,6 +83,7 @@ class FieldViewSet(viewsets.ModelViewSet):
         ascending = request.query_params.get('asc', 'true').lower() == 'true'
         fields = FieldService.get_sorted_fields(sort_by, ascending)
         serializer = self.get_serializer(fields, many=True)
+        log.debug(f"Returning list of fields: {serializer.data}")
         return Response(serializer.data)
     
     @extend_schema(
@@ -92,6 +96,7 @@ class FieldViewSet(viewsets.ModelViewSet):
         },
     )
     def retrieve(self, request, *args, **kwargs):
+        log.debug(f"Retrieving field with ID={kwargs['pk']}")
         return super().retrieve(request, *args, **kwargs)
     
     @extend_schema(
@@ -104,6 +109,7 @@ class FieldViewSet(viewsets.ModelViewSet):
         parameters=FieldParameters(required=True),
     )
     def update(self, request, *args, **kwargs):
+        log.debug(f"Updating field with ID={kwargs['pk']} with data: {request.data}")
         return super().update(request, *args, **kwargs)
     
     @extend_schema(
@@ -116,6 +122,7 @@ class FieldViewSet(viewsets.ModelViewSet):
         parameters=FieldParameters(),
     )
     def partial_update(self, request, *args, **kwargs):
+        log.debug(f"Partially updating field with ID={kwargs['pk']} with data: {request.data}")
         return super().partial_update(request, *args, **kwargs)
     
     @extend_schema(
@@ -127,6 +134,7 @@ class FieldViewSet(viewsets.ModelViewSet):
         },
     )
     def destroy(self, request, *args, **kwargs):
+        log.debug(f"Deleting field with ID={kwargs['pk']}")
         return super().destroy(request, *args, **kwargs)
     
     @extend_schema(
@@ -139,6 +147,7 @@ class FieldViewSet(viewsets.ModelViewSet):
         parameters=FieldParameters(required=True),
     )
     def create(self, request, *args, **kwargs):
+        log.debug(f"Creating field with data: {request.data}")
         return super().create(request, *args, **kwargs)
 
 def BedParameters(required=False):
@@ -178,6 +187,7 @@ class BedViewSet(viewsets.ModelViewSet):
         }
     )
     def create(self, request, *args, **kwargs):
+        log.debug(f"Creating bed with data: {request.data}")
         return super().create(request, *args, **kwargs)
 
     @extend_schema(
@@ -191,6 +201,7 @@ class BedViewSet(viewsets.ModelViewSet):
         },
     )
     def list(self, request, *args, **kwargs):
+        log.debug(f"Listing all beds")
         return super().list(request, *args, **kwargs)
     
     @extend_schema(
@@ -204,6 +215,7 @@ class BedViewSet(viewsets.ModelViewSet):
         },
     )
     def retrieve(self, request, *args, **kwargs):
+        log.debug(f"Retrieving bed with ID={kwargs['pk']}")
         return super().retrieve(request, *args, **kwargs)
     
     @extend_schema(
@@ -217,6 +229,7 @@ class BedViewSet(viewsets.ModelViewSet):
         parameters=BedParameters(required=True),
     )
     def update(self, request, *args, **kwargs):
+        log.debug(f"Updating bed with ID={kwargs['pk']} with data: {request.data}")
         return super().update(request, *args, **kwargs)
     
     @extend_schema(
@@ -229,6 +242,7 @@ class BedViewSet(viewsets.ModelViewSet):
         },
     )
     def destroy(self, request, *args, **kwargs):
+        log.debug(f"Deleting bed with ID={kwargs['pk']}")
         return super().destroy(request, *args, **kwargs)
     
     @extend_schema(
@@ -242,6 +256,7 @@ class BedViewSet(viewsets.ModelViewSet):
         parameters=BedParameters(),
     )
     def partial_update(self, request, *args, **kwargs):
+        log.debug(f"Partially updating bed with ID={kwargs['pk']} with data: {request.data}")
         return super().partial_update(request, *args, **kwargs)
 
     def perform_create(self, serializer):
@@ -265,6 +280,7 @@ class BedViewSet(viewsets.ModelViewSet):
     def my_beds(self, request):
         beds = BedService.get_user_beds(request.user)
         serializer = self.get_serializer(beds, many=True)
+        log.debug(f"Returning list of beds rented by user: {serializer.data}")
         return Response(serializer.data)
 
     @extend_schema(
@@ -297,6 +313,7 @@ class BedViewSet(viewsets.ModelViewSet):
     def rent(self, request, pk=None):
         bed = self.get_object()
         person = request.user
+        log.debug(f"Renting bed with ID={bed.id} for user with ID={person.id}")
         return BedService.rent_bed(bed.id, person)
 
     @extend_schema(
@@ -328,11 +345,14 @@ class BedViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def release(self, request, pk=None):
         bed = self.get_object()
+        log.debug(f"Releasing bed with ID={bed.id}")
         return BedService.release_bed(bed.id)
 
 
     def get_queryset(self):
         is_rented = self.request.query_params.get('is_rented', None)
         if is_rented is not None:
+            log.debug(f"Filtering beds by is_rented={is_rented}")
             return BedService.filter_beds(is_rented=is_rented.lower() == 'true')
+        log.debug("Returning all beds")
         return Bed.objects.all()

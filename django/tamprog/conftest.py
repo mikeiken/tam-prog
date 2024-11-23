@@ -26,6 +26,17 @@ def user():
     return user
 
 @pytest.fixture
+def register_data():
+    """Фикстура для данных регистрации пользователя."""
+    return {
+        'username': 'newuser',
+        'phone_number': '+1234567890',
+        'full_name': 'New User',
+        'password': 'newpassword',
+        'wallet_balance': 100.00
+    }
+
+@pytest.fixture
 def person():
     return mixer.blend('user.Person')
 
