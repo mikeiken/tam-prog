@@ -35,7 +35,7 @@ export default function RegisterForm() {
       localStorage.setItem("accessToken", response.data.access);
       localStorage.setItem("refreshToken", response.data.refresh);
       navigate("/login");
-      alert("Регистрация прошла успешно!");
+      //alert("Регистрация прошла успешно!");
     } catch (error) {
       console.error("Register failed:", error);
       setErrorMessage("Registration failed. Please try again.");
