@@ -253,7 +253,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
 
     @extend_schema(
         summary='Сhecking growth status',
-        description='Check the plant growth status and, if ripe, harvest',
+        description='Check the plant growth status',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
                 description='Plant harvested',
@@ -267,7 +267,7 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['get'])
     def check_growth(self, request, pk=None):
         bed_plant = self.get_object()
-        result = BedPlantService.check_and_harvest_plant(bed_plant)
+        result = BedPlantService.check_plant(bed_plant)
         if result:
             return result
         return Response({'status': f'Remaining growth time: {bed_plant.remaining_growth_time} days'})

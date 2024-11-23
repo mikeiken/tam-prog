@@ -39,7 +39,8 @@ class BedPlantService:
                 {"error": "Planting is only allowed through an active order."},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        if BedPlant.objects.filter(bed=bed, plant=plant).exists():
+        #if BedPlant.objects.filter(bed=bed, plant=plant).exists():
+        if not BedPlant.objects.filter(bed=bed, plant=plant, is_harvested=True).exists():
             return Response(
                 {"error": "This bed already has the specified plant."},
                 status=status.HTTP_400_BAD_REQUEST
@@ -53,12 +54,10 @@ class BedPlantService:
 
 
     @staticmethod
-    def check_and_harvest_plant(bed_plant):
+    def check_plant(bed_plant):
         if bed_plant.is_grown:
-            bed_plant.is_harvested = True
-            bed_plant.save(update_fields=['is_harvested'])
-            return BedPlantService.harvest_plant(bed_plant)
-        return None
+            return True
+        return False
 
 
     @staticmethod
@@ -68,8 +67,8 @@ class BedPlantService:
                 {'error': 'Plant is not fully grown yet'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        bed_plant.is_harvested = True
-        bed_plant.save(update_fields=['is_harvested'])
+        #bed_plant.is_harvested = True
+        #bed_plant.save(update_fields=['is_harvested'])
         return Response(
             {'status': 'Plant harvested'},
             status=status.HTTP_200_OK
@@ -123,7 +122,9 @@ class BedPlantService:
                 {'error': 'Plant must be harvested before digging up'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        bed_plant.delete()
+        bed_plant.is_harvested = True
+        bed_plant.save(update_fields=['is_harvested'])
+        #bed_plant.delete()
         return Response(
             {'status': 'Bed is now empty'},
             status=status.HTTP_200_OK
