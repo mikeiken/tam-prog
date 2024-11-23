@@ -1,3 +1,5 @@
+from orders.models import Order
+from user.services import PersonService
 from .models import BedPlant
 from fertilizer.models import BedPlantFertilizer
 from .queries import GetPlantsSortedByPrice
@@ -83,7 +85,7 @@ class BedPlantService:
                 status=status.HTTP_400_BAD_REQUEST
             )
         #if BedPlant.objects.filter(bed=bed, plant=plant).exists():
-        if not BedPlant.objects.filter(bed=bed, plant=plant, is_harvested=True).exists():
+        if BedPlant.objects.filter(bed=bed, plant=plant, is_harvested=False).exists():
             return Response(
                 {"error": "This bed already has the specified plant."},
                 status=status.HTTP_400_BAD_REQUEST
