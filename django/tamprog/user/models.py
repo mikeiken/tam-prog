@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
-from django.core.validators import RegexValidator
+from django.core.validators import RegexValidator, MinValueValidator
 from django.core.exceptions import ValidationError
 import re
 from logging import getLogger
@@ -35,7 +35,7 @@ class PersonManager(BaseUserManager):
 
 class Person(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=255, unique=True)
-    wallet_balance = models.FloatField(default=0.00)
+    wallet_balance = models.FloatField(default=0.00, validators=[MinValueValidator(0)])
     full_name = models.CharField(max_length=255)
     phone_number = models.CharField(
         max_length=15,
@@ -60,5 +60,5 @@ class Agronomist(models.Model):
 
 class Worker(models.Model):
     name = models.CharField(max_length=255)
-    price = models.FloatField(default=0.00)
+    price = models.FloatField(default=0.00, validators=[MinValueValidator(0)])
     description = models.TextField()

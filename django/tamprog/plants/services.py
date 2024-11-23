@@ -1,3 +1,5 @@
+from orders.models import Order
+from user.services import PersonService
 from .models import BedPlant
 from fertilizer.models import BedPlantFertilizer
 from .queries import GetPlantsSortedByPrice
@@ -18,7 +20,8 @@ class PlantService:
         return query.execute()
 
     @staticmethod
-    def fuzzy_search(query, threshold=75):
+    def fuzzy_search(query, threshold=70):
+        results = []
         plants = Plant.objects.all()
         query_lower = query.lower()
 
@@ -76,36 +79,76 @@ class BedPlantService:
 
     @staticmethod
     def plant_in_bed(bed, plant):
+        if not Order.objects.filter(bed=bed, completed_at__isnull=True).exists():
+            return Response(
+                {"error": "Planting is only allowed through an active order."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        #if BedPlant.objects.filter(bed=bed, plant=plant).exists():
+        if BedPlant.objects.filter(bed=bed, plant=plant, is_harvested=False).exists():
+            return Response(
+                {"error": "This bed already has the specified plant."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         growth_time = plant.growth_time
-        bed_plant = BedPlant.objects.create(bed=bed, plant=plant, growth_time=growth_time)
+        BedPlant.objects.create(bed=bed, plant=plant, growth_time=growth_time)
         log.debug(f"Plant {plant.name} planted in bed with ID={bed.id}")
-        return bed_plant
+        return Response(
+            {"message": "Plant successfully planted in the bed."},
+            status=status.HTTP_201_CREATED
+        )
+
+
+    @staticmethod
+    def check_plant(bed_plant):
+        if bed_plant.is_grown:
+            return True
+        return False
+
 
     @staticmethod
     def harvest_plant(bed_plant):
-        if not bed_plant:
+        if not bed_plant.is_grown:
             log.warning("Plant not found")
             return Response(
-                {'error': 'Plant not found'},
+                {'error': 'Plant is not fully grown yet'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-
-        bed_plant.delete()
+        #bed_plant.is_harvested = True
+        #bed_plant.save(update_fields=['is_harvested'])
         log.info("Plant harvested")
         return Response(
-            {'status': 'plant dug up'},
+            {'status': 'Plant harvested'},
             status=status.HTTP_200_OK
         )
 
 
     @staticmethod
-    def fertilize_plant(bed_plant, fertilizer):
+    def fertilize_plant(bed_plant, fertilizer, user):
         if not fertilizer:
             log.warning("No suitable fertilizer found")
             return Response(
                 {'error': 'No suitable fertilizer found'},
                 status=status.HTTP_400_BAD_REQUEST
             )
+
+        if bed_plant.fertilizer_applied:
+            return Response(
+                {'error': 'Fertilizer can only be applied once to a plant.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        required_min_growth_time = fertilizer.boost + 5
+        if bed_plant.growth_time <= required_min_growth_time:
+            return Response(
+                {'error':  "The plant's growth time must be at least 5 days longer than the fertilizer's boost time." },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        balance_response = PersonService.update_wallet_balance(user, fertilizer.price)
+        if balance_response.status_code != status.HTTP_200_OK:
+            return balance_response
+
         new_growth_time = bed_plant.growth_time - fertilizer.boost
         bed_plant.growth_time = new_growth_time
         BedPlantFertilizer.objects.create(bed_plant=bed_plant, fertilizer=fertilizer)
@@ -126,17 +169,18 @@ class BedPlantService:
 
     @staticmethod
     def dig_up_plant(bed_plant):
-        if not bed_plant:
+        if not bed_plant.is_harvested:
             log.warning("Plant not found")
             return Response(
-                {'error': 'Plant not found'},
+                {'error': 'Plant must be harvested before digging up'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-
-        bed_plant.delete()
+        bed_plant.is_harvested = True
+        bed_plant.save(update_fields=['is_harvested'])
+        #bed_plant.delete()
         log.info("Plant dug up")
         return Response(
-            {'status': 'plant dug up'},
+            {'status': 'Bed is now empty'},
             status=status.HTTP_200_OK
         )
 

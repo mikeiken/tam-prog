@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from .permissions import *
+from rest_framework.exceptions import ValidationError
 from .models import Plant, BedPlant
 from .serializers import PlantSerializer, BedPlantSerializer
 from .services import *
@@ -314,8 +315,33 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         bed = serializer.validated_data['bed']
         plant = serializer.validated_data['plant']
-        BedPlantService.plant_in_bed(bed, plant)
+        response = BedPlantService.plant_in_bed(bed, plant)
         log.info(f"Plant {plant.name} planted in bed with ID={bed.id}")
+        if isinstance(response, Response) and response.status_code != status.HTTP_201_CREATED:
+            raise ValidationError(response.data["error"])
+        serializer.save()
+
+    @extend_schema(
+        summary='Сhecking growth status',
+        description='Check the plant growth status',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Plant harvested',
+                response=BedPlantSerializer(many=True)
+            ),
+            status.HTTP_400_BAD_REQUEST: OpenApiResponse(
+                description='Plant not found',
+            ),
+        },
+    )
+    @action(detail=True, methods=['get'])
+    def check_growth(self, request, pk=None):
+        bed_plant = self.get_object()
+        result = BedPlantService.check_plant(bed_plant)
+        if result:
+            return result
+        return Response({'status': f'Remaining growth time: {bed_plant.remaining_growth_time} days'})
+
 
     @extend_schema(
         summary='Harvest a plant',
@@ -351,11 +377,33 @@ class BedPlantViewSet(viewsets.ModelViewSet):
                 ]
             ),
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(
-                description='No suitable fertilizer found',
+                description='Error with the fertilization process',
                 examples=[
                     OpenApiExample(
                         name='No suitable fertilizer',
                         value={'error': 'No suitable fertilizer found'},
+                    ),
+                    OpenApiExample(
+                        name='Fertilizer already applied',
+                        value={'error': 'Fertilizer can only be applied once to a plant.'},
+                    ),
+                    OpenApiExample(
+                        name='Insufficient funds',
+                        value={'error': 'Insufficient funds in the wallet. Please top up your balance.'},
+                    ),
+                    OpenApiExample(
+                        name='Growth time is too short',
+                        value={
+                            'error': "The plant's growth time must be at least 5 days longer than the fertilizer's boost time."},
+                    ),
+                ]
+            ),
+            status.HTTP_500_INTERNAL_SERVER_ERROR: OpenApiResponse(
+                description='Unexpected error occurred',
+                examples=[
+                    OpenApiExample(
+                        name='Unexpected error occurred',
+                        value={'error': 'Unexpected error occurred'},
                     )
                 ]
             ),
@@ -363,11 +411,19 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     )
     @action(detail=True, methods=['post'])
     def fertilize(self, request, pk=None):
+        user = self.request.user
         bed_plant = self.get_object()
         plant_name = bed_plant.plant.name
         fertilizer = Fertilizer.objects.filter(compound__icontains=plant_name).first()
         log.debug(f"Fertilizing plant {plant_name} with {fertilizer.name}")
-        return BedPlantService.fertilize_plant(bed_plant, fertilizer)
+        response = BedPlantService.fertilize_plant(bed_plant, fertilizer, user)
+
+        if not isinstance(response, Response):
+            return Response(
+                {'error': 'Unexpected error occurred'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        return response
 
     @extend_schema(
         summary='Water a plant',
