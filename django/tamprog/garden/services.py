@@ -3,7 +3,6 @@ from user.models import Person
 from .models import Bed
 from .queries import *
 from rest_framework.response import Response
-from rest_framework.exceptions import ValidationError
 from rest_framework import status
 # These \/ imports for the Celery
 from celery import shared_task

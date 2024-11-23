@@ -148,7 +148,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         user = self.request.user
         bed = serializer.validated_data['bed']
         plant = serializer.validated_data['plant']
-        comments = serializer.validated_data['action']
+        comments = serializer.validated_data['comments']
         response = OrderService.create_order(user, bed, plant, comments)
 
         if isinstance(response, Response) and response.status_code != status.HTTP_201_CREATED:

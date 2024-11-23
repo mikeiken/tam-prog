@@ -35,7 +35,7 @@ class OrderService:
             worker=worker,
             bed=bed,
             plant=plant,
-            comments=action,
+            comments=comments,
             total_cost=total_cost
         )
         rent_response = BedService.rent_bed(bed.id, user)
