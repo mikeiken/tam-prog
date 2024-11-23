@@ -20,9 +20,17 @@ html {
 
 .image-container {
   position: relative;
-  /* Относительное позиционирование для контейнера */
   width: 100%;
-  /* Занимает всю ширину */
+  height: 100vh;
+}
+.custom-text {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  background-color: cornsilk;
+  position: relative;
+  z-index: 10;
+  text-align: center;
 }
 
 .text-overlay {
@@ -51,7 +59,7 @@ html {
 }
 
 .landing {
-  width: 200vh;
+  width: 300vh;
   min-height: 100vh;
   /* Минимальная высота для контента */
   background-color: whitesmoke;
