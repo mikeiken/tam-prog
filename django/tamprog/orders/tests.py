@@ -34,10 +34,20 @@ def test_create_order_success(user, workers, beds, plants, mocker):
         "user.services.PersonService.update_wallet_balance",
         return_value=Response(status=status.HTTP_200_OK)
     )
+    mocker.patch(
+        "garden.services.BedService.rent_bed",
+        return_value=Response(status=status.HTTP_200_OK)
+    )
+    mocker.patch(
+        "plants.services.BedPlantService.plant_in_bed",
+        return_value=Response(status=status.HTTP_200_OK)
+    )
+
     action = "planting"
-    for worker, bed, plant in zip(workers, beds, plants):
+    for bed, plant in zip(beds, plants):
         response = OrderService.create_order(user, bed, plant, action)
-        assert response.status_code == status.HTTP_201_CREATED
+        assert response.status_code == status.HTTP_201_CREATED, f"Unexpected status code: {response.status_code}"
+        assert 'order_id' in response.data, f"Response data: {response.data}"
         order_id = response.data['order_id']
         order = Order.objects.get(id=order_id)
         assert order.user == user
@@ -45,7 +55,6 @@ def test_create_order_success(user, workers, beds, plants, mocker):
         assert order.bed == bed
         assert order.plant == plant
         assert order.total_cost == bed.field.price + plant.price + order.worker.price
-
 
 @pytest.mark.django_db
 def test_create_order_insufficient_funds(user, workers, beds, plants, mocker):
@@ -95,4 +104,5 @@ def test_filter_orders_all(orders):
     assert len(all_orders) == len(orders)
     for order in all_orders:
         assert order in orders
+
 

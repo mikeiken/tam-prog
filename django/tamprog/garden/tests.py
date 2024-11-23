@@ -44,29 +44,32 @@ def test_rent_bed_already_rented(beds, person):
 @pytest.mark.django_db
 def test_rent_bed_success(beds, person):
     bed = next(b for b in beds if not b.is_rented)
-    initial_count = bed.field.count_beds
+    order = mixer.blend('orders.Order', bed=bed, completed_at=None)
+    initial_count = bed.field.count_free_beds
     result = BedService.rent_bed(bed_id=bed.id, person=person)
     bed.refresh_from_db()
     assert result.status_code == 200
     assert bed.is_rented is True
     assert bed.rented_by == person
-    assert bed.field.count_beds == initial_count - 1
+    assert bed.field.count_free_beds == initial_count - 1
+
 
 
 @pytest.mark.django_db
 def test_release_bed_success(beds, person):
     bed = beds[0]
+    field = bed.field
     bed.is_rented = True
     bed.rented_by = person
     bed.save()
-    initial_count = bed.field.count_beds
+    initial_free_beds = field.count_free_beds
     result = BedService.release_bed(bed_id=bed.id)
     bed.refresh_from_db()
+    field.refresh_from_db()
     assert result.status_code == 200
     assert bed.is_rented is False
     assert bed.rented_by is None
-    assert bed.field.count_beds == initial_count + 1
-
+    assert field.count_free_beds == initial_free_beds + 1
 
 @pytest.mark.django_db
 def test_release_bed_not_rented(beds):

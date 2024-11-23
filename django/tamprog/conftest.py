@@ -46,7 +46,7 @@ def fields():
     return mixer.cycle(5).blend('garden.Field',
                                 name=lambda: mixer.faker.city(),
                                 price=lambda: mixer.faker.random_number(digits=3) * 1.0,
-                                count_beds=10)
+                                count_free_beds=10)
 
 @pytest.fixture
 def beds(fields, person):
