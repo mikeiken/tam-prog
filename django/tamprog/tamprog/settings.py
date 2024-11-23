@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'fertilizer',
     'drf_spectacular',
     'rest_framework_simplejwt.token_blacklist',
+    'django_db_logger',
 ]
 
 MIDDLEWARE = [
@@ -308,3 +309,58 @@ CELERY_WORKER_REDIRECT_STDOUTS_LEVEL = os.getenv(
 CELERY_WORKER_TASK_LOG_FORMAT = (
     os.getenv('CELERY_WORKER_TASK_LOG_FORMAT', '%(asctime)s - %(message)s')
 )
+
+DJANGO_SUPER_USER = os.environ.get('DJANGO_SUPER_USER', 'admin')
+DJANGO_SUPER_PASSWORD = os.environ.get('DJANGO_SUPER_PASSWORD', 'admin')
+
+DJANGO_DB_LOGGER_ENABLE_FORMATTER = True
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(asctime)s %(message)s'
+        },
+    },
+    'handlers': {
+        'db_log': {
+            'level': 'DEBUG',
+            'class': 'django_db_logger.db_log_handler.DatabaseLogHandler'
+        },
+    },
+    'loggers': {
+        'tamprog': {
+            'handlers': ['db_log'],
+            'level': 'DEBUG'
+        },
+        'fertilizer': {
+            'handlers': ['db_log'],
+            'level': 'DEBUG'
+        },
+        'garden': {
+            'handlers': ['db_log'],
+            'level': 'DEBUG'
+        },
+        'orders': {
+            'handlers': ['db_log'],
+            'level': 'DEBUG'
+        },
+        'plans': {
+            'handlers': ['db_log'],
+            'level': 'DEBUG'
+        },
+        'user': {
+            'handlers': ['db_log'],
+            'level': 'DEBUG'
+        },
+        'django.request': { # logging 500 errors to database
+            'handlers': ['db_log'],
+            'level': 'DEBUG',
+            'propagate': False,
+        }
+    }
+}

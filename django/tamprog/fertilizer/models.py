@@ -7,6 +7,7 @@ class Fertilizer(models.Model):
     name = models.CharField(max_length=100)
     boost = models.IntegerField(validators=[MinValueValidator(0)])
     compound = models.CharField(max_length=1024)
+    price = models.FloatField(default=0.00, validators=[MinValueValidator(0)])
 
 class BedPlantFertilizer(models.Model):
     bed_plant = models.ForeignKey(BedPlant, on_delete=models.CASCADE)

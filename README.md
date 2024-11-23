@@ -6,12 +6,12 @@
 - **Python**
   - **Django** (REST API)
   - **Celery**
+    - **RabbitMQ** - брокер сообщений
+  - **Swagger** - генерация документации для REST API
 - **JS**
   - **React**
 - **PostgreSQL** - СУБД
   - **Redis** - LRU-кэш для PostgerSQL
-- **Swagger** - генерация документации для REST API
-- **RabbitMQ** - брокер сообщений
 - **NGINX** - HTTP-сервер и обратный прокси-сервер
 - **Docker**
 
@@ -29,23 +29,23 @@
 После этого необходимо выполнить команду:
 
 ### Linux:
-```bash
+```
 ./docker-compose-up.sh
 ```
 
 ### Windows:
-```powershell
+```
 ./docker-compose-up.ps1
 ```
 
 При необходимости можно выполнить сборку образов из исходников и запуск контейнеров:
 
 ### Linux:
-```bash
+```
 ./docker-compose-build-up.sh
 ```
 
 ### Windows:
-```powershell
+```
 ./docker-compose-build-up.ps1
 ```

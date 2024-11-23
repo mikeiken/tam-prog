@@ -1,9 +1,13 @@
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 from .serializer import *
 from .models import Order
 from .services import OrderService
+from logging import getLogger
+
+log = getLogger(__name__)
 
 from drf_spectacular.utils import extend_schema, extend_schema_view, \
     OpenApiResponse, OpenApiParameter, OpenApiExample
@@ -23,8 +27,8 @@ def OrderParameters(required=False):
             required=required,
         ),
         OpenApiParameter(
-            name="action",
-            description="Action to perform",
+            name="comments",
+            description="Comment to perform",
             type=str,
             required=required,
         ),
@@ -57,6 +61,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         parameters=OrderParameters(required=True),
     )
     def create(self, request, *args, **kwargs):
+        log.debug(f"Creating order for user with ID={request.user.id}")
         return super().create(request, *args, **kwargs)
 
     @extend_schema(
@@ -70,6 +75,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         },
     )
     def list(self, request, *args, **kwargs):
+        log.debug(f"Getting all orders for user with ID={request.user.id}")
         return super().list(request, *args, **kwargs)
     
     @extend_schema(
@@ -83,6 +89,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         },
     )
     def retrieve(self, request, *args, **kwargs):
+        log.debug(f"Getting order with ID={kwargs['pk']} for user with ID={request.user.id}")
         return super().retrieve(request, *args, **kwargs)
     
     @extend_schema(
@@ -96,6 +103,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         parameters=OrderParameters(required=True),
     )
     def update(self, request, *args, **kwargs):
+        log.debug(f"Updating order with ID={kwargs['pk']} for user with ID={request.user.id}")
         return super().update(request, *args, **kwargs)
 
     @extend_schema(
@@ -121,7 +129,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 value={
                     "bed": 1,
                     "plant": 1,
-                    "action": "water",
+                    "comments": "water",
                     "completed_at": "2022-01-01T00:00:00Z"
                 },
                 request_only=True,
@@ -129,6 +137,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         ]
     )
     def partial_update(self, request, *args, **kwargs):
+        log.debug(f"Partially updating order with ID={kwargs['pk']} for user with ID={request.user.id}")
         return super().partial_update(request, *args, **kwargs)
     
     @extend_schema(
@@ -141,22 +150,30 @@ class OrderViewSet(viewsets.ModelViewSet):
         },
     )
     def destroy(self, request, *args, **kwargs):
+        log.debug(f"Deleting order with ID={kwargs['pk']} for user with ID={request.user.id}")
         return super().destroy(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         user = self.request.user
         bed = serializer.validated_data['bed']
         plant = serializer.validated_data['plant']
-        action = serializer.validated_data['action']
-        return OrderService.create_order(user, bed, plant, action)
+        comments = serializer.validated_data['comments']
+        log.debug(f"Creating order for user with ID={user.id}")
+        response = OrderService.create_order(user, bed, plant, comments)
+
+        if isinstance(response, Response) and response.status_code != status.HTTP_201_CREATED:
+            raise ValidationError(response.data["error"])
 
     def perform_update(self, serializer):
         order = serializer.save()
         if order.completed_at:
+            log.debug(f"Completing order with ID={order.id}")
             OrderService.complete_order(order)
 
     def get_queryset(self):
         is_completed = self.request.query_params.get('is_completed', None)
         if is_completed is not None:
+            log.debug(f"Filtering orders by is_completed={is_completed}")
             return OrderService.filter_orders(is_completed=is_completed.lower() == 'true')
+        log.debug("Getting all orders")
         return Order.objects.all()
