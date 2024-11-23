@@ -2,6 +2,7 @@ import { useState } from "react";
 import "./style.css";
 import LoginBtn from "./ui/login-btn/LoginBtn";
 import RegisterBtn from "./ui/register-btn/RegisterBtn";
+
 export default function MainPage() {
   const [loaded, setLoaded] = useState(false);
 

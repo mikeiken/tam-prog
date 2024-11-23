@@ -43,7 +43,7 @@
 }
 
 .scrolled-content {
-  height: 92%;
+  height: auto;
   overflow-y: auto;
   overflow-x: hidden;
   border-radius: 20px;
@@ -94,7 +94,7 @@
   justify-content: center;
   align-items: center;
   margin: 0 auto;
-  height: 100vh;
+  height: auto;
   max-height: 84vh;
 }
 
@@ -107,6 +107,8 @@
 
 .search-card-wrapper {
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 15px;
   margin: 2vh 1vh;
   border-radius: 20px;
@@ -114,6 +116,28 @@
   height: auto !important;
   background-color: darkgray;
   transition: 0.3s all;
+}
+
+.search-card-wrapper-v2 {
+  display: flex;
+}
+
+.add-to-basket {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  background-color: rgb(20, 201, 177, 0.5);
+  border-radius: 50%;
+  transition: 0.3s ease;
+}
+
+.add-to-basket:hover {
+  transform: scale(0.95);
+}
+.add-to-basket-img {
+  width: 40px;
 }
 
 .search-card-wrapper:hover {
@@ -130,6 +154,6 @@
     align-items: center;
     margin: 0 auto;
     height: 69vh;
-    max-height: 72vh;
+    max-height: 67vh;
   }
 }

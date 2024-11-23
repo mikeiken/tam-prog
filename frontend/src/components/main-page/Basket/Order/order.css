@@ -1,0 +1,151 @@
+.order-wrapper {
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.order {
+  gap: 10px;
+  padding: 20px;
+  width: auto;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.order-info {
+  padding: 20px;
+  border-radius: 20px;
+  width: 800px;
+  height: 300px;
+  background-color: burlywood;
+  display: flex;
+  gap: 10px;
+}
+
+.order-order {
+  padding: 20px;
+  border-radius: 20px;
+  width: auto;
+  height: 300px;
+  background-color: lightblue;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.oreder-description {
+  width: 200px;
+}
+
+.license-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  max-width: 83%;
+  min-height: 83vh;
+  height: auto;
+  background-color: rgb(120, 127, 80, 0.5);
+  margin: 2vh auto;
+  border-radius: 20px;
+  overflow-y: auto;
+}
+
+.order-info-wrapper {
+  display: flex;
+  justify-content: space-between;
+  width: 500px;
+  height: 100%;
+  background-color: cadetblue;
+  gap: 20px;
+}
+
+.order-image {
+  width: 260px;
+  height: auto;
+}
+
+.order-change-volume {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.order-submit-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.order-submit-button-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+/* Стили для поля ввода комментария */
+/* Стили для поля ввода комментария */
+.order-input {
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  font-size: 1em;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin: 10px 0;
+  background-color: #f9f9f9;
+  outline: none;
+  transition: all 0.3s ease;
+  word-wrap: break-word; /* Перенос текста на следующую строку */
+  resize: none;
+}
+
+.order-input:focus {
+  border-color: #4caf50; /* Цвет рамки при фокусе */
+  background-color: #fff; /* Изменение фона при фокусе */
+}
+
+/* Стили для кнопок */
+.order-submit-button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.order-submit-button,
+.order-cancel-button {
+  padding: 10px 20px;
+  font-size: 1.1em;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.order-submit-button {
+  background-color: #4caf50; /* Зеленая кнопка для заказа */
+  color: white;
+}
+
+.order-submit-button:hover {
+  background-color: #45a049;
+}
+
+.order-cancel-button {
+  background-color: #f44336; /* Красная кнопка для отмены */
+  color: white;
+}
+
+.order-cancel-button:hover {
+  background-color: #e53935;
+}
+
+.order-garden-list {
+  width: 370px;
+  height: 100%;
+  background-color: #ddd;
+  overflow: auto;
+}
