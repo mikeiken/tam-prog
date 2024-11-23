@@ -27,7 +27,6 @@ def user():
 
 @pytest.fixture
 def register_data():
-    """Фикстура для данных регистрации пользователя."""
     return {
         'username': 'newuser',
         'phone_number': '+1234567890',

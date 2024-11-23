@@ -2,12 +2,12 @@ import pytest
 from rest_framework import status
 from unittest.mock import patch, MagicMock
 from user.models import Worker
-from user.services import WorkerService
+from user.services import WorkerService,PersonService
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 from rest_framework_simplejwt.tokens import RefreshToken
 from user.views import LogoutView
-
+from mixer.backend.django import mixer
 User = get_user_model()
 
 @pytest.mark.django_db
@@ -156,4 +156,20 @@ def test_logout_user_exception(mock_refresh_token, api_client, user):
     assert "error" in response.data
     assert response.data["error"] == "Some error"
     mock_refresh_token_instance.blacklist.assert_called_once()
+
+@pytest.mark.django_db
+def test_update_wallet_balance_on_order_creation(api_client, user):
+    order = mixer.blend('orders.Order', user=user, total_cost=0.00)
+    initial_balance = user.wallet_balance
+    response = PersonService.update_wallet_balance(user, order.total_cost)
+    assert response.status_code == status.HTTP_200_OK
+    assert user.wallet_balance == initial_balance - order.total_cost
+
+@pytest.mark.django_db
+def test_insufficient_funds_on_order_creation(api_client, user):
+    order = mixer.blend('orders.Order', user=user, total_cost=200.00)
+    response = PersonService.update_wallet_balance(user, order.total_cost)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data['error'] == 'Insufficient funds in the wallet'
+
 
