@@ -45,7 +45,7 @@ export default function Header() {
               isActivePath("/navigate/contractor") && e.preventDefault()
             }
           >
-            Ваши участки
+            Личный кабинет
           </Link>
           <Link
             to="license"

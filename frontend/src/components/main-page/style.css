@@ -522,12 +522,6 @@ html {
     max-width: 70%;
     height: 100%;
   }
-
-  .content-container {
-    justify-content: center;
-    height: 83vh;
-    max-height: 100%;
-  }
 }
 
 @media (min-width: 1922px) {
