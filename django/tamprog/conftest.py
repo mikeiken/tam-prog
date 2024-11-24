@@ -20,10 +20,18 @@ def api_client():
 
 @pytest.fixture
 def user():
-    user = mixer.blend(User, username='testuser')
+    user = mixer.blend(User, username='testuser', is_superuser=False, is_staff=False)
     user.set_password('testpassword')
     user.save()
     return user
+
+@pytest.fixture
+def superuser():
+    user = mixer.blend(User, username='superuser', is_superuser=True, is_staff=True)
+    user.set_password('superpassword')
+    user.save()
+    return user
+
 
 @pytest.fixture
 def register_data():
@@ -88,10 +96,13 @@ def bed_plants(beds, plants):
 @pytest.fixture
 def bed_plant_fertilizers(bed_plants, fertilizers):
     # Применяем удобрения к посадкам
-    bed_plant_fertilizers = mixer.cycle(10).blend('fertilizer.BedPlantFertilizer',
-                                                  bed_plant=lambda: mixer.faker.random_element(bed_plants),
-                                                  fertilizer=lambda: mixer.faker.random_element(fertilizers))
+    bed_plant_fertilizers = mixer.cycle(10).blend(
+        'fertilizer.BedPlantFertilizer',
+        bed_plant=lambda: mixer.faker.random_element(bed_plants),
+        fertilizer=lambda: mixer.faker.random_element(fertilizers)
+    )
     return bed_plant_fertilizers
+
 
 
 @pytest.fixture

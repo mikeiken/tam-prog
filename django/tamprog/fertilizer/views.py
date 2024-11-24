@@ -146,6 +146,12 @@ class BedPlantFertilizerViewSet(viewsets.ModelViewSet):
     serializer_class = BedPlantFertilizerSerializer
     permission_classes = [BedPlantF]
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        bed_plant_id = self.request.query_params.get('bed_plant')
+        if bed_plant_id:
+            queryset = queryset.filter(bed_plant_id=bed_plant_id)
+        return queryset
     @extend_schema(
         summary='Get fertilizers applied to all plants',
         responses={

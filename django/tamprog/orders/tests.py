@@ -99,10 +99,39 @@ def test_filter_orders_not_completed(orders):
 @pytest.mark.django_db
 def test_filter_orders_all(orders):
     all_orders = OrderService.filter_orders()
-
-    # Проверяем, что все заказы из базы данных получены
     assert len(all_orders) == len(orders)
     for order in all_orders:
         assert order in orders
+
+@pytest.mark.django_db
+def test_filter_orders_completed_url(api_client, superuser, orders):
+    api_client.force_authenticate(user=superuser)
+    url = '/api/v1/order/'
+    response = api_client.get(url, {'is_completed': 'true'})
+    assert response.status_code == 200
+    response_data = response.data
+    assert all(order['completed_at'] is not None for order in response_data)
+    assert len(response_data) == sum(1 for order in orders if order.completed_at is not None)
+
+@pytest.mark.django_db
+def test_filter_orders_not_completed_url(api_client, superuser, orders):
+    api_client.force_authenticate(user=superuser)
+    url = '/api/v1/order/'
+    response = api_client.get(url, {'is_completed': 'false'})
+    assert response.status_code == 200
+    response_data = response.data
+    assert all(order['completed_at'] is None for order in response_data)
+    assert len(response_data) == sum(1 for order in orders if order.completed_at is None)
+
+@pytest.mark.django_db
+def test_filter_orders_all_url(api_client, superuser, orders):
+    api_client.force_authenticate(user=superuser)
+    url = '/api/v1/order/'
+    response = api_client.get(url)
+    assert response.status_code == 200
+    response_data = response.data
+    assert len(response_data) == len(orders)
+    for order in response_data:
+        assert order['id'] in [o.id for o in orders]
 
 

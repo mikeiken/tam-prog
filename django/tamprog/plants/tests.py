@@ -19,9 +19,8 @@ def test_sort_bed_plants(api_client, user, plants):
 
 @pytest.mark.django_db
 def test_filter_bed_plants(bed_plants, fertilizers, api_client, user):
-    # Удобряем растения
     for bed_plant in bed_plants:
-        BedPlantService.fertilize_plant(bed_plant, fertilizers[0], user)  # Передаем пользователя
+        BedPlantService.fertilize_plant(bed_plant, fertilizers[0], user)
 
     fertilized_plants = BedPlantService.filter_bed_plants(fertilizer_applied=True)
     non_fertilized_plants = BedPlantService.filter_bed_plants(fertilizer_applied=False)
@@ -66,33 +65,20 @@ def test_get_suggestions(api_client, plants, user):
 @pytest.mark.django_db
 def test_growth_time_adjustment_after_fertilizer(api_client, bed_plants, fertilizers, user):
     api_client.force_authenticate(user=user)
-
     for bed_plant in bed_plants:
-        # Если удобрение уже было применено, пропускаем этот экземпляр
         if bed_plant.fertilizer_applied:
             print(f"Skipping plant {bed_plant.id} as fertilizer is already applied.")
             continue
-
-        # Убедимся, что время роста достаточно велико для применения удобрения
         required_min_growth_time = fertilizers[0].boost + 5
         if bed_plant.growth_time <= required_min_growth_time:
-            bed_plant.growth_time = required_min_growth_time + 1  # Увеличиваем время роста на 1 день больше минимального
-            bed_plant.save()  # Сохраняем изменения
-
+            bed_plant.growth_time = required_min_growth_time + 1
+            bed_plant.save()
         initial_growth_time = bed_plant.growth_time
-
-        # Применяем удобрение
         response = BedPlantService.fertilize_plant(bed_plant, fertilizers[0], user)
-
         print(f"Response status code: {response.status_code}")
-        print(f"Response data: {response.data}")  # Логируем данные ответа для диагностики
-
-        # Проверяем, что статус успешный
+        print(f"Response data: {response.data}")
         assert response.status_code == 200
-
         bed_plant.refresh_from_db()
-
-        # Проверяем, что время роста было уменьшено на значение boost
         if bed_plant.fertilizer_applied:
             assert bed_plant.growth_time < initial_growth_time
         else:
@@ -102,11 +88,9 @@ def test_growth_time_adjustment_after_fertilizer(api_client, bed_plants, fertili
 @pytest.mark.django_db
 def test_plant_without_fertilizer_growth_time(api_client, bed_plants, user):
     api_client.force_authenticate(user=user)
-
-    # Проверяем время роста для растений, на которые не применялось удобрение
     for bed_plant in bed_plants:
         if not bed_plant.fertilizer_applied:
             initial_growth_time = bed_plant.growth_time
             bed_plant.refresh_from_db()
-            assert bed_plant.growth_time == initial_growth_time  # Время роста должно оставаться без изменений
+            assert bed_plant.growth_time == initial_growth_time
 

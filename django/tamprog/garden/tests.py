@@ -4,6 +4,8 @@ from .models import Field,Bed
 from mixer.backend.django import mixer
 from celery.result import AsyncResult
 from unittest.mock import patch
+from rest_framework import status
+from orders.models import Order
 
 def test_get_sorted_fields_success(celery_settings, mocker):
     mocked_task = mocker.patch('garden.services.get_sorted_fields_task.delay')
@@ -113,7 +115,6 @@ def test_filter_beds_not_rented(beds):
     for bed in not_rented_beds:
         assert bed.is_rented is False
 
-
 @pytest.mark.django_db
 def test_get_sorted_fields_by_price(celery_settings, mocker,fields):
     mocker.patch('garden.services.get_sorted_fields_task.delay')
@@ -140,5 +141,69 @@ def test_get_sorted_fields_by_beds(celery_settings, mocker):
     fields = FieldService.get_sorted_fields(sort_by='count_beds', ascending=True)
     assert [field['count_beds'] for field in fields] == [10, 11, 12, 13, 14]
 
+@pytest.mark.django_db
+def test_get_sorted_fields_timeout(api_client, superuser):
+    api_client.force_authenticate(user=superuser)
+    url = '/api/v1/field/'
+    response = api_client.get(url, {'sort_by': 'price', 'ascending': 'true'})
+    assert response.status_code == 200
+    assert 'error' not in response.data
+
+@pytest.mark.django_db
+def test_rent_bed_success_url(api_client, superuser, beds, person):
+    api_client.force_authenticate(user=person)
+    bed = next(b for b in beds if not b.is_rented)
+    order = mixer.blend(Order, bed=bed, completed_at=None)
+    assert bed.is_rented is False
+    assert Order.objects.filter(bed=bed, completed_at=None).exists()
+    url = f'/api/v1/bed/{bed.id}/rent/'
+    response = api_client.post(url)
+    bed.refresh_from_db()
+    assert response.status_code == status.HTTP_200_OK
+    assert bed.is_rented is True
+    assert bed.rented_by == person
 
 
+@pytest.mark.django_db
+def test_release_bed_success_url(api_client, superuser, beds, person):
+    api_client.force_authenticate(user=superuser)
+    bed = beds[0]
+    bed.is_rented = True
+    bed.rented_by = person
+    bed.save()
+    url = f'/api/v1/bed/{bed.id}/release/'
+    response = api_client.post(url)
+    bed.refresh_from_db()
+    assert response.status_code == 200
+    assert bed.is_rented is False
+    assert bed.rented_by is None
+
+
+@pytest.mark.django_db
+def test_get_user_beds_url(api_client, superuser, beds, person):
+    api_client.force_authenticate(user=person)
+    for bed in beds:
+        bed.rented_by = person
+        bed.is_rented = True
+        bed.save()
+    url = '/api/v1/bed/my_beds/'
+    response = api_client.get(url)
+    assert response.status_code == 200
+    assert len(response.data) == len(beds)
+    for bed in response.data:
+        assert bed['rented_by'] == person.id
+        assert bed['is_rented'] is True
+
+
+@pytest.mark.django_db
+def test_filter_beds_is_rented_url(api_client, superuser, beds):
+    api_client.force_authenticate(user=superuser)
+    for bed in beds:
+        bed.is_rented = True
+        bed.save()
+    url = '/api/v1/bed/'
+    response = api_client.get(url, {'is_rented': 'true'})
+    assert response.status_code == 200
+    assert len(response.data) == len(beds)
+    for bed in response.data:
+        assert bed['is_rented'] is True
