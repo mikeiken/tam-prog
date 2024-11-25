@@ -556,6 +556,11 @@ html {
     height: 65vh;
     width: 120vh;
   }
+
+  .student-wrapper{
+    height: 12vh !important;
+  }
+
 }
 
 @media (min-width: 2300px) {
