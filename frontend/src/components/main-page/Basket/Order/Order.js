@@ -32,13 +32,11 @@ export default function Order({
       <div className="order">
         <div className="order-info">
           <div className="order-info-wrapper">
-            <div>
               <img
                 src={process.env.PUBLIC_URL + "/user.png"}
                 alt="object"
                 className="order-image"
               ></img>
-            </div>
             <div className="oreder-description">
               {name} - {price} руб.
             </div>
