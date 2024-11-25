@@ -20,14 +20,21 @@ def api_client():
 
 @pytest.fixture
 def user():
-    user = mixer.blend(User, username='testuser')
+    user = mixer.blend(User, username='testuser', is_superuser=False, is_staff=False)
     user.set_password('testpassword')
     user.save()
     return user
 
 @pytest.fixture
+def superuser():
+    user = mixer.blend(User, username='agronom1', is_superuser=True, is_staff=True)
+    user.set_password('superpassword')
+    user.save()
+    return user
+
+
+@pytest.fixture
 def register_data():
-    """Фикстура для данных регистрации пользователя."""
     return {
         'username': 'newuser',
         'phone_number': '+1234567890',
@@ -43,10 +50,10 @@ def person():
 @pytest.fixture
 def fields():
     # Создаем 5 участков, каждый из которых имеет уникальное имя и цену
-    return mixer.cycle(5).blend('garden.Field',
+    return mixer.cycle(10).blend('garden.Field',
                                 name=lambda: mixer.faker.city(),
                                 price=lambda: mixer.faker.random_number(digits=3) * 1.0,
-                                count_beds=10)
+                                count_free_beds=10)
 
 @pytest.fixture
 def beds(fields, person):
@@ -89,16 +96,19 @@ def bed_plants(beds, plants):
 @pytest.fixture
 def bed_plant_fertilizers(bed_plants, fertilizers):
     # Применяем удобрения к посадкам
-    bed_plant_fertilizers = mixer.cycle(10).blend('fertilizer.BedPlantFertilizer',
-                                                  bed_plant=lambda: mixer.faker.random_element(bed_plants),
-                                                  fertilizer=lambda: mixer.faker.random_element(fertilizers))
+    bed_plant_fertilizers = mixer.cycle(10).blend(
+        'fertilizer.BedPlantFertilizer',
+        bed_plant=lambda: mixer.faker.random_element(bed_plants),
+        fertilizer=lambda: mixer.faker.random_element(fertilizers)
+    )
     return bed_plant_fertilizers
+
 
 
 @pytest.fixture
 def workers():
     # Создаем 10 рабочих с уникальными именами и стоимостью услуг
-    return mixer.cycle(10).blend('user.Worker',
+    return mixer.cycle(1).blend('user.Worker',
                                  name=lambda: mixer.faker.name(),
                                  price=lambda: mixer.faker.random_number(digits=2) * 1.0,
                                  description=lambda: mixer.faker.text(max_nb_chars=100))
@@ -111,7 +121,7 @@ def orders(user, workers, beds, plants):
                                  worker=lambda: mixer.faker.random_element(workers),
                                  bed=lambda: mixer.faker.random_element(beds),
                                  plant=lambda: mixer.faker.random_element(plants),
-                                 action=lambda: mixer.faker.word(),
+                                 comments=lambda: mixer.faker.word(),
                                  completed_at=lambda: None if mixer.faker.boolean() else timezone.now(),
                                  total_cost=lambda: mixer.faker.random_number(digits=3) * 1.0)
 
