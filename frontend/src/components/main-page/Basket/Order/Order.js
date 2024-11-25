@@ -46,6 +46,7 @@ export default function Order({
           <div className="order-garden-list">
             {" "}
             тут будут растения для выбора
+            Поле №{id}
           </div>
         </div>
 

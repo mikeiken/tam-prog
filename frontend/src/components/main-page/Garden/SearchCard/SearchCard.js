@@ -5,11 +5,15 @@ export default function SearchCard({ item, onClick }) {
   return (
     <div className="search-card-wrapper" onClick={onClick}>
       <div className="search-card-wrapper-v2">
-        <img className="search-card-img" src={""} alt="img"></img>
+        <img
+          className="search-card-img"
+          src="https://avatars.mds.yandex.net/i?id=b4560f26cb2f9fab2f7395b28c1fed50_l-5236855-images-thumbs&n=13"
+          alt="img"
+        ></img>
         <div>
-          <p>
-            Название: {item.name}
-            <br /> Кол-во грядок: {item.count_free_beds} шт
+          <p className="text-into-search-card">
+            {item.name}, {item.id}
+            <br /> Cвободно {item.count_free_beds} грядок
             <br /> Цена: {item.price} Рублей
           </p>
         </div>

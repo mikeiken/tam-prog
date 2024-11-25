@@ -103,6 +103,8 @@
   width: 100px;
   height: 100px;
   margin-right: 10px;
+  object-fit: cover; /* Обрезает изображение, чтобы заполнить блок */
+  object-position: center; /* Центрирует изображение внутри блока */
 }
 
 .search-card-wrapper {
@@ -113,13 +115,15 @@
   margin: 2vh 1vh;
   border-radius: 20px;
   width: 95%;
-  height: auto !important;
+  height: auto;
   background-color: darkgray;
   transition: 0.3s all;
 }
 
 .search-card-wrapper-v2 {
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .add-to-basket {

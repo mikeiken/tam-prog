@@ -1,18 +1,20 @@
 .student-wrapper{
-    width: 900px;
-    height: 145px;
+    width: 40vw;
+    height: 20vh;
     background-color: rgb(150, 194, 168, 0.5);
     padding: 10px;
     display: flex;
+    align-items: center;
     border-radius: 20px;
     color:bisque;
+    font-size: 1.5vh;
     font-weight: 500;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     overflow: visible !important;
 }
 
 .student-img {
-    height: 120px;
+    height: 5vw;
     width: auto;
     transition: .5s all;
     filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.7));
