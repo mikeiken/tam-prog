@@ -1,0 +1,42 @@
+.plant-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    width: 90px;
+    height: 100px;
+    background-color: #0f3a42;
+}
+
+.plant-container:focus{
+    background-color: #1b6d85;
+}
+
+.plant-image-wrapper{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.plant-image{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}
+
+.plant-area {
+    display: flex;
+    flex-wrap: wrap; /* Разрешает перенос строк */
+    gap: 7px;
+    /*margin: 5px;*/
+}
+
+.plant-search-area{
+    width: 98%;
+    height: 50px;
+    background-color: #0f3a42;
+    margin: 0 0 5px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
