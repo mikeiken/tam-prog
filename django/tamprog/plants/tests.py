@@ -33,6 +33,30 @@ def test_filter_bed_plants(bed_plants, fertilizers, api_client, user):
             assert bed_plant not in fertilized_plants
             assert bed_plant in non_fertilized_plants
 
+@pytest.mark.django_db
+def test_filter_bed_plants_via_url(api_client, bed_plants, fertilizers, user):
+    api_client.force_authenticate(user=user)
+    for bed_plant in bed_plants:
+        BedPlantService.fertilize_plant(bed_plant, fertilizers[0], user)
+    url = '/api/v1/bedplant/'
+    response = api_client.get(url, {'fertilizer_applied': 'true'})
+    assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+    fertilized_data = response.json()
+    for bed_plant in bed_plants:
+        if bed_plant.fertilizer_applied:
+            assert any(item['id'] == bed_plant.id for item in fertilized_data)
+        else:
+            assert all(item['id'] != bed_plant.id for item in fertilized_data)
+    response = api_client.get(url, {'fertilizer_applied': 'false'})
+    assert response.status_code == 200, f"Unexpected status code: {response.status_code}"
+    non_fertilized_data = response.json()
+    for bed_plant in bed_plants:
+        if not bed_plant.fertilizer_applied:
+            assert any(item['id'] == bed_plant.id for item in non_fertilized_data)
+        else:
+            assert all(item['id'] != bed_plant.id for item in non_fertilized_data)
+
+
 
 @pytest.mark.django_db
 def test_fuzzy_search(api_client, plants, user):
@@ -67,7 +91,6 @@ def test_growth_time_adjustment_after_fertilizer(api_client, bed_plants, fertili
     api_client.force_authenticate(user=user)
     for bed_plant in bed_plants:
         if bed_plant.fertilizer_applied:
-            print(f"Skipping plant {bed_plant.id} as fertilizer is already applied.")
             continue
         required_min_growth_time = fertilizers[0].boost + 5
         if bed_plant.growth_time <= required_min_growth_time:
@@ -75,8 +98,34 @@ def test_growth_time_adjustment_after_fertilizer(api_client, bed_plants, fertili
             bed_plant.save()
         initial_growth_time = bed_plant.growth_time
         response = BedPlantService.fertilize_plant(bed_plant, fertilizers[0], user)
-        print(f"Response status code: {response.status_code}")
-        print(f"Response data: {response.data}")
+        assert response.status_code == 200
+        bed_plant.refresh_from_db()
+        if bed_plant.fertilizer_applied:
+            assert bed_plant.growth_time < initial_growth_time
+        else:
+            assert bed_plant.growth_time == initial_growth_time
+
+
+@pytest.mark.django_db
+def test_growth_time_adjustment_after_fertilizer_api(api_client, bed_plants, fertilizers, superuser):
+    api_client.force_authenticate(user=superuser)
+    for bed_plant in bed_plants:
+        if bed_plant.fertilizer_applied:
+            continue
+        required_min_growth_time = fertilizers[0].boost + 5
+        if bed_plant.growth_time <= required_min_growth_time:
+            bed_plant.growth_time = required_min_growth_time + 1
+            bed_plant.save()
+        initial_growth_time = bed_plant.growth_time
+        matching_fertilizers = [fertilizer for fertilizer in fertilizers if bed_plant.plant.name in fertilizer.compound]
+        if not matching_fertilizers:
+            continue
+        fertilizer = matching_fertilizers[0]
+        url = f'/api/v1/bedplant/{bed_plant.id}/fertilize/'
+        payload = {'fertilizer_id': fertilizer.id}
+        assert fertilizer is not None, "Удобрение с указанным ID не найдено"
+        assert bed_plant.plant.name in fertilizer.compound, "Удобрение не соответствует растению"
+        response = api_client.post(url, payload, format='json')
         assert response.status_code == 200
         bed_plant.refresh_from_db()
         if bed_plant.fertilizer_applied:

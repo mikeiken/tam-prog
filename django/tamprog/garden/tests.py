@@ -20,7 +20,8 @@ def test_get_sorted_fields_timeout(celery_settings, mocker):
     mocked_task.return_value = AsyncResult('fake-task-id')
     mocker.patch.object(AsyncResult, 'get', side_effect=Exception('Timeout'))
     with pytest.raises(Exception, match='Timeout'):
-        FieldService.get_sorted_fields(sort_by='price', ascending=True)
+        FieldService.get_sorted_fields(sort_by='count_free_beds', ascending=True)
+
 
 @pytest.mark.django_db
 def test_filter_beds(api_client, user, beds):
@@ -72,6 +73,42 @@ def test_release_bed_success(beds, person):
     assert bed.is_rented is False
     assert bed.rented_by is None
     assert field.count_free_beds == initial_free_beds + 1
+
+
+@pytest.mark.django_db
+def test_rent_bed_success_api(api_client, beds, person):
+    api_client.force_authenticate(user=person)
+    bed = next(b for b in beds if not b.is_rented)
+    order = mixer.blend('orders.Order', bed=bed, person=person, completed_at=None)
+    bed.order = order
+    bed.save()
+    url = f'/api/v1/bed/{bed.id}/rent/'
+    response = api_client.post(url, {}, format='json')
+    bed.refresh_from_db()
+    assert response.status_code == 200
+    assert bed.is_rented is True
+    assert bed.rented_by == person
+
+
+
+@pytest.mark.django_db
+def test_release_bed_success_api(api_client, beds, person):
+    api_client.force_authenticate(user=person)
+    bed = beds[0]
+    bed.is_rented = True
+    bed.rented_by = person
+    bed.save()
+    field = bed.field
+    initial_free_beds = field.count_free_beds
+    url = f'/api/v1/bed/{bed.id}/release/'
+    response = api_client.post(url, {}, format='json')
+    bed.refresh_from_db()
+    field.refresh_from_db()
+    assert response.status_code == 200
+    assert bed.is_rented is False
+    assert bed.rented_by is None
+    assert field.count_free_beds == initial_free_beds + 1
+
 
 @pytest.mark.django_db
 def test_release_bed_not_rented(beds):
