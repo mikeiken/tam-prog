@@ -608,3 +608,24 @@ html {
   width: 24px;
   height: 24px;
 }
+
+.basket-link-wrapper {
+  position: relative;
+}
+
+.basket-indicator {
+  position: absolute;
+  top: -15px;
+  right: -15px;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
