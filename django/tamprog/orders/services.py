@@ -11,9 +11,6 @@ from plants.services import BedPlantService
 
 log = getLogger(__name__)
 
-
-from django.db import transaction  # Для атомарности операций
-
 class OrderService:
     @staticmethod
     def calculate_total_cost(bed, plant, worker):
@@ -35,23 +32,17 @@ class OrderService:
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # Выбор рабочего
         worker = random.choice(available_workers)
         total_cost = OrderService.calculate_total_cost(bed, plant, worker)
-
-        # Проверка баланса пользователя
         if user.wallet_balance < total_cost:
             return Response(
                 {'error': 'Insufficient funds'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-
-        # Списание средств
         user.wallet_balance -= total_cost
         user.save()
 
         try:
-            # Создание заказа
             order = Order.objects.create(
                 user=user,
                 worker=worker,
@@ -60,13 +51,10 @@ class OrderService:
                 comments=comments,
                 total_cost=total_cost
             )
-
-            # Аренда грядки
             rent_response = BedService.rent_bed(bed.id, user)
             if rent_response.status_code != 200:
                 raise Exception("Failed to rent bed")
 
-            # Посадка растения
             plant_response = BedPlantService.plant_in_bed(bed, plant)
             if plant_response.status_code != 201:
                 raise Exception(plant_response.data.get("error", "Failed to plant in bed"))
@@ -80,11 +68,9 @@ class OrderService:
         except Exception as e:
             log.error(f"Error creating order: {e}")
 
-            # Возврат средств пользователю
             user.wallet_balance += total_cost
             user.save()
 
-            # Откат аренды грядки (если была выполнена)
             BedService.release_bed(bed.id)
 
             return Response(

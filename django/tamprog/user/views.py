@@ -50,9 +50,11 @@ class LoginView(generics.GenericAPIView):
                     OpenApiExample(
                         name="Successful login",
                         value={
+                            'username': "example_user",
                             "refresh": "string",
                             "access": "string",
                             "wallet_balance": 0.00,
+                            'is_staff': False,
                         },
                     )
                 ],
@@ -84,9 +86,11 @@ class LoginView(generics.GenericAPIView):
             refresh = RefreshToken.for_user(user)
             log.info(f"User {user.username} logged in successfully")
             return Response({
+                'username': user.username,
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
                 'wallet_balance': user.wallet_balance,
+                'is_staff': user.is_staff,
             })
         log.error("Invalid credentials")
         return Response({"detail": "Invalid credentials"}, status=400)
@@ -158,6 +162,7 @@ class RegisterViewSet(viewsets.ModelViewSet):
                             "message": "User created successfully", 
                             "user_id": 0,
                             "username": "string",
+                            'is_staff': False,
                         },
                     )
                 ],
@@ -199,7 +204,11 @@ class RegisterViewSet(viewsets.ModelViewSet):
         headers = self.get_success_headers(serializer.data)
         log.info(f"User {user.username} registered successfully")
         return Response(
-            {"message": "User created successfully", "user_id": user.id, "username": user.username},
+            {"message": "User created successfully",
+             "user_id": user.id,
+             "username": user.username,
+             'is_staff': user.is_staff,
+             },
             status=status.HTTP_201_CREATED,
             headers=headers
         )
