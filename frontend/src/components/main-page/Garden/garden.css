@@ -30,7 +30,7 @@
   margin: 0 auto;
   width: 60%;
   height: 64%;
-  background-color: #3498db;
+  background-color: rgba(150, 194, 168, 0.5);
 }
 
 .container-plot-products {
@@ -39,7 +39,7 @@
   width: 80%;
   height: 35%;
   border-radius: 20px;
-  background-color: #96c2a8;
+  background-color: rgba(150, 194, 168, 0.7);
 }
 
 .scrolled-content {
@@ -116,7 +116,7 @@
   border-radius: 20px;
   width: 95%;
   height: auto;
-  background-color: darkgray;
+  background-color: rgba(236, 228, 211, 0.5);
   transition: 0.3s all;
 }
 
@@ -132,7 +132,7 @@
   align-items: center;
   width: 50px;
   height: 50px;
-  background-color: rgb(20, 201, 177, 0.5);
+  background-color: rgba(29, 16, 3, 0.5);
   border-radius: 50%;
   transition: 0.3s ease;
 }
@@ -149,15 +149,32 @@
   cursor: pointer;
 }
 
-@media screen {
-  .loading-container,
-  .error-container,
-  .empty-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-    height: 69vh;
-    max-height: 67vh;
-  }
+@media (max-width: 1200px) and (max-height: 1080px) {
+
+}
+.container-wrapper-img{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  height: 44vh;
+}
+
+.container-for-text{
+  padding: 5px;
+}
+
+.container-wrapper-info{
+  display: flex;
+  flex-direction: row;
+}
+
+.plot-card-img{
+  border-radius: 10px;
+  width: 400px;
+  transition: .5s ease;
+}
+
+.plot-card-img:hover{
+  transform: scale(1.01);
 }
