@@ -103,8 +103,8 @@
   width: 100px;
   height: 100px;
   margin-right: 10px;
-  object-fit: cover; /* Обрезает изображение, чтобы заполнить блок */
-  object-position: center; /* Центрирует изображение внутри блока */
+  object-fit: cover;
+  object-position: center;
 }
 
 .search-card-wrapper {
@@ -150,9 +150,8 @@
 }
 
 @media (max-width: 1200px) and (max-height: 1080px) {
-
 }
-.container-wrapper-img{
+.container-wrapper-img {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -160,21 +159,21 @@
   height: 44vh;
 }
 
-.container-for-text{
+.container-for-text {
   padding: 5px;
 }
 
-.container-wrapper-info{
+.container-wrapper-info {
   display: flex;
   flex-direction: row;
 }
 
-.plot-card-img{
+.plot-card-img {
   border-radius: 10px;
   width: 400px;
-  transition: .5s ease;
+  transition: 0.5s ease;
 }
 
-.plot-card-img:hover{
+.plot-card-img:hover {
   transform: scale(1.01);
 }
