@@ -16,6 +16,7 @@ class BedPlant(models.Model):
     fertilizer_applied = models.BooleanField(default=False)
     growth_time = models.IntegerField(default=1)
     is_harvested = models.BooleanField(default=False)
+    growth_percentage = models.IntegerField(default=0)  # Используем обычное поле для хранения процента роста
 
     @property
     def remaining_growth_time(self):
@@ -28,7 +29,7 @@ class BedPlant(models.Model):
         return self.remaining_growth_time == 0
 
     @property
-    def growth_percentage(self):
+    def growth_percentage_calculated(self):
         elapsed_time = (timezone.now() - self.planted_at).days
         percentage = (elapsed_time / self.growth_time) * 100
         return min(max(percentage, 0), 100)

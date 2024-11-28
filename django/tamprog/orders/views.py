@@ -155,14 +155,20 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         user = self.request.user
-        bed = serializer.validated_data['bed']
+        field = serializer.validated_data['field']
         plant = serializer.validated_data['plant']
+        beds_count = serializer.validated_data['beds_count']
         comments = serializer.validated_data['comments']
-        log.debug(f"Creating order for user with ID={user.id}")
-        response = OrderService.create_order(user, bed, plant, comments)
+        fertilize = serializer.validated_data.get('fertilize', False)
 
-        if isinstance(response, Response) and response.status_code != status.HTTP_201_CREATED:
-            raise ValidationError(response.data["error"])
+        log.debug(f"Creating order for user with ID={user.id}")
+        response = OrderService.create_order(user, field, plant, beds_count, comments, fertilize)
+
+        if isinstance(response, Response):
+            if response.status_code == status.HTTP_201_CREATED:
+                return response
+            else:
+                raise ValidationError(response.data.get("error", "Unknown error"))
 
     def perform_update(self, serializer):
         order = serializer.save()

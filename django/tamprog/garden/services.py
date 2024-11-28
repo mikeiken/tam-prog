@@ -66,79 +66,35 @@ class BedService:
         )
 
     @staticmethod
-    def rent_bed(bed_id: int, person: Person):
-        try:
-            bed = Bed.objects.get(id=bed_id)
+    def rent_beds(field, user, beds_count):
+        free_beds = Bed.objects.filter(field=field, is_rented=False).order_by('id')[:beds_count]
+        rented_beds = []
+        if len(free_beds) < beds_count:
+            log.warning(f"Not enough free beds available for rent.")
+            return 0
 
-            if bed.is_rented:
-                log.warning(f"Bed with ID={bed_id} is already rented.")
-                return Response(
-                    {"error": "This bed is already rented."},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-
-            if not Order.objects.filter(bed=bed, completed_at__isnull=True).exists():
-                return Response(
-                    {"error": "This bed can only be rented through an active order."},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-
+        for bed in free_beds:
             bed.is_rented = True
-            bed.rented_by = person
+            bed.rented_by = user
             bed.save()
+            rented_beds.append(bed)
 
-            field = bed.field
-            field.count_free_beds -= 1
-            field.save()
-            log.info(f"Bed with ID={bed_id} successfully rented.")
-            return Response(
-                {"message": "Bed successfully rented."},
-                status=status.HTTP_200_OK
-            )
-        except Bed.DoesNotExist as e:
-            log.exception(e)
-            return Response(
-                {"error": "Bed with the given ID does not exist."},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
+        field.count_free_beds -= beds_count
+        field.save()
+        log.info(f"{beds_count} beds rented successfully.")
+        return beds_count
 
     @staticmethod
-    def release_bed(bed_id: int):
-        try:
-            bed = Bed.objects.get(id=bed_id)
-
-            if Order.objects.filter(bed=bed, completed_at__isnull=True).exists():
-                return Response(
-                    {"error": "This bed is linked to an active order and cannot be released."},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-
-            if not bed.is_rented:
-                log.warning(f"Bed with ID={bed_id} is not currently rented.")
-                return Response(
-                    {"error": "This bed is not currently rented."},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+    def release_beds(field, beds_count):
+        rented_beds = Bed.objects.filter(field=field, is_rented=True)[:beds_count]
+        for bed in rented_beds:
             bed.is_rented = False
             bed.rented_by = None
             bed.save()
 
-            field = bed.field
-            field.count_free_beds += 1
-            field.save()
-            log.info(f"Bed with ID={bed_id} successfully released.")
-            return Response(
-                {"message": "Bed successfully released."},
-                status=status.HTTP_200_OK
-            )
-        except Bed.DoesNotExist as e:
-            log.exception(e)
-            return Response(
-                {"error": "Bed with the given ID does not exist."},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
+        field.count_free_beds += beds_count
+        field.save()
+        log.info(f"{beds_count} beds released successfully.")
 
     @staticmethod
     def get_user_beds(user):
