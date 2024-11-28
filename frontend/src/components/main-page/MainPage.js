@@ -29,7 +29,7 @@ export default function MainPage() {
                 onLoad={handleLoad}
                 className={loaded ? "loaded" : ""}
               />
-              <div className="text-overlay landing-container-text">
+              <div className="text-overlay">
                 TAMPROG by BGTUTeam
               </div>
             </div>
