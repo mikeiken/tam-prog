@@ -7,6 +7,7 @@ class Field(models.Model):
     count_free_beds = models.IntegerField(default=0)
     all_beds = models.IntegerField(default=0)
     price = models.FloatField(default=0.00, validators=[MinValueValidator(0)])
+    url = models.TextField()
 
 class Bed(models.Model):
     field = models.ForeignKey(Field, related_name='beds', on_delete=models.CASCADE)

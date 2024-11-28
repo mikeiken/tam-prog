@@ -8,6 +8,7 @@ class Plant(models.Model):
     growth_time = models.IntegerField(default=0)
     price = models.FloatField(default=0.00, validators=[MinValueValidator(0)])
     description = models.TextField()
+    url = models.TextField()
 
 class BedPlant(models.Model):
     bed = models.ForeignKey(Bed, on_delete=models.CASCADE)

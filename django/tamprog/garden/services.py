@@ -35,12 +35,13 @@ def get_sorted_fields_task(sort_by: str = 'id', ascending: bool = True):
 
 class FieldService:
     @staticmethod
-    def create_field(name: str, all_beds: int, price: float):
+    def create_field(name: str, all_beds: int, price: float, url: str):
         field = Field.objects.create(
             name=name,
             all_beds=all_beds,
             count_free_beds=all_beds,
             price=price,
+            url=url
         )
         return field
 

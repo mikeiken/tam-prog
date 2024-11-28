@@ -40,6 +40,12 @@ def FieldParameters(required=False):
             type=float,
             required=required,
         ),
+        OpenApiParameter(
+            name="url",
+            description="image",
+            type=str,
+            required=required,
+        ),
     ]
 
 @extend_schema(tags=['Field'])
@@ -53,7 +59,8 @@ class FieldViewSet(viewsets.ModelViewSet):
         name = serializer.validated_data['name']
         all_beds = serializer.validated_data['all_beds']
         price = serializer.validated_data['price']
-        FieldService.create_field(name, all_beds, price)
+        url = serializer.validated_data['url']
+        FieldService.create_field(name, all_beds, price, url)
 
     @extend_schema(
         summary='List all fields',
