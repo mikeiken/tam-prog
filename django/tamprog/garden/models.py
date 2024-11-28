@@ -4,8 +4,8 @@ from django.core.validators import MinValueValidator
 
 class Field(models.Model):
     name = models.CharField(max_length=100)
-    count_free_beds = models.IntegerField(default=0)
-    all_beds = models.IntegerField(default=0)
+    count_free_beds = models.IntegerField(default=0, validators=[MinValueValidator(0)])
+    all_beds = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     price = models.FloatField(default=0.00, validators=[MinValueValidator(0)])
     url = models.TextField()
 

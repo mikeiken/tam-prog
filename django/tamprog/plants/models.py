@@ -5,7 +5,7 @@ from django.core.validators import MinValueValidator
 
 class Plant(models.Model):
     name = models.CharField(max_length=100)
-    growth_time = models.IntegerField(default=0)
+    growth_time = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     price = models.FloatField(default=0.00, validators=[MinValueValidator(0)])
     description = models.TextField()
     url = models.TextField()
@@ -15,9 +15,9 @@ class BedPlant(models.Model):
     plant = models.ForeignKey(Plant, on_delete=models.CASCADE)
     planted_at = models.DateTimeField(auto_now_add=True)
     fertilizer_applied = models.BooleanField(default=False)
-    growth_time = models.IntegerField(default=1)
+    growth_time = models.IntegerField(default=1, validators=[MinValueValidator(0)])
     is_harvested = models.BooleanField(default=False)
-    growth_percentage = models.IntegerField(default=0)  # Используем обычное поле для хранения процента роста
+    growth_percentage = models.IntegerField(default=0)
 
     @property
     def remaining_growth_time(self):
