@@ -7,9 +7,9 @@ import NotFound from "./components/not-found/NotFound";
 import RegisterForm from "./components/auth/register/RegisterForm";
 import Garden from "./components/main-page/Garden/Garden";
 import Contractor from "./components/main-page/Contractor/Contractor";
-import License from "./components/main-page/License/License";
 import About from "./components/main-page/About/about";
 import PrivateRoute from "./components/auth/private-route/PrivateRoute";
+import Basket from "./components/main-page/Basket/Basket";
 
 function App() {
   return (
@@ -29,7 +29,7 @@ function App() {
         >
           <Route path="garden" element={<Garden />} />
           <Route path="contractor" element={<Contractor />} />
-          <Route path="license" element={<License />} />
+          <Route path="license" element={<Basket />} />
           <Route path="about" element={<About />} />
         </Route>
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, Routes, Route, useNavigate } from "react-router-dom";
 import RegisterForm from "../../register/RegisterForm";
 import Instance from "../../../api/instance";
+import Welcome from "./welocme/Welcome";
 export default function Form() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -37,7 +38,9 @@ export default function Form() {
   return (
     <div className="wrapper">
       <form onSubmit={handleSubmit}>
-        <h1>Login</h1>
+        <div className="welcome-show">
+          <Welcome />
+        </div>
         <div className="input-box">
           <input
             className=""
