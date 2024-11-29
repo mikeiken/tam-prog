@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./order.css";
-import Counter from "./Counter/Couter";
+import Counter from "./Counter/Counter";
 import PlantArea from "./PlantArea/PlantArea";
 
 function getDeclension(quantity, one, few, many) {
