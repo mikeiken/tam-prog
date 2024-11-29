@@ -41,6 +41,12 @@ def PlantParameters(required=False):
             description='Plant description',
             required=required,
         ),
+        OpenApiParameter(
+            name='url',
+            type=str,
+            description='image',
+            required=required,
+        ),
     ]
 
 @extend_schema(tags=['Plant'])
@@ -315,7 +321,9 @@ class BedPlantViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         bed = serializer.validated_data['bed']
         plant = serializer.validated_data['plant']
-        response = BedPlantService.plant_in_bed(bed, plant)
+        fertilizer = serializer.validated_data.get['fertilizer', None]
+        beds_count = serializer.validated_data['beds_count', 1]
+        response = BedPlantService.plant_in_beds(bed.field, plant, beds_count, fertilizer=fertilizer)
         log.info(f"Plant {plant.name} planted in bed with ID={bed.id}")
         if isinstance(response, Response) and response.status_code != status.HTTP_201_CREATED:
             raise ValidationError(response.data["error"])

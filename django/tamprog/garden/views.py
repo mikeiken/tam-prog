@@ -40,6 +40,12 @@ def FieldParameters(required=False):
             type=float,
             required=required,
         ),
+        OpenApiParameter(
+            name="url",
+            description="image",
+            type=str,
+            required=required,
+        ),
     ]
 
 @extend_schema(tags=['Field'])
@@ -53,7 +59,8 @@ class FieldViewSet(viewsets.ModelViewSet):
         name = serializer.validated_data['name']
         all_beds = serializer.validated_data['all_beds']
         price = serializer.validated_data['price']
-        FieldService.create_field(name, all_beds, price)
+        url = serializer.validated_data['url']
+        FieldService.create_field(name, all_beds, price, url)
 
     @extend_schema(
         summary='List all fields',
@@ -285,69 +292,98 @@ class BedViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     @extend_schema(
-        summary='Rent bed',
-        description='Rent bed',
+        summary='Rent beds',
+        description='Rent a specified number of beds from a field.',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Bed successfully rented.',
+                description='Beds successfully rented.',
             ),
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(
-                description='Bad request: Bed is already rented.',
+                description='Bad request: Not enough free beds available.',
             ),
             status.HTTP_404_NOT_FOUND: OpenApiResponse(
-                description='Bed not found.',
+                description='Field not found.',
             ),
         },
         parameters=BedParameters(required=True),
         examples=[
             OpenApiExample(
-                name='Rent bed for user',
+                name='Rent beds for user',
                 value={
-                    "is_rented": True,
                     "field": 1,
-                    "rented_by": 1
+                    "beds_count": 3
                 }
             )
         ],
     )
-    @action(detail=True, methods=['post'])
-    def rent(self, request, pk=None):
-        bed = self.get_object()
-        person = request.user
-        log.debug(f"Renting bed with ID={bed.id} for user with ID={person.id}")
-        return BedService.rent_bed(bed.id, person)
+    @action(detail=False, methods=['post'])
+    def rent(self, request):
+        field_id = request.data.get('field')
+        beds_count = request.data.get('beds_count')
+        user = request.user
+
+        log.debug(f"Attempting to rent {beds_count} beds for user with ID={user.id} in field with ID={field_id}")
+
+        # Получаем поле по ID
+        try:
+            field = Field.objects.get(id=field_id)
+        except Field.DoesNotExist:
+            return Response({'error': 'Field not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        rented_beds = BedService.rent_beds(field, user, beds_count)
+
+        if rented_beds == 0:
+            return Response({'error': 'Not enough free beds available for rent.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({
+            'message': f'{beds_count} beds rented successfully.',
+            'rented_beds': [{'id': bed.id, 'position': bed.position, 'is_rented': bed.is_rented} for bed in rented_beds]
+        }, status=status.HTTP_200_OK)
 
     @extend_schema(
-        summary='Release bed',
-        description='Release bed',
+        summary='Release beds',
+        description='Release a specified number of rented beds from a field.',
         responses={
             status.HTTP_200_OK: OpenApiResponse(
-                description='Bed successfully released.',
+                description='Beds successfully released.',
             ),
             status.HTTP_400_BAD_REQUEST: OpenApiResponse(
-                description='Bad request: Bed is not rented.',
+                description='Bad request: Not enough rented beds.',
             ),
             status.HTTP_404_NOT_FOUND: OpenApiResponse(
-                description='Bed not found.',
+                description='Field not found.',
             ),
         },
         parameters=BedParameters(required=True),
         examples=[
             OpenApiExample(
-                name='Release bed for user',
+                name='Release beds for user',
                 value={
-                    "is_rented": False,
                     "field": 1,
-                    "rented_by": 1
+                    "beds_count": 2
                 }
             )
         ],
     )
-    @action(detail=True, methods=['post'])
-    def release(self, request, pk=None):
-        bed = self.get_object()
-        log.debug(f"Releasing bed with ID={bed.id}")
-        return BedService.release_bed(bed.id)
+    @action(detail=False, methods=['post'])
+    def release(self, request):
+        field_id = request.data.get('field')
+        beds_count = request.data.get('beds_count')
+
+        log.debug(f"Attempting to release {beds_count} beds in field with ID={field_id}")
+
+        # Получаем поле по ID
+        try:
+            field = Field.objects.get(id=field_id)
+        except Field.DoesNotExist:
+            return Response({'error': 'Field not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        BedService.release_beds(field, beds_count)
+
+        # Возвращаем успешный ответ
+        return Response({
+            'message': f'{beds_count} beds released successfully.'
+        }, status=status.HTTP_200_OK)
 
 
     def get_queryset(self):
