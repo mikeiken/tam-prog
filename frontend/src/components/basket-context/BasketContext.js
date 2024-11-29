@@ -39,12 +39,11 @@ export const BasketProvider = ({ children }) => {
 
   const removeOneFromBasket = (id) => {
     setBasketItems((prevItems) => {
-      const updatedItems = prevItems
+      return prevItems
         .map((item) =>
           item.id === id ? { ...item, quantity: item.quantity - 1 } : item
         )
         .filter((item) => item.quantity > 0); // Убираем элементы с нулевым количеством
-      return updatedItems;
     });
   };
 
@@ -52,9 +51,12 @@ export const BasketProvider = ({ children }) => {
     setBasketItems((prevItems) => prevItems.filter((item) => item.id !== id)); // Удаляем элемент по id
   };
 
+  const totalItems = basketItems.length;
+
   return (
     <BasketContext.Provider
       value={{
+        totalItems,
         basketItems,
         addToBasket,
         removeFromBasket,

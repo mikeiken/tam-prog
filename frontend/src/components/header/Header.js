@@ -11,7 +11,7 @@ import Logout from "../auth/logout/Logout";
 
 export default function Header() {
   const location = useLocation();
-  const { basketItems } = useBasket();
+  const { totalItems } = useBasket();
   const [showIndicator, setShowIndicator] = useState(false);
   const [lastBasketCount, setLastBasketCount] = useState(0);
 
@@ -24,7 +24,6 @@ export default function Header() {
 
   const isActivePath = (path) => location.pathname === path;
 
-  const totalItems = basketItems.length;
 
   useEffect(() => {
     if (location.pathname === "/navigate/license") {
