@@ -24,7 +24,7 @@ export default function Header() {
 
   const isActivePath = (path) => location.pathname === path;
 
-  const totalItems = basketItems.reduce((sum, item) => sum + item.quantity, 0) ;
+  const totalItems = basketItems.length;
 
   useEffect(() => {
     if (location.pathname === "/navigate/license") {

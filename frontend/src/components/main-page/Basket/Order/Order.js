@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import "./order.css";
-import Counter from "./Counter/Counter";
 import PlantArea from "./PlantArea/PlantArea";
 
 function getDeclension(quantity, one, few, many) {
@@ -74,14 +73,7 @@ export default function Order({
               <div>Дата заказа: {date}</div>
               <div className="order-change-volume">
                 Итог:{" "}
-                <Counter
-                    id={id}
-                    quantity={quantity}
-                    removeOneFromBasket={removeOneFromBasket}
-                    removeFromBasket={removeFromBasket}
-                    item={item}
-                    addToBasket={addToBasket}
-                />{" "}
+                {" "}
                 {declension}
               </div>
               <div className="order-selected-plant">

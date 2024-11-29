@@ -24,22 +24,19 @@ export const BasketProvider = ({ children }) => {
     const currentDate = new Date().toLocaleDateString("ru-RU"); // Получаем дату в формате "день.месяц.год"
 
     setBasketItems((prevItems) => {
-      const existingItem = prevItems.find((i) => i.id === item.id);
-      if (existingItem) {
+      // Проверяем, есть ли уже такой элемент в корзине
+      const exists = prevItems.some((i) => i.id === item.id);
+      if (exists) {
+        // Если элемент уже есть, просто возвращаем текущий список
         return prevItems.map((i) =>
-          i.id === item.id
-            ? { ...i, quantity: i.quantity + 1, dateAdded: currentDate } // Добавляем или обновляем дату
-            : i
+            i.id === item.id ? { ...i, dateAdded: currentDate } : i
         );
       }
-      return [
-        ...prevItems,
-        { ...item, quantity: 1, dateAdded: currentDate }, // Добавляем дату добавления
-      ];
+      // Если элемента нет, добавляем его
+      return [...prevItems, { ...item, dateAdded: currentDate }];
     });
   };
 
-  // Функция для удаления 1 единицы элемента из корзины
   const removeOneFromBasket = (id) => {
     setBasketItems((prevItems) => {
       const updatedItems = prevItems
@@ -51,7 +48,6 @@ export const BasketProvider = ({ children }) => {
     });
   };
 
-  // Функция для полного удаления элемента из корзины
   const removeFromBasket = (id) => {
     setBasketItems((prevItems) => prevItems.filter((item) => item.id !== id)); // Удаляем элемент по id
   };
