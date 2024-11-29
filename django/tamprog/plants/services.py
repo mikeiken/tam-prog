@@ -1,7 +1,11 @@
+from garden.models import Bed
 from orders.models import Order
+from django.utils.timezone import now
+from django.db import transaction
+from datetime import timedelta
 from user.services import PersonService
 from .models import BedPlant
-from fertilizer.models import BedPlantFertilizer
+from fertilizer.models import BedPlantFertilizer, Fertilizer
 from .queries import GetPlantsSortedByPrice
 from fuzzywuzzy import fuzz
 from rest_framework.response import Response
@@ -76,28 +80,36 @@ class PlantService:
 
 
 class BedPlantService:
-
     @staticmethod
-    def plant_in_bed(bed, plant):
-        if not Order.objects.filter(bed=bed, completed_at__isnull=True).exists():
-            return Response(
-                {"error": "Planting is only allowed through an active order."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        #if BedPlant.objects.filter(bed=bed, plant=plant).exists():
-        if BedPlant.objects.filter(bed=bed, plant=plant, is_harvested=False).exists():
-            return Response(
-                {"error": "This bed already has the specified plant."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        growth_time = plant.growth_time
-        BedPlant.objects.create(bed=bed, plant=plant, growth_time=growth_time)
-        log.debug(f"Plant {plant.name} planted in bed with ID={bed.id}")
+    def plant_in_beds(field, plant, beds_count, fertilizer=None):
+        rented_beds = Bed.objects.filter(field=field, is_rented=True).order_by('id')[:beds_count]
+        responses = []
+        with transaction.atomic():
+            for bed in rented_beds:
+                bed_plant = BedPlant.objects.create(bed=bed, plant=plant, growth_time=plant.growth_time)
+                log.debug(f"Plant {plant.name} planted in bed with ID={bed.id}")
+                if fertilizer:
+                    if bed.rented_by:
+                        BedPlantService.fertilize_plant(bed_plant, fertilizer, bed.rented_by)
+                        new_growth_time = max(0, bed_plant.growth_time - fertilizer.boost)
+                        new_completion_time = bed_plant.planted_at + timedelta(days=new_growth_time)
+
+                        try:
+                            order = Order.objects.filter(user=bed.rented_by).latest('created_at')
+                            order.completed_at = new_completion_time
+                            order.save(update_fields=["completed_at"])
+                        except Order.DoesNotExist:
+                            log.warning(f"No order found for user {bed.rented_by.id}")
+                    else:
+                        log.warning(f"Bed with ID={bed.id} has no user associated with it, skipping fertilization.")
+
+                responses.append({"bed_id": bed.id, "status": "success"})
+
+        log.debug(f"Plant {plant.name} planted in {beds_count} beds.")
         return Response(
-            {"message": "Plant successfully planted in the bed."},
+            {"message": "Plants successfully planted.", "details": responses},
             status=status.HTTP_201_CREATED
         )
-
 
     @staticmethod
     def check_plant(bed_plant):
@@ -121,7 +133,6 @@ class BedPlantService:
             {'status': 'Plant harvested'},
             status=status.HTTP_200_OK
         )
-
 
     @staticmethod
     def fertilize_plant(bed_plant, fertilizer, user):
@@ -147,7 +158,7 @@ class BedPlantService:
 
         balance_response = PersonService.update_wallet_balance(user, fertilizer.price)
         if balance_response.status_code != status.HTTP_200_OK:
-            return balance_response
+           return balance_response
 
         new_growth_time = bed_plant.growth_time - fertilizer.boost
         bed_plant.growth_time = new_growth_time
