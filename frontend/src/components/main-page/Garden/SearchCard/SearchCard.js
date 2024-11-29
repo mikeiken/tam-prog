@@ -15,7 +15,7 @@ export default function SearchCard({item, onClick}) {
                     <h3 className={"header-into-card"}>{item.name}, {item.id}</h3>
 
                     <div>
-                            Cвободно {item.count_free_beds} грядок
+                            Свободно {item.count_free_beds} грядок
                             <br/>
                             Цена: {item.price} Рублей / грядка
                     </div>
