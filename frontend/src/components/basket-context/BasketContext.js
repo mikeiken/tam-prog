@@ -43,6 +43,10 @@ export const BasketProvider = ({ children }) => {
 
   const totalItems = basketItems.length;
 
+  const clearBasket = () => {
+    setBasketItems([]);
+  };
+
   return (
     <BasketContext.Provider
       value={{
@@ -50,6 +54,7 @@ export const BasketProvider = ({ children }) => {
         basketItems,
         addToBasket,
         removeFromBasket,
+        clearBasket
       }}
     >
       {children}

@@ -22,15 +22,11 @@ export default function Order({
                                 removeFromBasket,
                                 quantity,
                                 date,
-                                removeOneFromBasket,
-                                item,
-                                addToBasket,
                               }) {
-  const declension = getDeclension(quantity, "товар", "товара", "товаров");
+  const declension = getDeclension(quantity, "грядка", "грядок", "грядок");
   const [comment, setComment] = useState("");
   const [selectedPlant, setSelectedPlant] = useState(null); // Состояние для выбранного растения
 
-  // Логируем выбранное растение при его изменении
   useEffect(() => {
     if (selectedPlant) {
       console.log("Выбранное растение:", selectedPlant);
@@ -73,6 +69,7 @@ export default function Order({
               <div>Дата заказа: {date}</div>
               <div className="order-change-volume">
                 Итог:{" "}
+                  ?
                 {" "}
                 {declension}
               </div>

@@ -7,8 +7,8 @@ export default function SearchBlock({onSelectItem}) {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
     useEffect(() => {
+
         setLoading(true);
         Instance.get("/field/?format=json").then((response) => {
             setData(response.data);

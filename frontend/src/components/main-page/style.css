@@ -481,8 +481,11 @@ html {
         flex-direction: row;
     }
 
+    .order-input{
+        height: 14vh !important;
+    }
     .order-info {
-        width: 45vw !important;
+        width: auto !important;
         height: 50vh !important;
         display: flex;
         flex-direction: column;
@@ -496,6 +499,9 @@ html {
         gap: 20px;
     }
 
+    .oreder-description {
+        width: 40vw !important;
+    }
     .order-image {
         width: 20vw !important;
         height: auto !important;
@@ -509,6 +515,8 @@ html {
     }
 
     .order {
+        display: flex;
+        flex-direction: column;
         padding: 2vw !important;
     }
 

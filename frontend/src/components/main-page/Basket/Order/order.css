@@ -25,7 +25,7 @@
 .order-order {
   padding: 20px;
   border-radius: 20px;
-  width: auto;
+  width: 20vw;
   height: auto;
   background-color: lightblue;
   display: flex;
@@ -63,12 +63,13 @@
 }
 
 .order-image {
-  width: 180px;
-  height: 180px;
+  width: 190px;
+  height: 190px;
+  padding: 10px;
 }
 
 .order-image-align{
-  width: 180px;
+  width: auto;
   height: auto;
   display: flex;
   justify-content: center;
