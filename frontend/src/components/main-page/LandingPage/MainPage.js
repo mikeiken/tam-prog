@@ -1,7 +1,7 @@
 import { useState } from "react";
-import "./style.css";
-import LoginBtn from "./ui/login-btn/LoginBtn";
-import RegisterBtn from "./ui/register-btn/RegisterBtn";
+import "./main.css";
+import LoginBtn from "../ui/login-btn/LoginBtn";
+import RegisterBtn from "../ui/register-btn/RegisterBtn";
 
 export default function MainPage() {
   const [loaded, setLoaded] = useState(false);
@@ -29,9 +29,7 @@ export default function MainPage() {
                 onLoad={handleLoad}
                 className={loaded ? "loaded" : ""}
               />
-              <div className="text-overlay">
-                TAMPROG by BGTUTeam
-              </div>
+              <div className="text-overlay">TAMPROG by BGTUTeam</div>
             </div>
             <h1 className="custom-text">Мы команда инженеров!</h1>
             <div className="image-container">

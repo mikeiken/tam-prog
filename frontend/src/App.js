@@ -1,5 +1,5 @@
 import "./App.css";
-import MainPage from "./components/main-page/MainPage";
+import MainPage from "./components/main-page/LandingPage/MainPage";
 import AuthForm from "./components/auth/login/auth";
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/header/Header";

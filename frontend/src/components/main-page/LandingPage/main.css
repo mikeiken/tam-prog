@@ -1,0 +1,97 @@
+.header-for-landing {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  z-index: 1000;
+  background-color: rgba(40, 37, 40, 0.5);
+}
+
+.landing-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.landing-page {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+.landing {
+  width: 300vh;
+  min-height: 100vh;
+  background-color: whitesmoke;
+}
+
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+.text-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 24px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 10px;
+}
+
+.custom-text {
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  background-color: cornsilk;
+  position: relative;
+  z-index: 10;
+  text-align: center;
+}
+
+.landing img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  display: block;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  transition: opacity 2s ease-out;
+}
+
+.landing img.loaded {
+  opacity: 1;
+}
+
+.landing-register-btn {
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+.landing-register-btn:hover {
+  transform: scale(1.05);
+}
+
+.landing-login-btn a {
+  font-weight: 500;
+  align-items: center;
+}
+
+.landing-login-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: 0.3s ease;
+  cursor: pointer;
+}
