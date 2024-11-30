@@ -15,7 +15,7 @@ export default function Basket() {
       ) : (
         <div className="basket-around">
           {basketItems.map((item) => (
-            <Context key={item.id}>
+            <Context key={item.id} free_beds={item.count_free_beds}>
               <Order
                 key={item.id}
                 id={item.id}

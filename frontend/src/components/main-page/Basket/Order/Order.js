@@ -25,7 +25,7 @@ export default function Order({
   date,
 }) {
   const { count } = useContext(CounterContext);
-  const declension = getDeclension(quantity, "грядка", "грядок", "грядок");
+  const declension = getDeclension(count, "грядка", "грядки", "грядок");
   const [comment, setComment] = useState("");
   const [selectedPlant, setSelectedPlant] = useState(null); // Состояние для выбранного растения
 
@@ -67,10 +67,12 @@ export default function Order({
             value={comment}
             onChange={(e) => setComment(e.target.value)}
           ></textarea>
-          <Counter />
           <div className="order-submit-wrapper">
             <div>Дата заказа: {date}</div>
-            <div className="order-change-volume">Итог: ? {declension}</div>
+            <div className="order-change-volume">
+              Итог: <Counter />
+              {declension}
+            </div>
             <div className="order-selected-plant">
               {selectedPlant ? (
                 <div>Выбрано растение: {selectedPlant.name}</div>
