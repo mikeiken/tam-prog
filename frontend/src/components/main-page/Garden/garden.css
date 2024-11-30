@@ -157,6 +157,8 @@
   align-items: center;
   width: auto;
   height: 44vh;
+  overflow: hidden;
+  border-radius: 20px;
 }
 
 .container-for-text {
@@ -170,8 +172,10 @@
 
 .plot-card-img {
   border-radius: 10px;
-  width: 400px;
+  width: 600px;
   transition: 0.5s ease;
+  height: 100%;
+  border-radius: 20px;
 }
 
 .plot-card-img:hover {

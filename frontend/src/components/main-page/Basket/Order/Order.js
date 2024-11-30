@@ -28,13 +28,32 @@ export default function Order({
   const declension = getDeclension(count, "грядка", "грядки", "грядок");
   const [comment, setComment] = useState("");
   const [selectedPlant, setSelectedPlant] = useState(null); // Состояние для выбранного растения
+  const [fertilize, setFertilization] = useState(false);
+
+  const handleSetFertilizeFalse = () => {
+    setFertilization(false);
+  };
+
+  const handleSetFertilizeTrue = () => {
+    setFertilization(true);
+  };
 
   useEffect(() => {
     if (selectedPlant) {
-      console.log("Выбранное растение:", selectedPlant);
-      console.log(count);
+      console.log(
+        "Выбранное поле:",
+        item.id,
+        "Выбранное растение:",
+        selectedPlant.id,
+        "количество выбранных грядок:",
+        Number(count),
+        "Комментарий: ",
+        comment,
+        "Удобрять?",
+        fertilize
+      );
     }
-  }, [selectedPlant, count]);
+  }, [selectedPlant, count, comment]);
 
   return (
     <div className="order-wrapper">
@@ -42,11 +61,7 @@ export default function Order({
         <div className="order-info">
           <div className="order-info-wrapper">
             <div className={"order-image-align"}>
-              <img
-                src={process.env.PUBLIC_URL + "/user.png"}
-                alt="object"
-                className="order-image"
-              ></img>
+              <img src={item.url} alt="object" className="order-image"></img>
             </div>
             <div className="oreder-description">
               {name} - {price} руб. <br />
@@ -65,14 +80,34 @@ export default function Order({
           <textarea
             className="order-input"
             placeholder="Введите комментарий"
-            value={comment}
             onChange={(e) => setComment(e.target.value)}
           ></textarea>
           <div className="order-submit-wrapper">
             <div>Дата заказа: {date}</div>
             <div className="order-change-volume">
-              Итог: <Counter />
-              {declension}
+              <div className="order-wrapper-itog">
+                Итог: <Counter />
+                {declension}
+              </div>
+            </div>
+            <div>
+              Удобрять?{" "}
+              <button
+                className={
+                  fertilize ? "fertilize_btn" + " green" : "fertilize_btn"
+                }
+                onClick={handleSetFertilizeTrue}
+              >
+                Да
+              </button>
+              <button
+                className={
+                  fertilize ? "fertilize_btn" : "fertilize_btn" + " red"
+                }
+                onClick={handleSetFertilizeFalse}
+              >
+                Нет
+              </button>
             </div>
             <div className="order-selected-plant">
               {selectedPlant ? (
