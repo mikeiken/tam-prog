@@ -327,16 +327,22 @@ html {
 }
 
 .not-found-container p {
-  /* font-size: 1em; */
   margin: 0;
   font-weight: 600;
 }
 
 .not-found-container img {
   width: 100%;
-  /* height: auto; */
 }
 
+.counter-wrapper {
+  display: flex;
+  width: 150px;
+}
+
+.counter-wrapper input {
+  width: 80%;
+}
 @keyframes spin {
   0% {
     transform: rotate(0deg);

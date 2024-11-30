@@ -6,13 +6,9 @@ export default function Counter() {
     useContext(CounterContext);
 
   return (
-    <div>
+    <div className="counter-wrapper">
       <button onClick={increment}>+</button>
-      <input
-        type="text" // Меняем тип input на "text" для возможности ввода пустого значения
-        value={count}
-        onChange={setCountValue}
-      />
+      <input type="text" value={count} onChange={setCountValue} />
       <button onClick={decrement}>-</button>
     </div>
   );
