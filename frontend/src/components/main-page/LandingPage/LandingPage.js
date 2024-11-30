@@ -3,7 +3,7 @@ import "./main.css";
 import LoginBtn from "../ui/login-btn/LoginBtn";
 import RegisterBtn from "../ui/register-btn/RegisterBtn";
 
-export default function MainPage() {
+export default function LandingPage() {
   const [loaded, setLoaded] = useState(false);
 
   const handleLoad = () => {

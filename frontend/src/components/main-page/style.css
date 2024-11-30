@@ -446,6 +446,9 @@ html {
   .container-for-text {
     font-size: 14px !important;
   }
+  .order-order {
+    width: auto !important;
+  }
 }
 
 @media (min-width: 1200px) and (max-height: 1080px) {

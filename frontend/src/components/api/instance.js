@@ -42,12 +42,10 @@ Instance.interceptors.response.use(
         localStorage.setItem("accessToken", response.data.access);
         originalRequest.headers.Authorization = `Bearer ${response.data.access}`;
 
-        // Повторяем оригинальный запрос с новым токеном
         return axios(originalRequest);
       } catch (refreshError) {
         console.error("Token refresh failed:", refreshError);
 
-        // Необходимо перенаправить на страницу логина
         return Promise.reject(refreshError);
       }
     }

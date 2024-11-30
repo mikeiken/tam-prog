@@ -1,5 +1,5 @@
 import "./App.css";
-import MainPage from "./components/main-page/LandingPage/MainPage";
+import LandingPage from "./components/main-page/LandingPage/LandingPage";
 import AuthForm from "./components/auth/login/auth";
 import { Routes, Route } from "react-router-dom";
 import Header from "./components/header/Header";
@@ -15,7 +15,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<MainPage />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<AuthForm />} />
         <Route path="/register" element={<RegisterForm />} />
 
