@@ -21,8 +21,8 @@ export default function Order({
   name,
   price,
   removeFromBasket,
-  quantity,
   date,
+  item,
 }) {
   const { count } = useContext(CounterContext);
   const declension = getDeclension(count, "грядка", "грядки", "грядок");
@@ -50,7 +50,8 @@ export default function Order({
             </div>
             <div className="oreder-description">
               {name} - {price} руб. <br />
-              Поле №{id}
+              Поле №{id} <br />
+              Свободных грядок: {item.count_free_beds}
             </div>
           </div>
           <div className="order-garden-list">
