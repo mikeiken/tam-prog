@@ -68,7 +68,7 @@ services:
     restart: always
     environment:
       - REDIS_PASS=${REDIS_PASS}
-      - REDIS_MAXMEMORY_POLICY="allkeys-lru"
+      # - REDIS_MAXMEMORY_POLICY="allkeys-lru"
       - REDIS_MAXMEMORY="${REDIS_MAXMEMORY}"
     volumes:
       - redis-data:/data

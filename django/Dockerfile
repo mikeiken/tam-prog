@@ -15,6 +15,9 @@ RUN apk update && \
 # Copy the requirements file to the working directory
 COPY requirements.txt .
 
+# Update pip
+RUN pip install --upgrade pip
+
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
