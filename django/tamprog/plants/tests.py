@@ -57,7 +57,6 @@ def test_filter_bed_plants_via_url(api_client, bed_plants, fertilizers, user):
             assert all(item['id'] != bed_plant.id for item in non_fertilized_data)
 
 
-
 @pytest.mark.django_db
 def test_fuzzy_search(api_client, plants, user):
     api_client.force_authenticate(user=user)
