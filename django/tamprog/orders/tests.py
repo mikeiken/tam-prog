@@ -29,10 +29,6 @@ def test_calculate_total_cost(beds, plants, workers):
         total_cost = OrderService.calculate_total_cost(bed.field, plant, worker, beds_count)
         assert total_cost == (bed.field.price * beds_count) + (plant.price * beds_count) + worker.price
 
-
-
-
-
 @pytest.mark.django_db
 def test_create_order_success(user, workers, beds, plants, mocker):
     user.wallet_balance = 100000.00
