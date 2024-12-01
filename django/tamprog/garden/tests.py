@@ -47,15 +47,19 @@ def test_rent_bed_already_rented(beds, person):
 
 @pytest.mark.django_db
 def test_rent_bed_success(beds, person):
-    bed = next(b for b in beds if not b.is_rented)
-    order = mixer.blend('orders.Order', bed=bed, completed_at=None)
-    initial_count = bed.field.count_free_beds
-    result = BedService.rent_bed(bed_id=bed.id, person=person)
-    bed.refresh_from_db()
-    assert result.status_code == 200
-    assert bed.is_rented is True
-    assert bed.rented_by == person
-    assert bed.field.count_free_beds == initial_count - 1
+    field = beds[0].field
+    free_beds = Bed.objects.filter(field=field, is_rented=False)
+    assert free_beds.exists(), "Должна быть хотя бы одна свободная кровать для теста"
+    initial_count = field.count_free_beds
+    rented_count = BedService.rent_beds(field=field, user=person, beds_count=1)
+    field.refresh_from_db()
+    rented_bed = Bed.objects.filter(field=field, rented_by=person).first()
+    assert rented_count == 1, "Должна быть успешно арендована одна кровать"
+    assert rented_bed is not None, "Должна быть найдена арендованная кровать"
+    assert rented_bed.is_rented is True
+    assert rented_bed.rented_by == person
+    assert field.count_free_beds == initial_count - 1
+
 
 
 
