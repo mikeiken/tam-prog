@@ -50,11 +50,12 @@ class LoginView(generics.GenericAPIView):
                     OpenApiExample(
                         name="Successful login",
                         value={
-                            'username': "example_user",
+                            "id": 1,
+                            "username": "example_user",
                             "refresh": "string",
                             "access": "string",
                             "wallet_balance": 0.00,
-                            'is_staff': False,
+                            "is_staff": False,
                         },
                     )
                 ],
@@ -86,6 +87,7 @@ class LoginView(generics.GenericAPIView):
             refresh = RefreshToken.for_user(user)
             log.info(f"User {user.username} logged in successfully")
             return Response({
+                'id': user.id,
                 'username': user.username,
                 'refresh': str(refresh),
                 'access': str(refresh.access_token),
