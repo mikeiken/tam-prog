@@ -35,5 +35,17 @@ HEALTHCHECK --interval=10s --timeout=5s --retries=5 CMD curl --fail http://local
 
 WORKDIR /usr/src/app/tamprog
 
+# Remove build dependencies
+RUN apk del gcc musl-dev libffi-dev openssl-dev make postgresql-dev
+
+# Clean up
+RUN rm -rf /var/cache/apk/*
+
+# Clear cache
+RUN rm -rf /root/.cache
+
+# Clear temp files
+RUN rm -rf /tmp/*
+
 # Run migrations and start the Django development server
 ENTRYPOINT ["/bin/sh", "../entrypoint.sh"]
