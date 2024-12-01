@@ -96,29 +96,20 @@ def test_create_order_via_url(api_client, user, workers, beds, plants, mocker):
     expected_balance = initial_balance - total_cost
     assert user.wallet_balance == expected_balance
 
-
-
 @pytest.mark.django_db
-def test_create_order_insufficient_funds(user, workers, beds, plants, mocker):
-    # Мокинг внешних зависимостей
-    mocker.patch(
-        "user.services.PersonService.update_wallet_balance",
-        return_value=Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "Insufficient funds"})
-    )
-    mocker.patch(
-        "garden.services.BedService.rent_bed",
-        return_value=Response(status=status.HTTP_200_OK)
-    )
-    mocker.patch(
-        "plants.services.BedPlantService.plant_in_bed",
-        return_value=Response(status=status.HTTP_200_OK)
-    )
-    action = "planting"
-    for bed, plant in zip(beds, plants):
-        response = OrderService.create_order(user, bed, plant, action)
-        assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert response.data['error'] == "Insufficient funds", f"Unexpected error: {response.data['error']}"
+def test_create_order_insufficient_funds(user, fields, plants, workers, mocker):
+    field = fields[0]
+    plant = plants[0]
 
+    beds_count = 3
+    comments = "Тестовый заказ с недостаточными средствами"
+    fertilize = True
+    worker = workers[0]
+    user.wallet_balance = 50
+    user.save()
+    response = OrderService.create_order(user, field, plant, beds_count, comments, fertilize)
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response.data['error'] == "Insufficient funds"
 
 
 @pytest.mark.django_db
