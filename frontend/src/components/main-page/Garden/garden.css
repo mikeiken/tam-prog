@@ -34,6 +34,7 @@
   display: flex;
   justify-content: space-around;
   align-items: center;
+  gap: 10px;
 }
 
 .container-plot-products {
@@ -175,7 +176,7 @@
 }
 
 .plot-card-img {
-  width: 600px;
+  width: 300px;
   transition: 0.5s ease;
   height: 100%;
   border-radius: 20px;
