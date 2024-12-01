@@ -31,6 +31,9 @@
   width: 60%;
   height: 64%;
   background-color: rgba(150, 194, 168, 0.5);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
 
 .container-plot-products {
@@ -140,6 +143,7 @@
 .add-to-basket:hover {
   transform: scale(0.95);
 }
+
 .add-to-basket-img {
   width: 40px;
 }
@@ -162,7 +166,7 @@
 }
 
 .container-for-text {
-  padding: 5px;
+  font-size: 18px !important;
 }
 
 .container-wrapper-info {
@@ -171,7 +175,6 @@
 }
 
 .plot-card-img {
-  border-radius: 10px;
   width: 600px;
   transition: 0.5s ease;
   height: 100%;

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Instance from '../../../../api/instance';
 import './plant-area.css';
 
-function Plant({ plant, onClick }) {
+function Plant({plant, onClick}) {
     return (
         <button className="plant-container" onClick={onClick}>
             <div className="plant-image-wrapper">
@@ -17,7 +17,7 @@ function Plant({ plant, onClick }) {
     );
 }
 
-export default function PlantArea({ onPlantSelect }) {
+export default function PlantArea({onPlantSelect}) {
     const [data, setData] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
@@ -49,21 +49,24 @@ export default function PlantArea({ onPlantSelect }) {
     return (
         <div>
             <div className="plant-search-area">
-                <input
-                    placeholder="Введите название..."
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                />
-                <button>
-                    <img alt="search" />
-                </button>
+                <div className={"plant-search-input-wrapper"}>
+                    <input
+                        placeholder="Введите название..."
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        className={"plant-area-input"}
+                    />
+                    <button className={"plant-search-button"}>
+                        <img src={process.env.PUBLIC_URL + '/search.svg'} alt="search"/>
+                    </button>
+                </div>
             </div>
             <div className="plant-area">
                 {filteredData.map((item) => (
                     <Plant
                         plant={item}
                         key={item.id}
-                        onClick={() => onPlantSelect(item)} // Передаем выбранное растение
+                        onClick={() => onPlantSelect(item)} // Передаем объект растения
                     />
                 ))}
             </div>

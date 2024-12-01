@@ -393,7 +393,8 @@ html {
   }
   .order-info {
     width: auto !important;
-    height: 50vh !important;
+    min-height: 50vh !important;
+    height: auto !important;
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -401,6 +402,7 @@ html {
 
   .order-info-wrapper {
     width: auto !important;
+    min-height: 300px;
     height: auto !important;
     background-color: cadetblue;
     gap: 20px;

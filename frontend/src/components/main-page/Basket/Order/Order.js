@@ -3,6 +3,7 @@ import "./order.css";
 import PlantArea from "./PlantArea/PlantArea";
 import { CounterContext } from "../../ui/counter/CounterContext";
 import Counter from "../../ui/counter/Counter";
+import Instance from "../../../api/instance";
 function getDeclension(quantity, one, few, many) {
   if (quantity % 10 === 1 && quantity % 100 !== 11) {
     return one;
@@ -26,7 +27,7 @@ export default function Order({
 }) {
   const { count } = useContext(CounterContext);
   const declension = getDeclension(count, "грядка", "грядки", "грядок");
-  const [comment, setComment] = useState("");
+  const [comment, setComment] = useState(" ");
   const [selectedPlant, setSelectedPlant] = useState(null); // Состояние для выбранного растения
   const [fertilize, setFertilization] = useState(false);
 
@@ -37,6 +38,16 @@ export default function Order({
   const handleSetFertilizeTrue = () => {
     setFertilization(true);
   };
+
+  function createOrder() {
+    Instance.post("order/", {
+      field: item.id,
+      beds_count: Number(count),
+      plant: selectedPlant.id,
+      comments: comment,
+      fertilize: fertilize,
+    }).then(removeFromBasket(id))
+  }
 
   useEffect(() => {
     if (selectedPlant) {
@@ -59,13 +70,19 @@ export default function Order({
     <div className="order-wrapper">
       <div className="order">
         <div className="order-info">
-          <div className="order-info-wrapper">
-            <div className={"order-image-align"}>
-              <img src={item.url} alt="object" className="order-image"></img>
-            </div>
-            <div className="oreder-description">
-              {name} - {price} руб. <br />
+          <div className="order-info-wrapper"
+               style={{
+                 backgroundImage: `url(${item.url})`, // Устанавливаем фон
+                 backgroundSize: 'cover',             // Масштабируем фон для заполнения
+                 backgroundPosition: 'center',        // Центрируем фон
+                 backgroundRepeat: 'no-repeat',        // Избегаем повторения изображения
+                 borderRadius: '20px'
+               }}
+          >
+
+            <div className="order-description">
               Поле №{id} <br />
+              {name} - {price} руб. <br />
               Свободных грядок: {item.count_free_beds}
             </div>
           </div>
@@ -86,7 +103,7 @@ export default function Order({
             <div>Дата заказа: {date}</div>
             <div className="order-change-volume">
               <div className="order-wrapper-itog">
-                Итог: <Counter />
+                Итог: <Counter /> {" "}
                 {declension}
               </div>
             </div>
@@ -116,8 +133,11 @@ export default function Order({
                 "Растение не выбрано"
               )}
             </div>
+            <div>
+              Цена: {item.price * Number(count) + (selectedPlant ? selectedPlant.price : 0)} ₽
+            </div>
             <div className="order-submit-button-container">
-              <button>Заказать</button>
+              {selectedPlant ? <button onClick={createOrder}>Заказать</button> : ""}
               <button onClick={() => removeFromBasket(id)}>Отменить</button>
             </div>
           </div>

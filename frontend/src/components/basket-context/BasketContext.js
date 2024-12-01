@@ -3,9 +3,7 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 // Создаем контекст
 const BasketContext = createContext();
 
-// Провайдер контекста для оборачивания компонентов
 export const BasketProvider = ({ children }) => {
-  // Получаем данные из localStorage или начинаем с пустого массива
   const loadBasketItems = () => {
     const savedItems = localStorage.getItem("basketItems");
     return savedItems ? JSON.parse(savedItems) : [];

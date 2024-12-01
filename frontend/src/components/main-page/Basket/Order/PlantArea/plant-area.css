@@ -5,11 +5,21 @@
     align-items: center;
     width: 90px;
     height: 100px;
-    background-color: #0f3a42;
+    border-radius: 15px;
+    outline: none;
+    border: 3px solid white;
+    background-color: rgba(40, 37, 40, 0.5);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    transition: 0.3s ease;
 }
 
-.plant-container:focus{
-    background-color: #1b6d85;
+.plant-container:focus {
+    background-color: #96c2a8;
+    transform: scale(0.95);
+}
+
+.plant-container:active {
+    transform: scale(0.9);
 }
 
 .plant-image-wrapper{
@@ -29,15 +39,47 @@
     flex-wrap: wrap; /* Разрешает перенос строк */
     gap: 7px;
     justify-content: center;
-    /*margin: 5px;*/
 }
 
-.plant-search-area{
-    width: 100%;
-    height: 50px;
-    background-color: #0f3a42;
-    margin: 0 0 5px 0;
+.plant-search-area {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.plant-search-input-wrapper {
+    position: relative; /* Для абсолютного позиционирования кнопки */
+    width: 100%; /* Чтобы адаптировать к ширине контейнера */
+    max-width: 400px; /* Опционально, максимальная ширина */
+    margin-bottom: 5px;
+}
+
+.plant-area-input {
+    width: 100%; /* Полная ширина */
+    padding: 10px 40px 10px 10px; /* Отступ справа для кнопки */
+    font-size: 16px; /* Размер шрифта */
+    border: 1px solid #ccc; /* Граница */
+    outline: none;
+    border-radius: 20px; /* Закругленные углы */
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+
+}
+
+.plant-area-input:focus{
+    border: 1px solid #1b6d85;
+}
+
+.plant-search-button {
+    position: absolute; /* Абсолютное позиционирование внутри контейнера */
+    top: 50%; /* Выравнивание по вертикали */
+    right: 10px; /* Расстояние от правого края */
+    transform: translateY(-50%); /* Центровка по вертикали */
+    background: none; /* Убираем фон */
+    border: none; /* Убираем границу */
+    cursor: pointer; /* Указатель мыши */
+}
+
+.plant-search-button img {
+    width: 20px; /* Размер иконки */
+    height: 20px;
 }
