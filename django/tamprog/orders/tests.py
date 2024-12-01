@@ -25,8 +25,12 @@ def test_filter_orders(api_client, user, orders):
 @pytest.mark.django_db
 def test_calculate_total_cost(beds, plants, workers):
     for bed, plant, worker in zip(beds, plants, workers):
-        total_cost = OrderService.calculate_total_cost(bed, plant, worker)
-        assert total_cost == bed.field.price + plant.price + worker.price
+        beds_count = 1
+        total_cost = OrderService.calculate_total_cost(bed.field, plant, worker, beds_count)
+        assert total_cost == (bed.field.price * beds_count) + (plant.price * beds_count) + worker.price
+
+
+
 
 
 @pytest.mark.django_db
