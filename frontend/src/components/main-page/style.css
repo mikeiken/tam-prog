@@ -12,6 +12,7 @@ html {
 
 .user-interface-login {
   width: 30px;
+  height: 30px;
 }
 
 @keyframes fade-in {

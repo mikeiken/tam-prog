@@ -20,8 +20,6 @@
 
 .container-plot-wrapper.visible {
   opacity: 1;
-  /* Полная видимость */
-  /* height: auto; Если хотите анимировать высоту, убедитесь, что элемент имеет фиксированную высоту в начале */
 }
 
 .container-plot-info {

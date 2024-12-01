@@ -12,7 +12,6 @@ export default function LoginBtn() {
             </Link>
             <Routes >
                 <Route path="/login" element={<AuthForm />} />
-
             </Routes>
         </>
     )
