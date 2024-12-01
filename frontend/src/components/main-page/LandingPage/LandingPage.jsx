@@ -1,6 +1,4 @@
-// import { useState } from "react";
 import "./main.css";
-import Garden from "../Garden/Garden";
 import LoginBtn from "../ui/login-btn/LoginBtn";
 import RegisterBtn from "../ui/register-btn/RegisterBtn";
 
@@ -25,9 +23,4 @@ export default function LandingPage() {
             </div>
         </>
     );
-}
-
-{/*<LoginBtn/>*/
-}
-{/*<RegisterBtn/>*/
 }
