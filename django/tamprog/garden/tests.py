@@ -47,37 +47,38 @@ def test_rent_bed_already_rented(beds, person):
 
 @pytest.mark.django_db
 def test_rent_bed_success(beds, person):
-    field = beds[0].field
-    free_beds = Bed.objects.filter(field=field, is_rented=False)
-    assert free_beds.exists(), "Должна быть хотя бы одна свободная кровать для теста"
+    free_beds = [bed for bed in beds if not bed.is_rented]
+    assert free_beds, "Должна быть хотя бы одна свободная грядка для теста"
+    field = free_beds[0].field
     initial_count = field.count_free_beds
     rented_count = BedService.rent_beds(field=field, user=person, beds_count=1)
     field.refresh_from_db()
     rented_bed = Bed.objects.filter(field=field, rented_by=person).first()
-    assert rented_count == 1, "Должна быть успешно арендована одна кровать"
-    assert rented_bed is not None, "Должна быть найдена арендованная кровать"
+    assert rented_count == 1, "Должна быть успешно арендована одна грядка"
+    assert rented_bed is not None, "Должна быть найдена арендованная грядка"
     assert rented_bed.is_rented is True
     assert rented_bed.rented_by == person
     assert field.count_free_beds == initial_count - 1
-
-
 
 
 @pytest.mark.django_db
 def test_release_bed_success(beds, person):
     bed = beds[0]
     field = bed.field
+    assert bed, "Грядка должна существовать"
+    assert field, "У грядки должно быть связано поле"
     bed.is_rented = True
     bed.rented_by = person
     bed.save()
     initial_free_beds = field.count_free_beds
-    result = BedService.release_bed(bed_id=bed.id)
+    assert bed.is_rented is True, "Грядка должна быть арендована перед освобождением"
+    assert bed.rented_by == person, "Грядка должна быть связана с пользователем"
+    BedService.release_beds(field=field, beds_count=1)
     bed.refresh_from_db()
     field.refresh_from_db()
-    assert result.status_code == 200
-    assert bed.is_rented is False
-    assert bed.rented_by is None
-    assert field.count_free_beds == initial_free_beds + 1
+    assert bed.is_rented is False, "Грядка должна быть освобождена"
+    assert bed.rented_by is None, "У грядки не должно быть арендатора"
+    assert field.count_free_beds == initial_free_beds + 1, "Количество свободных грядок должно увеличиться"
 
 
 @pytest.mark.django_db
