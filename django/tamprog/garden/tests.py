@@ -40,8 +40,9 @@ def test_rent_bed_already_rented(beds, person):
     for bed in beds:
         bed.is_rented = True
         bed.save()
-        result = BedService.rent_bed(bed_id=bed.id, person=person)
-        assert result.status_code == 400
+    field = beds[0].field
+    result = BedService.rent_beds(field=field, user=person, beds_count=len(beds))
+    assert result == 0
 
 
 @pytest.mark.django_db
