@@ -120,9 +120,17 @@ def test_release_bed_success_api(api_client, beds, person):
 def test_release_bed_not_rented(beds):
     for bed in beds:
         bed.is_rented = False
+        bed.rented_by = None
         bed.save()
-        result = BedService.release_bed(bed_id=bed.id)
-        assert result.status_code == 400
+    result = BedService.release_beds(field=beds[0].field, beds_count=1)
+    assert result is None
+    for bed in beds:
+        bed.refresh_from_db()
+        assert bed.is_rented is False
+        assert bed.rented_by is None
+    field = beds[0].field
+    field.refresh_from_db()
+    assert field.count_free_beds == field.count_free_beds
 
 @pytest.mark.django_db
 def test_get_user_beds(beds, person):
