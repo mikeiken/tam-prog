@@ -88,14 +88,16 @@ class BedService:
     @staticmethod
     def release_beds(field, beds_count):
         rented_beds = Bed.objects.filter(field=field, is_rented=True)[:beds_count]
+        if not rented_beds:
+            log.warning(f"No rented beds available to release in field {field.id}")
+            return
         for bed in rented_beds:
             bed.is_rented = False
             bed.rented_by = None
             bed.save()
-
-        field.count_free_beds += beds_count
+        field.count_free_beds += len(rented_beds)
         field.save()
-        log.info(f"{beds_count} beds released successfully.")
+        log.info(f"{len(rented_beds)} beds released successfully.")
 
     @staticmethod
     def get_user_beds(user):

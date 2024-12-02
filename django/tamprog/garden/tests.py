@@ -81,7 +81,6 @@ def test_release_bed_success(beds, person):
     assert field.count_free_beds == initial_free_beds + 1, "Количество свободных грядок должно увеличиться"
 
 
-
 @pytest.mark.django_db
 def test_release_bed_not_rented(beds):
     for bed in beds:
