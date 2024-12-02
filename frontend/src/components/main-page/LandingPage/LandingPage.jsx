@@ -37,9 +37,10 @@ export default function LandingPage() {
               style={{
                 margin: "0",
                 textShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",
+                fontSize: "35px",
               }}
             >
-              presents
+              представляет
             </h3>
           </div>
         </div>
@@ -79,7 +80,15 @@ export default function LandingPage() {
                         "radial-gradient(circle, yellow 5%, orange 50%)",
                     }}
                   >
-                    <h2>Наш DevOps инженер</h2>
+                    <h2
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      Денис
+                    </h2>
+                    <p>Наш DevOps инженер</p>
                   </div>
                 </div>
               </div>
@@ -108,7 +117,15 @@ export default function LandingPage() {
                         "radial-gradient(circle, #E9EAA0 5%, #11B278 50%)",
                     }}
                   >
-                    <h2>Наш Front-End разработчик</h2>
+                    <h2
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      Леонид
+                    </h2>
+                    <p>Наш Front-End разработчик</p>
                   </div>
                 </div>
               </div>
@@ -136,7 +153,15 @@ export default function LandingPage() {
                         "radial-gradient(circle, #F5B2CE 15%, #E74792 100%)",
                     }}
                   >
-                    <h2>Наш Back-End разработчик</h2>
+                    <h2
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      Анастасия
+                    </h2>
+                    <p>Наш Back-End разработчик</p>
                   </div>
                 </div>
               </div>
@@ -163,7 +188,15 @@ export default function LandingPage() {
                         "radial-gradient(circle, #E3F1F8 5%, #40BBE7 50%)",
                     }}
                   >
-                    <h2>Наш Тестировщик</h2>
+                    <h2
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      Николай
+                    </h2>
+                    <p>Наш Тестировщик</p>
                   </div>
                 </div>
               </div>
@@ -186,9 +219,19 @@ export default function LandingPage() {
                       left: "130px",
                       background:
                         "radial-gradient(circle, #FEAA56 15%, #F67028 50%)",
+                      width: "150px",
+                      height: "120px",
                     }}
                   >
-                    <h2>Наш Дизайнер</h2>
+                    <h2
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      Дарья
+                    </h2>
+                    <p2>Наш Дизайнер</p2>
                   </div>
                 </div>
               </div>
@@ -229,31 +272,6 @@ export default function LandingPage() {
               ТАМПРОГ
             </h1>{" "}
             – автоматизация, которая работает для <u>Вас</u> и вашего урожая.
-          </div>
-        </div>
-        <div
-          className={"section2"}
-          style={{
-            backgroundColor: "#282528",
-          }}
-        >
-          <div className={"parallax-text"}>
-            <div
-              style={{
-                fontSize: "14px",
-              }}
-            >
-              Сажайте, ухаживайте, собирайте – всё в один клик, где бы вы ни
-              находились.
-            </div>
-            <div
-              style={{
-                fontSize: "14px",
-              }}
-            >
-              Управляйте растениями удаленно – от аренды до сбора урожая с нашей
-              системой.
-            </div>
           </div>
         </div>
       </div>
