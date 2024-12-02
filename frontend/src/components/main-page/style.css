@@ -512,8 +512,7 @@ html {
     max-width: 20%;
     height: 100%;
   }
-  .section1::before
-  {
+  .section1::before {
     transform: translateZ(-1px) scale(3.2);
   }
   .box2 {
@@ -533,14 +532,13 @@ html {
     width: 120vh;
   }
 
-  .section1::before
-  {
+  .section1::before {
     transform: translateZ(-1px) scale(3.7);
   }
   .student-wrapper {
     height: 12vh !important;
   }
-  .student-img{
+  .student-img {
     height: 14vh !important;
   }
 }
@@ -588,4 +586,5 @@ html {
 .header-into-card {
   padding: 0;
   margin: 0;
+  font-size: 18px;
 }

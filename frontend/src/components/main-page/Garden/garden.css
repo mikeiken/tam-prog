@@ -152,6 +152,12 @@
   cursor: pointer;
 }
 
+.plot-image-wrapper {
+  width: 400px;
+  height: 80%;
+  object-fit: cover;
+}
+
 @media (max-width: 1200px) and (max-height: 1080px) {
 }
 .container-wrapper-img {
@@ -174,10 +180,11 @@
 }
 
 .plot-card-img {
-  width: 20vw;
+  width: 100%;
   transition: 0.5s ease;
   height: 100%;
   border-radius: 20px;
+  object-fit: cover;
 }
 
 .plot-card-img:hover {
