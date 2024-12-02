@@ -49,7 +49,7 @@ export default function LandingPage() {
           className={"section2"}
           style={{
             background:
-              "linear-gradient(to top, #282528 6%, rgba(40, 37, 40, 0) 95%)",
+              "linear-gradient(to top, #282528 1%, rgba(40, 37, 40, 0) 95%)",
           }}
         >
           <div className="dream-team">
