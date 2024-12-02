@@ -91,7 +91,7 @@ env:
     # Log level for task logs [DEBUG/>INFO</WARNING/ERROR/CRITICAL]
     CELERY_WORKER_REDIRECT_STDOUTS_LEVEL: INFO
     # Custom logging format for tasks
-    CELERY_WORKER_TASK_LOG_FORMAT: [%(asctime)s: %(levelname)s] Task %(task_name)s[%(task_id)s]: %(message)s
+    CELERY_WORKER_TASK_LOG_FORMAT: "[%(asctime)s: %(levelname)s] Task %(task_name)s[%(task_id)s]: %(message)s"
 
 jobs:
   fetch-commit-message:
