@@ -204,15 +204,20 @@ def test_get_sorted_fields_timeout(api_client, superuser):
 def test_rent_bed_success_url(api_client, superuser, beds, person):
     api_client.force_authenticate(user=person)
     bed = next(b for b in beds if not b.is_rented)
-    order = mixer.blend(Order, bed=bed, completed_at=None)
-    assert bed.is_rented is False
-    assert Order.objects.filter(bed=bed, completed_at=None).exists()
-    url = f'/api/v1/bed/{bed.id}/rent/'
-    response = api_client.post(url)
+    field = bed.field
+    beds_count = 1
+    url = '/api/v1/bed/rent/'
+    data = {
+        'field_id': field.id,
+        'beds_count': beds_count
+    }
+    response = api_client.post(url, data)
     bed.refresh_from_db()
     assert response.status_code == status.HTTP_200_OK
     assert bed.is_rented is True
     assert bed.rented_by == person
+    assert Order.objects.filter(bed=bed, completed_at=None).exists()
+
 
 
 @pytest.mark.django_db
