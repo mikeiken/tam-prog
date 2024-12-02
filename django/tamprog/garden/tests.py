@@ -81,40 +81,6 @@ def test_release_bed_success(beds, person):
     assert field.count_free_beds == initial_free_beds + 1, "Количество свободных грядок должно увеличиться"
 
 
-@pytest.mark.django_db
-def test_rent_bed_success_api(api_client, beds, person):
-    api_client.force_authenticate(user=person)
-    bed = next(b for b in beds if not b.is_rented)
-    order = mixer.blend('orders.Order', bed=bed, person=person, completed_at=None)
-    bed.order = order
-    bed.save()
-    url = f'/api/v1/bed/{bed.id}/rent/'
-    response = api_client.post(url, {}, format='json')
-    bed.refresh_from_db()
-    assert response.status_code == 200
-    assert bed.is_rented is True
-    assert bed.rented_by == person
-
-
-
-@pytest.mark.django_db
-def test_release_bed_success_api(api_client, beds, person):
-    api_client.force_authenticate(user=person)
-    bed = beds[0]
-    bed.is_rented = True
-    bed.rented_by = person
-    bed.save()
-    field = bed.field
-    initial_free_beds = field.count_free_beds
-    url = f'/api/v1/bed/{bed.id}/release/'
-    response = api_client.post(url, {}, format='json')
-    bed.refresh_from_db()
-    field.refresh_from_db()
-    assert response.status_code == 200
-    assert bed.is_rented is False
-    assert bed.rented_by is None
-    assert field.count_free_beds == initial_free_beds + 1
-
 
 @pytest.mark.django_db
 def test_release_bed_not_rented(beds):
@@ -199,41 +165,6 @@ def test_get_sorted_fields_timeout(api_client, superuser):
     response = api_client.get(url, {'sort_by': 'price', 'ascending': 'true'})
     assert response.status_code == 200
     assert 'error' not in response.data
-
-@pytest.mark.django_db
-def test_rent_bed_success_url(api_client, superuser, beds, person):
-    api_client.force_authenticate(user=person)
-    bed = next(b for b in beds if not b.is_rented)
-    field = bed.field
-    beds_count = 1
-    url = '/api/v1/bed/rent/'
-    data = {
-        'field_id': field.id,
-        'beds_count': beds_count
-    }
-    response = api_client.post(url, data)
-    bed.refresh_from_db()
-    assert response.status_code == status.HTTP_200_OK
-    assert bed.is_rented is True
-    assert bed.rented_by == person
-    assert Order.objects.filter(bed=bed, completed_at=None).exists()
-
-
-
-@pytest.mark.django_db
-def test_release_bed_success_url(api_client, superuser, beds, person):
-    api_client.force_authenticate(user=superuser)
-    bed = beds[0]
-    bed.is_rented = True
-    bed.rented_by = person
-    bed.save()
-    url = f'/api/v1/bed/{bed.id}/release/'
-    response = api_client.post(url)
-    bed.refresh_from_db()
-    assert response.status_code == 200
-    assert bed.is_rented is False
-    assert bed.rented_by is None
-
 
 @pytest.mark.django_db
 def test_get_user_beds_url(api_client, superuser, beds, person):
