@@ -231,7 +231,7 @@ export default function LandingPage() {
                     >
                       Дарья
                     </h2>
-                    <p2>Наш Дизайнер</p2>
+                    <p>Наш Дизайнер</p>
                   </div>
                 </div>
               </div>
