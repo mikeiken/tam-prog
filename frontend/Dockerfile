@@ -1,27 +1,37 @@
-# Use the official Node.js 20.17 image as the base image
-FROM node:20-alpine
+# Build stage
+FROM node:20-alpine AS builder
 
-# Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Copy the package.json and yarn.lock files to the working directory
-COPY package.json yarn.lock ./
+ENV NODE_ENV=production
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
 
-# Install the dependencies using yarn
-RUN yarn install
+COPY package*.json ./
 
-# Install curl for healthcheck
-RUN apk add --no-cache curl
+RUN npm install --production --silent && \
+    npm cache clean --force
 
-# Copy the rest of the application code to the working directory
 COPY . .
+RUN npm run build
 
-# Expose the port the application will run on
+# Runtime stage
+FROM nginx:alpine-slim
+
+# Copy nginx config
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy built assets
+COPY --from=builder /usr/src/app/build /usr/share/nginx/html
+
+# Set permissions and install curl
+RUN chmod -R 755 /usr/share/nginx/html && \
+    chown -R nginx:nginx /usr/share/nginx/html && \
+    apk add --no-cache curl && \
+    rm -rf /var/cache/apk/*
+
 EXPOSE 3000
 
-# Define the command to run the application
-CMD ["yarn", "start"]
-
-# Add a healthcheck to ensure the container is running correctly
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:3000/ || exit 1
+  CMD curl -f http://localhost/index.html || exit 1
+
+CMD ["nginx", "-g", "daemon off;"]
