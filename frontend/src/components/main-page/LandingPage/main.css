@@ -1,7 +1,8 @@
 .section1,
-.section2 {
+.section2,
+.section3 {
   width: 100%;
-  min-height: 100.1vh;
+  min-height: 100.2vh;
   position: relative;
   display: flex;
   justify-content: center;
@@ -28,6 +29,15 @@
 .section2 {
   background: #1b6d85;
   height: 100%;
+}
+
+.section3 {
+  background: url("../../../../public/field2.jpg"); /* Путь к картинке */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed; /* Закрепляем изображение */
+  transform: scale(2);
 }
 
 .default-text {
@@ -91,7 +101,7 @@
   width: 90px;
   height: 90px;
   position: relative;
-  transition: 0.3s ease;
+  transition: 0.5s ease;
 }
 
 .dream-team-container {
@@ -128,6 +138,29 @@
 .developer-wrapper:hover .popup {
   opacity: 1;
   transform: translateY(0);
+  animation: bounce 0.5s;
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  60% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0);
+    /* transform: translateY(0); */
+  }
+
+  40% {
+    transform: translateY(-20px);
+    /* transform: translateY(-20px); */
+  }
+
+  80% {
+    transform: translateY(-10px);
+    /* transform: translateY(-10px); */
+  }
 }
 
 .leonid {
