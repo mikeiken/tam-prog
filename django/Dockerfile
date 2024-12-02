@@ -1,51 +1,53 @@
-# Use the official Python image from the Alpine version
-FROM python:3.9-alpine
+# Build stage
+FROM python:3.9-alpine as builder
 
 # Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-# Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Install dependencies
-RUN apk update && \
-    apk add --no-cache gcc musl-dev libffi-dev openssl-dev make postgresql-dev curl
+# Install build dependencies and compile requirements
+RUN apk add --no-cache --virtual .build-deps \
+    gcc \
+    musl-dev \
+    libffi-dev \
+    openssl-dev \
+    make \
+    postgresql-dev \
+    && pip install --upgrade pip
 
-# Copy the requirements file to the working directory
 COPY requirements.txt .
-
-# Update pip
-RUN pip install --upgrade pip
-
-# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the rest of the application code to the working directory
-COPY . .
+# Runtime stage
+FROM python:3.9-alpine
 
-# Collect static files
-RUN python tamprog/manage.py collectstatic --noinput
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
 
-# Expose the port the application will run on
+WORKDIR /usr/src/app
+
+# Install only runtime dependencies
+RUN apk add --no-cache libpq curl
+
+# Copy Python packages from builder
+COPY --from=builder /usr/local/lib/python3.9/site-packages/ /usr/local/lib/python3.9/site-packages/
+COPY --from=builder /usr/local/bin/ /usr/local/bin/
+
+# Copy only necessary project files
+COPY tamprog/ tamprog/
+COPY entrypoint.sh .
+
+# Collect static files and clean up in single layer
+RUN python tamprog/manage.py collectstatic --noinput \
+    && find . -type d -name __pycache__ -exec rm -r {} + \
+    && rm -rf /root/.cache /tmp/*
+
 EXPOSE 8000
 
-# Add health check
 HEALTHCHECK --interval=10s --timeout=5s --retries=5 CMD curl --fail http://localhost:8000/admin || exit 1
 
 WORKDIR /usr/src/app/tamprog
 
-# Remove build dependencies
-RUN apk del gcc musl-dev libffi-dev openssl-dev make postgresql-dev
-
-# Clean up
-RUN rm -rf /var/cache/apk/*
-
-# Clear cache
-RUN rm -rf /root/.cache
-
-# Clear temp files
-RUN rm -rf /tmp/*
-
-# Run migrations and start the Django development server
 ENTRYPOINT ["/bin/sh", "../entrypoint.sh"]
