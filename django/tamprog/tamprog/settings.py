@@ -259,7 +259,27 @@ RABBITMQ_HOST = os.getenv('RABBITMQ_HOST', 'localhost') \
 RABBITMQ_PORT = os.getenv('RABBITMQ_PORT', '5672')
 RABBITMQ_VHOST = os.getenv('RABBITMQ_VHOST', '/')
 
-CELERY_BROKER_URL = f'amqp://{RABBITMQ_USER}:{RABBITMQ_PASSWORD}@{RABBITMQ_HOST}:{RABBITMQ_PORT}/{RABBITMQ_VHOST}'
+
+# Redis settings
+REDIS_HOST = os.getenv('REDIS_HOST', 'localhost') \
+    if IS_IN_CONTAINER \
+    else 'localhost'
+REDIS_PORT = os.getenv('REDIS_PORT', '6379')
+REDIS_DB = os.getenv('REDIS_DB', '0')
+REDIS_USER = os.getenv('REDIS_USER', 'default')
+REDIS_PASSWORD = os.getenv('REDIS_PASS', 'admin')
+
+# Redis connection pool settings
+REDIS_CONNECTION_POOL = {
+    'max_connections': 20,
+    'retry_on_timeout': True,
+    'socket_timeout': 5,
+    'socket_connect_timeout': 5,
+    'retry': 3,
+    'retry_delay': 1,      # Delay between retries in seconds
+    'connection_class': 'redis.connection.DefaultConnection',
+    'retry_on_error': [ConnectionError, TimeoutError]
+}
 
 CELERY_BROKER_CONNECTION_RETRY = bool(os.getenv(
     'CELERY_BROKER_CONNECTION_RETRY', 'True').lower() == 'true')
@@ -269,13 +289,54 @@ CELERY_BROKER_CONNECTION_MAX_RETRIES = int(os.getenv(
     'CELERY_BROKER_CONNECTION_MAX_RETRIES', '10'))
 CELERY_BROKER_HEARTBEAT = int(os.getenv(
     'CELERY_BROKER_HEARTBEAT', '60'))
+CELERY_BROKER_CONNECTION_TIMEOUT = 10
+CELERY_BROKER_POOL_LIMIT = 10
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    'visibility_timeout': 7200,
+    'max_retries': 5,
+    'interval_start': 0,
+    'interval_step': 0.2,
+    'interval_max': 0.5,
+    'connect_timeout': 10,
+    'read_timeout': 10,
+    'write_timeout': 10,
+}
+
+CELERY_BROKER_URL = f'amqp://{RABBITMQ_USER}:{RABBITMQ_PASSWORD}@{RABBITMQ_HOST}:{RABBITMQ_PORT}/{RABBITMQ_VHOST}?heartbeat={CELERY_BROKER_HEARTBEAT}'
+
 CELERY_WORKER_PREFETCH_MULTIPLIER = int(os.getenv(
     'CELERY_WORKER_PREFETCH_MULTIPLIER', '1') \
     if IS_IN_CONTAINER \
     else '1')
 
-CELERY_RESULT_BACKEND = os.getenv(
-    'CELERY_RESULT_BACKEND', 'rpc://')
+# Celery settings for proper result handling
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+# How long to keep task results (in seconds, 1 day = 86400)
+CELERY_RESULT_EXPIRES = 86400
+
+# CELERY_RESULT_BACKEND = os.getenv(
+    # 'CELERY_RESULT_BACKEND', 'rpc://')
+
+REDIS_URL = f'redis://{REDIS_USER}:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}'
+
+CELERY_RESULT_BACKEND = REDIS_URL
+
+# Redis-specific Celery settings
+CELERY_REDIS_MAX_CONNECTIONS = 20
+CELERY_REDIS_SOCKET_TIMEOUT = 15
+CELERY_REDIS_SOCKET_CONNECT_TIMEOUT = 15
+CELERY_REDIS_RETRY_ON_TIMEOUT = True
+
+# Store results even if task is ignored
+CELERY_TASK_IGNORE_RESULT = False
+
+# Enable extended task result attributes
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60  # 30 minutes
+
 # Acknowledge tasks after they are done [True/False]
 CELERY_TASK_ACKS_LATE = bool(os.getenv(
     'CELERY_TASK_ACKS_LATE', 'True').lower() == 'true')
@@ -310,6 +371,28 @@ CELERY_WORKER_TASK_LOG_FORMAT = (
     os.getenv('CELERY_WORKER_TASK_LOG_FORMAT', '%(asctime)s - %(message)s')
 )
 
+# Optional: Redis cache settings
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': REDIS_URL,
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'PASSWORD': REDIS_PASSWORD,
+            'CONNECTION_POOL_CLASS_KWARGS': REDIS_CONNECTION_POOL,
+            'RETRY_ON_TIMEOUT': True,
+            'MAX_CONNECTIONS': 50,
+            'SOCKET_CONNECT_TIMEOUT': 30,
+            'SOCKET_TIMEOUT': 30,
+            'RETRY_ON_CONNECTION_FAILURE': True,
+            'CONNECTION_POOL_CLASS': 'redis.connection.ConnectionPool',
+            'PARSER_CLASS': 'redis.connection.HiredisParser',
+        },
+        'KEY_PREFIX': 'tamprog',
+        'TIMEOUT': 300,  # 5 minutes default timeout
+    }
+}
+
 DJANGO_SUPER_USER = os.environ.get('DJANGO_SUPER_USER', 'admin')
 DJANGO_SUPER_PASSWORD = os.environ.get('DJANGO_SUPER_PASSWORD', 'admin')
 
@@ -329,38 +412,63 @@ LOGGING = {
     'handlers': {
         'db_log': {
             'level': 'DEBUG',
-            'class': 'django_db_logger.db_log_handler.DatabaseLogHandler'
+            'class': 'django_db_logger.db_log_handler.DatabaseLogHandler',
+            'formatter': 'verbose',
         },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        }
     },
     'loggers': {
         'tamprog': {
-            'handlers': ['db_log'],
+            'handlers': ['db_log', 'console'],
             'level': 'DEBUG'
         },
         'fertilizer': {
-            'handlers': ['db_log'],
+            'handlers': ['db_log', 'console'],
             'level': 'DEBUG'
         },
         'garden': {
-            'handlers': ['db_log'],
+            'handlers': ['db_log', 'console'],
             'level': 'DEBUG'
         },
         'orders': {
-            'handlers': ['db_log'],
+            'handlers': ['db_log', 'console'],
             'level': 'DEBUG'
         },
         'plans': {
-            'handlers': ['db_log'],
+            'handlers': ['db_log', 'console'],
             'level': 'DEBUG'
         },
         'user': {
-            'handlers': ['db_log'],
+            'handlers': ['db_log', 'console'],
             'level': 'DEBUG'
         },
         'django.request': { # logging 500 errors to database
-            'handlers': ['db_log'],
+            'handlers': ['db_log', 'console'],
             'level': 'DEBUG',
             'propagate': False,
-        }
+        },
+        'amqp': {
+            'handlers': ['db_log', 'console'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+        'celery': {
+            'handlers': ['db_log', 'console'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+        'redis_backend': {
+            'handlers': ['db_log', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'redis': {
+            'handlers': ['db_log', 'console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
     }
 }
