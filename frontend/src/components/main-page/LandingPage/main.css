@@ -7,6 +7,10 @@
   justify-content: center;
   align-items: center;
   transform-style: preserve-3d;
+  scroll-snap-align: start; /* "Липнуть" к началу секции */
+}
+
+.modern {
 }
 
 .section1::before {
@@ -43,6 +47,7 @@
   transform-style: preserve-3d;
   height: 100vh;
   overflow-x: hidden;
+  scroll-snap-type: y mandatory;
 }
 
 .page-header {

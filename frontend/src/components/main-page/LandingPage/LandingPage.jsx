@@ -8,7 +8,7 @@ export default function LandingPage() {
   return (
     <>
       <header className="page-header">
-        <div>TAMPROG</div>
+        <div className="modern">TAMPROG</div>
         {state && state.length > 0 ? (
           <Link to="/navigate/garden">
             <div>По коням!</div>
@@ -49,7 +49,7 @@ export default function LandingPage() {
           className={"section2"}
           style={{
             background:
-              "linear-gradient(to top, #282528 1%, rgba(40, 37, 40, 0) 95%)",
+              "linear-gradient(to top, #282528 0%, rgba(40, 37, 40, 0) 95%)",
           }}
         >
           <div className="dream-team">
