@@ -465,6 +465,10 @@ html {
     max-width: 500px;
   }
 
+  .section1::before {
+    transform: translateZ(-1px) scale(4.7);
+  }
+
   .container-plot-info {
     width: 80% !important;
   }
