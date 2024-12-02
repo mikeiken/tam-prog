@@ -3,6 +3,7 @@ import LoginBtn from "../ui/login-btn/LoginBtn";
 import RegisterBtn from "../ui/register-btn/RegisterBtn";
 import { Link, Route, Routes } from "react-router-dom";
 import Header from "../../header/Header";
+
 export default function LandingPage() {
   const state = localStorage.getItem("accessToken");
   return (

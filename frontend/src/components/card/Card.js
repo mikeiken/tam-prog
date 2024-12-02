@@ -2,6 +2,7 @@ import React from "react";
 import "./style-card.css";
 import { useState, useEffect } from "react";
 import Modal from "./modal/Modal";
+
 export default function Card(props) {
     const [modalActive, setModalActive] = useState(false);
 
