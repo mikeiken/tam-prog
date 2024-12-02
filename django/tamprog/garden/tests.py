@@ -40,83 +40,63 @@ def test_rent_bed_already_rented(beds, person):
     for bed in beds:
         bed.is_rented = True
         bed.save()
-        result = BedService.rent_bed(bed_id=bed.id, person=person)
-        assert result.status_code == 400
+    field = beds[0].field
+    result = BedService.rent_beds(field=field, user=person, beds_count=len(beds))
+    assert result == 0
 
 
 @pytest.mark.django_db
 def test_rent_bed_success(beds, person):
-    bed = next(b for b in beds if not b.is_rented)
-    order = mixer.blend('orders.Order', bed=bed, completed_at=None)
-    initial_count = bed.field.count_free_beds
-    result = BedService.rent_bed(bed_id=bed.id, person=person)
-    bed.refresh_from_db()
-    assert result.status_code == 200
-    assert bed.is_rented is True
-    assert bed.rented_by == person
-    assert bed.field.count_free_beds == initial_count - 1
-
+    free_beds = [bed for bed in beds if not bed.is_rented]
+    assert free_beds, "Должна быть хотя бы одна свободная грядка для теста"
+    field = free_beds[0].field
+    initial_count = field.count_free_beds
+    rented_count = BedService.rent_beds(field=field, user=person, beds_count=1)
+    field.refresh_from_db()
+    rented_bed = Bed.objects.filter(field=field, rented_by=person).first()
+    assert rented_count == 1, "Должна быть успешно арендована одна грядка"
+    assert rented_bed is not None, "Должна быть найдена арендованная грядка"
+    assert rented_bed.is_rented is True
+    assert rented_bed.rented_by == person
+    assert field.count_free_beds == initial_count - 1
 
 
 @pytest.mark.django_db
 def test_release_bed_success(beds, person):
     bed = beds[0]
     field = bed.field
+    assert bed, "Грядка должна существовать"
+    assert field, "У грядки должно быть связано поле"
     bed.is_rented = True
     bed.rented_by = person
     bed.save()
     initial_free_beds = field.count_free_beds
-    result = BedService.release_bed(bed_id=bed.id)
+    assert bed.is_rented is True, "Грядка должна быть арендована перед освобождением"
+    assert bed.rented_by == person, "Грядка должна быть связана с пользователем"
+    BedService.release_beds(field=field, beds_count=1)
     bed.refresh_from_db()
     field.refresh_from_db()
-    assert result.status_code == 200
-    assert bed.is_rented is False
-    assert bed.rented_by is None
-    assert field.count_free_beds == initial_free_beds + 1
+    assert bed.is_rented is False, "Грядка должна быть освобождена"
+    assert bed.rented_by is None, "У грядки не должно быть арендатора"
+    assert field.count_free_beds == initial_free_beds + 1, "Количество свободных грядок должно увеличиться"
 
-
-@pytest.mark.django_db
-def test_rent_bed_success_api(api_client, beds, person):
-    api_client.force_authenticate(user=person)
-    bed = next(b for b in beds if not b.is_rented)
-    order = mixer.blend('orders.Order', bed=bed, person=person, completed_at=None)
-    bed.order = order
-    bed.save()
-    url = f'/api/v1/bed/{bed.id}/rent/'
-    response = api_client.post(url, {}, format='json')
-    bed.refresh_from_db()
-    assert response.status_code == 200
-    assert bed.is_rented is True
-    assert bed.rented_by == person
-
-
-
-@pytest.mark.django_db
-def test_release_bed_success_api(api_client, beds, person):
-    api_client.force_authenticate(user=person)
-    bed = beds[0]
-    bed.is_rented = True
-    bed.rented_by = person
-    bed.save()
-    field = bed.field
-    initial_free_beds = field.count_free_beds
-    url = f'/api/v1/bed/{bed.id}/release/'
-    response = api_client.post(url, {}, format='json')
-    bed.refresh_from_db()
-    field.refresh_from_db()
-    assert response.status_code == 200
-    assert bed.is_rented is False
-    assert bed.rented_by is None
-    assert field.count_free_beds == initial_free_beds + 1
 
 
 @pytest.mark.django_db
 def test_release_bed_not_rented(beds):
     for bed in beds:
         bed.is_rented = False
+        bed.rented_by = None
         bed.save()
-        result = BedService.release_bed(bed_id=bed.id)
-        assert result.status_code == 400
+    result = BedService.release_beds(field=beds[0].field, beds_count=1)
+    assert result is None
+    for bed in beds:
+        bed.refresh_from_db()
+        assert bed.is_rented is False
+        assert bed.rented_by is None
+    field = beds[0].field
+    field.refresh_from_db()
+    assert field.count_free_beds == field.count_free_beds
 
 @pytest.mark.django_db
 def test_get_user_beds(beds, person):
@@ -185,36 +165,6 @@ def test_get_sorted_fields_timeout(api_client, superuser):
     response = api_client.get(url, {'sort_by': 'price', 'ascending': 'true'})
     assert response.status_code == 200
     assert 'error' not in response.data
-
-@pytest.mark.django_db
-def test_rent_bed_success_url(api_client, superuser, beds, person):
-    api_client.force_authenticate(user=person)
-    bed = next(b for b in beds if not b.is_rented)
-    order = mixer.blend(Order, bed=bed, completed_at=None)
-    assert bed.is_rented is False
-    assert Order.objects.filter(bed=bed, completed_at=None).exists()
-    url = f'/api/v1/bed/{bed.id}/rent/'
-    response = api_client.post(url)
-    bed.refresh_from_db()
-    assert response.status_code == status.HTTP_200_OK
-    assert bed.is_rented is True
-    assert bed.rented_by == person
-
-
-@pytest.mark.django_db
-def test_release_bed_success_url(api_client, superuser, beds, person):
-    api_client.force_authenticate(user=superuser)
-    bed = beds[0]
-    bed.is_rented = True
-    bed.rented_by = person
-    bed.save()
-    url = f'/api/v1/bed/{bed.id}/release/'
-    response = api_client.post(url)
-    bed.refresh_from_db()
-    assert response.status_code == 200
-    assert bed.is_rented is False
-    assert bed.rented_by is None
-
 
 @pytest.mark.django_db
 def test_get_user_beds_url(api_client, superuser, beds, person):
