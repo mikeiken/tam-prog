@@ -23,7 +23,24 @@ export default function LandingPage() {
 
       <div className={"landing-main-wrapper"}>
         <div className={"section1"}>
-          <div className={"parallax-text"}>BSTUteam</div>
+          <div className={"parallax-text"}>
+            <h2
+              style={{
+                marginBottom: "0",
+                textShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              BSTUteam
+            </h2>
+            <h3
+              style={{
+                margin: "0",
+                textShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",
+              }}
+            >
+              presents
+            </h3>
+          </div>
         </div>
 
         <div
@@ -31,7 +48,6 @@ export default function LandingPage() {
           style={{
             background:
               "linear-gradient(to top, #282828 0%, rgba(40, 40, 40, 0) 95%)",
-            // boxShadow: "0 -30px 60px rgba(0, 0, 0, 0.8)",
           }}
         >
           <div className="dream-team">

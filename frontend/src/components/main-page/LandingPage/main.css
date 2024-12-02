@@ -1,7 +1,7 @@
 .section1,
 .section2 {
   width: 100%;
-  min-height: 100vh;
+  min-height: 80vh;
   position: relative;
   display: flex;
   justify-content: center;
@@ -17,7 +17,7 @@
   background-size: contain;
   background: url("../../../../public/field1.jpg") top center no-repeat;
 
-  transform: translateZ(-1px) scale(4);
+  transform: translateZ(-1px) scale(3);
   filter: blur(3px);
 }
 
