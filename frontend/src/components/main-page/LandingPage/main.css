@@ -98,8 +98,8 @@
 }
 
 .developer-wrapper {
-  width: 90px;
-  height: 90px;
+  width: 100px;
+  height: 100px;
   position: relative;
   transition: 0.5s ease;
 }
@@ -129,6 +129,7 @@
   pointer-events: none;
   transition: opacity 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+  z-index: -1;
 }
 
 .developer-wrapper:hover {
