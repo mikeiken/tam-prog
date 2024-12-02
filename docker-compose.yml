@@ -53,6 +53,8 @@ services:
       - ${RABBITMQ_PORT}:5672
     networks:
       - gateway
+    depends_on:
+      - redis
     healthcheck:
       test: ["CMD-SHELL", "rabbitmqctl start_app && rabbitmqctl status"]
       interval: 30s

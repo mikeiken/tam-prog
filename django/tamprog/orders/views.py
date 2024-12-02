@@ -2,6 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
+from rest_framework.decorators import action
 from .serializer import *
 from .models import Order
 from .services import OrderService
@@ -175,6 +176,23 @@ class OrderViewSet(viewsets.ModelViewSet):
         if order.completed_at:
             log.debug(f"Completing order with ID={order.id}")
             OrderService.complete_order(order)
+
+    @extend_schema(
+        summary='List all orders for current user',
+        description='List all orders for current user',
+        responses={
+            status.HTTP_200_OK: OpenApiResponse(
+                description='Successful response with list of orders',
+                response=OrderSerializer(many=True),
+            )
+        },
+    )
+    @action(detail=False, methods=['get'])
+    def my_orders(self, request):
+        orders = OrderService.get_orders(request.user)
+        serializer = self.get_serializer(orders, many=True)
+        log.debug(f"Returning list of orders by user: {serializer.data}")
+        return Response(serializer.data)
 
     def get_queryset(self):
         is_completed = self.request.query_params.get('is_completed', None)

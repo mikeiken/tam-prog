@@ -57,14 +57,24 @@ def fields():
 
 @pytest.fixture
 def beds(fields, person):
-    # Создаем 10 грядок, которые могут быть арендованы или не арендованы
-    # Для арендованных грядок будет назначен пользователь как арендатор
-    return mixer.cycle(10).blend(
+    # Создаем 9 грядок с произвольными параметрами
+    beds = mixer.cycle(9).blend(
         'garden.Bed',
-        field=lambda: mixer.faker.random_element(fields),  # связываем грядки с участками
-        is_rented=lambda: mixer.faker.boolean(),  # случайным образом определяем арендуемая ли грядка
-        rented_by=lambda: person if mixer.faker.boolean() else None  # если арендована, назначаем арендатора
+        field=lambda: mixer.faker.random_element(fields),
+        is_rented=lambda: mixer.faker.boolean(),
+        rented_by=lambda: person if mixer.faker.boolean() else None
     )
+
+    # Добавляем 1 гарантированно свободную грядку
+    free_bed = mixer.blend(
+        'garden.Bed',
+        field=mixer.faker.random_element(fields),
+        is_rented=False,
+        rented_by=None
+    )
+
+    return beds + [free_bed]
+
 
 @pytest.fixture
 def fertilizers():

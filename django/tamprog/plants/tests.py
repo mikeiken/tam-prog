@@ -57,6 +57,8 @@ def test_filter_bed_plants_via_url(api_client, bed_plants, fertilizers, user):
             assert all(item['id'] != bed_plant.id for item in non_fertilized_data)
 
 
+from fuzzywuzzy import fuzz
+
 
 @pytest.mark.django_db
 def test_fuzzy_search(api_client, plants, user):
@@ -64,15 +66,21 @@ def test_fuzzy_search(api_client, plants, user):
     url = '/api/v1/plant/search/'
     plant_name = plants[0].name[:3]
     response = api_client.get(url, {'q': plant_name})
+
     assert response.status_code == 200
     expected_matches = [
         plant.name for plant in plants
         if fuzz.partial_ratio(plant_name.lower(), plant.name.lower()) >= 75
     ]
     response_names = [plant['name'] for plant in response.data]
-    assert all(name in response_names for name in expected_matches)
-    assert all(name in expected_matches for name in response_names)
-    assert len(response_names) == len(expected_matches)
+    print(f"Expected matches: {expected_matches}")
+    print(f"Response names: {response_names}")
+    assert all(name in response_names for name in expected_matches), \
+        f"Not all expected plants were found in the response. Missing: {set(expected_matches) - set(response_names)}"
+    assert all(name in expected_matches for name in response_names), \
+        f"Unexpected plants found in the response: {set(response_names) - set(expected_matches)}"
+    assert len(response_names) == len(expected_matches), \
+        f"Mismatch in count: expected {len(expected_matches)}, got {len(response_names)}"
 
 
 @pytest.mark.django_db

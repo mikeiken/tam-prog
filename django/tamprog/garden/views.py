@@ -324,7 +324,6 @@ class BedViewSet(viewsets.ModelViewSet):
 
         log.debug(f"Attempting to rent {beds_count} beds for user with ID={user.id} in field with ID={field_id}")
 
-        # Получаем поле по ID
         try:
             field = Field.objects.get(id=field_id)
         except Field.DoesNotExist:
@@ -372,7 +371,6 @@ class BedViewSet(viewsets.ModelViewSet):
 
         log.debug(f"Attempting to release {beds_count} beds in field with ID={field_id}")
 
-        # Получаем поле по ID
         try:
             field = Field.objects.get(id=field_id)
         except Field.DoesNotExist:
@@ -380,7 +378,6 @@ class BedViewSet(viewsets.ModelViewSet):
 
         BedService.release_beds(field, beds_count)
 
-        # Возвращаем успешный ответ
         return Response({
             'message': f'{beds_count} beds released successfully.'
         }, status=status.HTTP_200_OK)

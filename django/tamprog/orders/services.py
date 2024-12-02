@@ -109,6 +109,11 @@ class OrderService:
         return order
 
     @staticmethod
+    def get_orders(user):
+        log.debug(f"Getting orders by user with ID={user.id}")
+        return Order.objects.filter(user=user)
+
+    @staticmethod
     def filter_orders(is_completed=None):
         if is_completed is not None:
             if is_completed:
