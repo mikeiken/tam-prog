@@ -38,25 +38,28 @@ def test_create_order_success(user, workers, beds, plants, mocker):
         return_value=Response(status=status.HTTP_200_OK)
     )
     mocker.patch(
-        "garden.services.BedService.rent_bed",
-        return_value=Response(status=status.HTTP_200_OK)
+        "garden.services.BedService.rent_beds",
+        return_value=2
     )
     mocker.patch(
-        "plants.services.BedPlantService.plant_in_bed",
+        "plants.services.BedPlantService.plant_in_beds",
         return_value=Response(status=status.HTTP_201_CREATED)
     )
+    field = beds[0].field
+    plant = plants[0]
+    worker = workers[0]
+    beds_count = 2
+    total_cost = field.price * beds_count + plant.price * beds_count + worker.price
     action = "planting"
-    for bed, plant in zip(beds, plants):
-        response = OrderService.create_order(user, bed, plant, action)
-        assert response.status_code == status.HTTP_201_CREATED, f"Unexpected status code: {response.status_code}"
-        order_id = response.data['order_id']
-        order = Order.objects.get(id=order_id)
-        assert order.user == user
-        assert order.worker is not None
-        assert order.bed == bed
-        assert order.plant == plant
-        total_cost = bed.field.price + plant.price + order.worker.price
-        assert order.total_cost == total_cost
+    response = OrderService.create_order(user, field, plant, beds_count, action, fertilize=False)
+    assert response.status_code == status.HTTP_201_CREATED, f"Unexpected status code: {response.status_code}"
+    order_id = response.data['order_id']
+    order = Order.objects.get(id=order_id)
+    assert order.user == user
+    assert order.worker is not None
+    assert order.field == field
+    assert order.plant == plant
+    assert order.total_cost == total_cost
 
 @pytest.mark.django_db
 def test_create_order_via_url(api_client, user, workers, beds, plants, mocker):
