@@ -74,7 +74,7 @@ export default function LandingPage() {
                     className="popup"
                     style={{
                       top: "-90px",
-                      left: "130px",
+                      left: "100px",
                       width: "150px",
                       background:
                         "radial-gradient(circle, yellow 5%, orange 50%)",
@@ -146,8 +146,8 @@ export default function LandingPage() {
                   <div
                     className="popup"
                     style={{
-                      top: "-80px",
-                      left: "110px",
+                      top: "-90px",
+                      left: "80px",
                       width: "170px",
                       background:
                         "radial-gradient(circle, #F5B2CE 15%, #E74792 100%)",
@@ -182,7 +182,7 @@ export default function LandingPage() {
                   <div
                     className="popup"
                     style={{
-                      left: "-200px",
+                      left: "-130px",
                       top: "-90px",
                       background:
                         "radial-gradient(circle, #E3F1F8 5%, #40BBE7 50%)",
@@ -216,7 +216,7 @@ export default function LandingPage() {
                   <div
                     className="popup"
                     style={{
-                      left: "130px",
+                      left: "80px",
                       background:
                         "radial-gradient(circle, #FEAA56 15%, #F67028 50%)",
                       width: "150px",
