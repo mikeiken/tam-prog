@@ -68,11 +68,11 @@ def test_create_order_via_url(api_client, user, workers, beds, plants, mocker):
         return_value=Response(status=status.HTTP_200_OK)
     )
     mocker.patch(
-        "garden.services.BedService.rent_bed",
-        return_value=Response(status=status.HTTP_200_OK)
+        "garden.services.BedService.rent_beds",
+        return_value=2
     )
     mocker.patch(
-        "plants.services.BedPlantService.plant_in_bed",
+        "plants.services.BedPlantService.plant_in_beds",
         return_value=Response(status=status.HTTP_201_CREATED)
     )
     initial_balance = 1500.0
@@ -81,23 +81,31 @@ def test_create_order_via_url(api_client, user, workers, beds, plants, mocker):
     api_client.force_authenticate(user=user)
     url = '/api/v1/order/'
     data = {
-        "bed": beds[0].id,
+        "field": beds[0].field.id,
         "plant": plants[0].id,
         "worker": workers[0].id,
-        "comments": "planting"
+        "beds_count": 2,
+        "comments": "planting",
+        "fertilize": True
     }
     response = api_client.post(url, data)
     assert response.status_code == status.HTTP_201_CREATED, f"Unexpected status code: {response.status_code}"
-    order = Order.objects.get(bed=beds[0], plant=plants[0], comments="planting")
+    order = Order.objects.get(
+        field=beds[0].field,
+        plant=plants[0],
+        worker=workers[0],
+        comments="planting"
+    )
     assert order.user == user
     assert order.worker == workers[0]
-    assert order.bed == beds[0]
+    assert order.field == beds[0].field
     assert order.plant == plants[0]
-    total_cost = beds[0].field.price + plants[0].price + workers[0].price
+    total_cost = (beds[0].field.price * data["beds_count"]) + (plants[0].price * data["beds_count"]) + workers[0].price
     assert order.total_cost == total_cost
     user.refresh_from_db()
     expected_balance = initial_balance - total_cost
     assert user.wallet_balance == expected_balance
+
 
 @pytest.mark.django_db
 def test_create_order_insufficient_funds(user, fields, plants, workers, mocker):
