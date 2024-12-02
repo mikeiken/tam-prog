@@ -88,7 +88,7 @@ def test_rent_bed_success_api(api_client, beds, person):
     order = mixer.blend('orders.Order', bed=bed, person=person, completed_at=None)
     bed.order = order
     bed.save()
-    url = f'/api/v1/bed/rent/'
+    url = f'/api/v1/bed/{bed.id}/rent/'
     response = api_client.post(url, {}, format='json')
     bed.refresh_from_db()
     assert response.status_code == 200
@@ -207,7 +207,7 @@ def test_rent_bed_success_url(api_client, superuser, beds, person):
     order = mixer.blend(Order, bed=bed, completed_at=None)
     assert bed.is_rented is False
     assert Order.objects.filter(bed=bed, completed_at=None).exists()
-    url = f'/api/v1/bed/rent/'
+    url = f'/api/v1/bed/{bed.id}/rent/'
     response = api_client.post(url)
     bed.refresh_from_db()
     assert response.status_code == status.HTTP_200_OK
