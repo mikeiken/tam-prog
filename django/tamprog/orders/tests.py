@@ -61,6 +61,7 @@ def test_create_order_success(user, workers, beds, plants, mocker):
     assert order.plant == plant
     assert order.total_cost == total_cost
 
+
 @pytest.mark.django_db
 def test_create_order_via_url(api_client, user, workers, beds, plants, mocker):
     mocker.patch(
@@ -75,10 +76,18 @@ def test_create_order_via_url(api_client, user, workers, beds, plants, mocker):
         "plants.services.BedPlantService.plant_in_beds",
         return_value=Response(status=status.HTTP_201_CREATED)
     )
-    initial_balance = 1500.0
+
+
+    assert beds[0].field is not None, "Поле для грядки должно быть указано"
+    assert plants[0] is not None, "Растение должно быть указано"
+    assert workers[0] is not None, "Работник должен быть указан"
+
+    initial_balance = 150000.0
     user.wallet_balance = initial_balance
     user.save()
+
     api_client.force_authenticate(user=user)
+
     url = '/api/v1/order/'
     data = {
         "field": beds[0].field.id,
@@ -88,20 +97,27 @@ def test_create_order_via_url(api_client, user, workers, beds, plants, mocker):
         "comments": "planting",
         "fertilize": True
     }
+
     response = api_client.post(url, data)
-    assert response.status_code == status.HTTP_201_CREATED, f"Unexpected status code: {response.status_code}"
+
+    print(response.data)
+    assert response.status_code == status.HTTP_201_CREATED, f"Unexpected status code: {response.status_code}, Response: {response.data}"
+
     order = Order.objects.get(
         field=beds[0].field,
         plant=plants[0],
         worker=workers[0],
         comments="planting"
     )
+
     assert order.user == user
     assert order.worker == workers[0]
     assert order.field == beds[0].field
     assert order.plant == plants[0]
+
     total_cost = (beds[0].field.price * data["beds_count"]) + (plants[0].price * data["beds_count"]) + workers[0].price
     assert order.total_cost == total_cost
+
     user.refresh_from_db()
     expected_balance = initial_balance - total_cost
     assert user.wallet_balance == expected_balance
