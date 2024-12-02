@@ -27,6 +27,7 @@ export default function LandingPage() {
             <h2
               style={{
                 marginBottom: "0",
+                marginTop: "20px",
                 textShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",
               }}
             >
@@ -47,7 +48,7 @@ export default function LandingPage() {
           className={"section2"}
           style={{
             background:
-              "linear-gradient(to top, #282828 0%, rgba(40, 40, 40, 0) 95%)",
+              "linear-gradient(to top, #282528 6%, rgba(40, 37, 40, 0) 95%)",
           }}
         >
           <div className="dream-team">
@@ -208,16 +209,26 @@ export default function LandingPage() {
         <div
           className={"section2"}
           style={{
-            backgroundImage: `url(${process.env.PUBLIC_URL + "/ferma.jpg"})`,
+            // backgroundImage: `url(${process.env.PUBLIC_URL + "/ferma.jpg"})`,
+            backgroundColor: "#282528",
           }}
         >
           <div
             className={"parallax-text"}
             style={{
-              fontSize: "31px",
+              fontSize: "41px",
             }}
           >
-            ТАМПРОГ – автоматизация, которая работает для вас и вашего урожая.
+            <h1
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                fontSize: "120px",
+              }}
+            >
+              ТАМПРОГ
+            </h1>{" "}
+            – автоматизация, которая работает для <u>Вас</u> и вашего урожая.
           </div>
         </div>
         <div
