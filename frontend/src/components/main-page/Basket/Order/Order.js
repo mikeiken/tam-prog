@@ -31,14 +31,6 @@ export default function Order({
   const [selectedPlant, setSelectedPlant] = useState(null); // Состояние для выбранного растения
   const [fertilize, setFertilization] = useState(false);
 
-  const handleSetFertilizeFalse = () => {
-    setFertilization(false);
-  };
-
-  const handleSetFertilizeTrue = () => {
-    setFertilization(true);
-  };
-
   function createOrder() {
     Instance.post("order/", {
       field: item.id,
@@ -46,8 +38,16 @@ export default function Order({
       plant: selectedPlant.id,
       comments: comment,
       fertilize: fertilize,
-    }).then(removeFromBasket(id))
+    }).then(removeFromBasket(id));
   }
+
+  const handleSetFertilizeFalse = () => {
+    setFertilization(false);
+  };
+
+  const handleSetFertilizeTrue = () => {
+    setFertilization(true);
+  };
 
   useEffect(() => {
     if (selectedPlant) {
@@ -64,22 +64,22 @@ export default function Order({
         fertilize
       );
     }
-  }, [selectedPlant, count, comment]);
+  }, [selectedPlant, count]);
 
   return (
     <div className="order-wrapper">
       <div className="order">
         <div className="order-info">
-          <div className="order-info-wrapper"
-               style={{
-                 backgroundImage: `url(${item.url})`, // Устанавливаем фон
-                 backgroundSize: 'cover',             // Масштабируем фон для заполнения
-                 backgroundPosition: 'center',        // Центрируем фон
-                 backgroundRepeat: 'no-repeat',        // Избегаем повторения изображения
-                 borderRadius: '20px'
-               }}
+          <div
+            className="order-info-wrapper"
+            style={{
+              backgroundImage: `url(${item.url})`, // Устанавливаем фон
+              backgroundSize: "cover", // Масштабируем фон для заполнения
+              backgroundPosition: "center", // Центрируем фон
+              backgroundRepeat: "no-repeat", // Избегаем повторения изображения
+              borderRadius: "20px",
+            }}
           >
-
             <div className="order-description">
               Поле №{id} <br />
               {name} - {price} руб. <br />
@@ -103,28 +103,45 @@ export default function Order({
             <div>Дата заказа: {date}</div>
             <div className="order-change-volume">
               <div className="order-wrapper-itog">
-                Итог: <Counter /> {" "}
-                {declension}
+                Итог: <Counter /> {declension}
               </div>
             </div>
-            <div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                gap: "20px",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               Удобрять?{" "}
-              <button
-                className={
-                  fertilize ? "fertilize_btn" + " green" : "fertilize_btn"
-                }
-                onClick={handleSetFertilizeTrue}
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  gap: "3px",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
               >
-                Да
-              </button>
-              <button
-                className={
-                  fertilize ? "fertilize_btn" : "fertilize_btn" + " red"
-                }
-                onClick={handleSetFertilizeFalse}
-              >
-                Нет
-              </button>
+                <button
+                  className={
+                    fertilize ? "fertilize_btn" + " green" : "fertilize_btn"
+                  }
+                  onClick={handleSetFertilizeTrue}
+                >
+                  Да
+                </button>
+                <button
+                  className={
+                    fertilize ? "fertilize_btn" : "fertilize_btn" + " red"
+                  }
+                  onClick={handleSetFertilizeFalse}
+                >
+                  Нет
+                </button>
+              </div>
             </div>
             <div className="order-selected-plant">
               {selectedPlant ? (
@@ -134,10 +151,17 @@ export default function Order({
               )}
             </div>
             <div>
-              Цена: {item.price * Number(count) + (selectedPlant ? selectedPlant.price : 0)} ₽
+              Цена:{" "}
+              {item.price * Number(count) +
+                (selectedPlant ? selectedPlant.price : 0)}{" "}
+              ₽
             </div>
             <div className="order-submit-button-container">
-              {selectedPlant ? <button onClick={createOrder}>Заказать</button> : ""}
+              {selectedPlant ? (
+                <button onClick={createOrder}>Заказать</button>
+              ) : (
+                ""
+              )}
               <button onClick={() => removeFromBasket(id)}>Отменить</button>
             </div>
           </div>

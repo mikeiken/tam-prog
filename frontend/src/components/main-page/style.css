@@ -13,6 +13,7 @@ html {
 .user-interface-login {
   width: 30px;
   height: 30px;
+  transition: 0.3s ease;
 }
 
 @keyframes fade-in {
@@ -272,8 +273,8 @@ html {
 .contractor-wrapper {
   padding: 20px;
   max-width: 83%;
-  height: 83vh;
-  max-height: 100%;
+  height: auto;
+  min-height: 83vh;
   background-color: rgb(138, 146, 122, 0.5);
   border-radius: 20px;
   margin: 2vh auto;
@@ -337,12 +338,35 @@ html {
 }
 
 .counter-wrapper {
+  margin: 0 3px 0 3px;
   display: flex;
-  width: 150px;
+  width: auto;
+  background-color: #8a927a;
+  border-radius: 5px;
 }
 
 .counter-wrapper input {
-  width: 80%;
+  width: 40px;
+  outline: none;
+  transform: scale(0.9);
+  border: none;
+}
+
+.counter-wrapper button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px;
+  border: 0;
+  transform: scale(0.9);
+}
+
+.btn-left {
+  border-radius: 5px 0px 0 5px;
+}
+
+.btn-right {
+  border-radius: 0 5px 5px 0;
 }
 @keyframes spin {
   0% {
@@ -467,10 +491,6 @@ html {
 
   .section1::before {
     transform: translateZ(-1px) scale(4.7);
-  }
-
-  .container-plot-info {
-    width: 80% !important;
   }
 
   .search-card-img {

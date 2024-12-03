@@ -42,7 +42,7 @@ export default function Header() {
       <header className="header">
         <img
           className="logo"
-          src={process.env.PUBLIC_URL + "/logo.png"}
+          src={process.env.PUBLIC_URL + "/tamprog-logo.svg"}
           alt="Logo"
         />
         <nav className="navbar">

@@ -7,9 +7,13 @@ export default function Counter() {
 
   return (
     <div className="counter-wrapper">
-      <button onClick={increment}>+</button>
+      <button className="btn-left" onClick={increment}>
+        +
+      </button>
       <input type="text" value={count} onChange={setCountValue} />
-      <button onClick={decrement}>-</button>
+      <button className="btn-right" onClick={decrement}>
+        -
+      </button>
     </div>
   );
 }

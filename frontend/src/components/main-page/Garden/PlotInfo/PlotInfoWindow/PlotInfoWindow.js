@@ -27,10 +27,6 @@ export default function PlotInfoWindow({ item }) {
           </ul>
         </div>
       </div>
-
-      <div className="container-plot-products">
-        <h1>ID: {item.id}</h1>
-      </div>
     </div>
   );
 }

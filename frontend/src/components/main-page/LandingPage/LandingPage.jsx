@@ -9,7 +9,13 @@ export default function LandingPage() {
   return (
     <>
       <header className="page-header">
-        <div className="modern">TAMPROG</div>
+        <div className="modern">
+          <img
+            className={"logo-modern"}
+            src={process.env.PUBLIC_URL + "/tamprog-logo.svg"}
+            alt="logo"
+          ></img>
+        </div>
         {state && state.length > 0 ? (
           <Link to="/navigate/garden">
             <div>По коням!</div>
