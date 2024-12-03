@@ -41,6 +41,10 @@ export default function Contractor() {
     position: { x: 0, y: 0 },
   });
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalAnimation, setModalAnimation] = useState(false);
+  const [amount, setAmount] = useState(""); // Track input amount
+
   const user_id = localStorage.getItem("user_id");
 
   useEffect(() => {
@@ -120,6 +124,44 @@ export default function Contractor() {
     setTooltip({ visible: false, content: "", position: { x: 0, y: 0 } });
   };
 
+  const handleModalToggle = () => {
+    if (!isModalOpen) {
+      setIsModalOpen(true);
+      setTimeout(() => setModalAnimation(true), 10);
+    } else {
+      setModalAnimation(false);
+      setTimeout(() => setIsModalOpen(false), 400);
+    }
+  };
+
+  const handleUpdateUser = () => {
+    const amountToAdd = parseFloat(amount);
+
+    // Проверяем, что введенная сумма больше нуля
+    if (amountToAdd > 0) {
+      // Получаем текущий баланс и добавляем к нему введенную сумму
+      const newBalance = user?.wallet_balance + amountToAdd;
+
+      Instance.patch(`/person/${user_id}/`, {
+        wallet_balance: newBalance,
+      })
+        .then((response) => {
+          setUser((prevUser) => ({
+            ...prevUser,
+            wallet_balance: response.data.wallet_balance,
+          }));
+          setAmount("");
+          handleModalToggle();
+        })
+        .catch((error) => {
+          console.error("Failed to recharge wallet:", error);
+          alert("Произошла ошибка при пополнении баланса.");
+        });
+    } else {
+      alert("Введите корректную сумму.");
+    }
+  };
+
   return (
     <div
       className="contractor-wrapper lk-centered"
@@ -157,6 +199,8 @@ export default function Contractor() {
                     className="lk-plus-img"
                     src={process.env.PUBLIC_URL + "/user_plus.png"}
                     alt="plus"
+                    onClick={handleModalToggle}
+                    style={{ cursor: "pointer" }}
                   />
                 </div>
               </div>
@@ -265,6 +309,7 @@ export default function Contractor() {
           </div>
         </div>
       </div>
+
       {tooltip.visible && (
         <div
           className="tooltip"
@@ -281,6 +326,89 @@ export default function Contractor() {
           }}
         >
           {tooltip.content}
+        </div>
+      )}
+
+      {isModalOpen && (
+        <div
+          className="modal"
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            width: "100vw",
+            height: "100vh",
+            backgroundColor: "rgba(0, 0, 0, 0.3)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000,
+            opacity: modalAnimation ? 1 : 0,
+            transform: modalAnimation ? "scale(1)" : "scale(1)",
+            transition: "opacity 0.5s ease-in-out, transform 0.5s ease-in-out",
+          }}
+          onClick={handleModalToggle}
+        >
+          <div
+            className="modal-content"
+            style={{
+              backgroundColor: "rgb(250, 235, 215, 1)",
+              padding: "20px",
+              borderRadius: "10px",
+              maxWidth: "600px",
+              maxHeight: "80vh",
+              overflowY: "auto",
+              filter: "drop-shadow(0px 0px 1px rgba(0, 0, 0, 1))",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2
+              style={{
+                filter: "drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.7))",
+              }}
+            >
+              Пополнение баланса
+            </h2>
+            <div
+              style={{
+                filter: "drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.4))",
+              }}
+              className="lk-input-wrapper"
+            >
+              <input
+                type="number"
+                placeholder="Введите сумму"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                onKeyDown={(e) => {
+                  const allowedKeys = [
+                    "Backspace",
+                    "Tab",
+                    "ArrowLeft",
+                    "ArrowRight",
+                    "Delete",
+                  ];
+                  if (
+                    !/[0-9]/.test(e.key) &&
+                    !allowedKeys.includes(e.key) &&
+                    !(e.key === "." && !e.target.value.includes("."))
+                  ) {
+                    e.preventDefault();
+                  }
+                }}
+              />
+
+              <span className="currency-sign">₽</span>
+              <button
+                style={{
+                  filter: "drop-shadow(0px 0px 1px rgba(0, 0, 0, 0.4))",
+                }}
+                onClick={handleUpdateUser}
+              >
+                Пополнить
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

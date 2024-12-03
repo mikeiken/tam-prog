@@ -103,3 +103,51 @@ p {
   font-size: 14px;
   color: #333;
 }
+
+.lk-input-wrapper {
+  position: relative; /* Это важно для правильного позиционирования знака рубля */
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lk-input-wrapper input {
+  padding-right: 30px; /* Создаем пространство для знака */
+  padding-left: 10px;
+  font-size: 16px;
+  height: 30px;
+  width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+}
+
+.lk-input-wrapper .currency-sign {
+  position: absolute;
+  right: 120px; /* Прижимаем знак рубля к правому краю поля */
+  font-size: 16px;
+  color: #333;
+  pointer-events: none; /* Это позволяет пользователю кликать в поле ввода, не задевая знак */
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background-color: #333; */
+  width: 30px;
+  border-radius: 0 6px 6px 0;
+  border: 1px solid #ccc;
+}
+
+.lk-input-wrapper button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.lk-input-wrapper button:hover {
+  background-color: #45a049;
+}
