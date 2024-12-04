@@ -13,12 +13,16 @@ export default function Form() {
     try {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
+      localStorage.removeItem("wallet_balance");
+      localStorage.removeItem("user_id");
       const response = await Instance.post("/login/", {
         username,
         password,
       });
       localStorage.setItem("accessToken", response.data.access);
       localStorage.setItem("refreshToken", response.data.refresh);
+      localStorage.setItem("wallet_balance", response.data.wallet_balance);
+      localStorage.setItem("user_id", response.data.id);
       navigate("/navigate/garden");
       //alert("Приветствуем вас!");
     } catch (error) {

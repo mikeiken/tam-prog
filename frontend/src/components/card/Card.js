@@ -1,9 +1,10 @@
-import React from 'react'
-import './style-card.css'
-import { useState, useEffect } from 'react'
-import Modal from './modal/Modal'
+import React from "react";
+import "./style-card.css";
+import { useState, useEffect } from "react";
+import Modal from "./modal/Modal";
+
 export default function Card(props) {
-    const [modalActive, setModalActive] = useState(false)
+    const [modalActive, setModalActive] = useState(false);
 
     const [isVisible, setIsVisible] = useState(false);
     useEffect(() => {
@@ -16,14 +17,20 @@ export default function Card(props) {
 
     return (
         <>
-            <div className={`card-wrapper ${isVisible ? 'fade-in' : ''}`} onClick={() => setModalActive(true)}>
-                <img src={process.env.PUBLIC_URL + '/man.jpg'} alt='Placeholder' />
+            <div
+                className={`card-wrapper ${isVisible ? "fade-in" : ""}`}
+                onClick={() => setModalActive(true)}
+            >
+                <img src={process.env.PUBLIC_URL + "/man.jpg"} alt="Placeholder" />
                 <h2>{props.label}</h2>
                 <p>{props.description}</p>
             </div>
-            <Modal active={modalActive} setActive={setModalActive} 
-                label={props.label} description={props.description}/>
-
+            <Modal
+                active={modalActive}
+                setActive={setModalActive}
+                label={props.label}
+                description={props.description}
+            />
         </>
-    )
+    );
 }
