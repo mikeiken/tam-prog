@@ -2,7 +2,7 @@ import axios from "axios";
 
 const Instance = axios.create({
   baseURL: "http://127.0.0.1:8000/api/v1",
-  timeout: 5000,
+  timeout: 15000,
   headers: {
     "Content-Type": "application/json",
   },
@@ -42,12 +42,10 @@ Instance.interceptors.response.use(
         localStorage.setItem("accessToken", response.data.access);
         originalRequest.headers.Authorization = `Bearer ${response.data.access}`;
 
-        // Повторяем оригинальный запрос с новым токеном
         return axios(originalRequest);
       } catch (refreshError) {
         console.error("Token refresh failed:", refreshError);
 
-        // Необходимо перенаправить на страницу логина
         return Promise.reject(refreshError);
       }
     }

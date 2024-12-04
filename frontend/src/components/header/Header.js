@@ -11,7 +11,7 @@ import Logout from "../auth/logout/Logout";
 
 export default function Header() {
   const location = useLocation();
-  const { basketItems } = useBasket();
+  const { totalItems } = useBasket();
   const [showIndicator, setShowIndicator] = useState(false);
   const [lastBasketCount, setLastBasketCount] = useState(0);
 
@@ -23,8 +23,6 @@ export default function Header() {
   ];
 
   const isActivePath = (path) => location.pathname === path;
-
-  const totalItems = basketItems.reduce((sum, item) => sum + item.quantity, 0) ;
 
   useEffect(() => {
     if (location.pathname === "/navigate/license") {
@@ -40,74 +38,76 @@ export default function Header() {
   const transitionRef = useRef(null);
 
   return (
-      <>
-        <header className="header">
-          <img
-              className="logo"
-              src={process.env.PUBLIC_URL + "/logo.png"}
-              alt="Logo"
-          />
-          <nav className="navbar">
-            <Link
-                to="garden"
-                onClick={(e) =>
-                    isActivePath("/navigate/garden") && e.preventDefault()
-                }
-            >
-              Участки
-            </Link>
-            <Link
-                to="contractor"
-                onClick={(e) =>
-                    isActivePath("/navigate/contractor") && e.preventDefault()
-                }
-            >
-              Личный кабинет
-            </Link>
-            <div className="basket-link-wrapper">
-              <Link
-                  to="license"
-                  onClick={(e) =>
-                      isActivePath("/navigate/license") && e.preventDefault()
-                  }
-              >
-                Корзина
-              </Link>
-              {showIndicator && (
-                  <div className={`basket-indicator ${!showIndicator ? "hidden" : ""}`}>
-                    {totalItems}
-                  </div>
-              )}
-            </div>
-            <Link
-                to="about"
-                onClick={(e) =>
-                    isActivePath("/navigate/about") && e.preventDefault()
-                }
-            >
-              О нас
-            </Link>
-          </nav>
-          <Logout />
-        </header>
-
-        <SwitchTransition>
-          <CSSTransition
-              nodeRef={transitionRef}
-              key={location.key}
-              timeout={530}
-              classNames="main"
-              unmountOnExit
+    <>
+      <header className="header">
+        <img
+          className="logo"
+          src={process.env.PUBLIC_URL + "/tamprog-logo.svg"}
+          alt="Logo"
+        />
+        <nav className="navbar">
+          <Link
+            to="garden"
+            onClick={(e) =>
+              isActivePath("/navigate/garden") && e.preventDefault()
+            }
           >
-            <div ref={transitionRef}>
-              <Routes location={location}>
-                {routes.map(({ path, Component }) => (
-                    <Route key={path} path={path} element={<Component />} />
-                ))}
-              </Routes>
-            </div>
-          </CSSTransition>
-        </SwitchTransition>
-      </>
+            Участки
+          </Link>
+          <Link
+            to="contractor"
+            onClick={(e) =>
+              isActivePath("/navigate/contractor") && e.preventDefault()
+            }
+          >
+            Личный кабинет
+          </Link>
+          <div className="basket-link-wrapper">
+            <Link
+              to="license"
+              onClick={(e) =>
+                isActivePath("/navigate/license") && e.preventDefault()
+              }
+            >
+              Корзина
+            </Link>
+            {showIndicator && (
+              <div
+                className={`basket-indicator ${!showIndicator ? "hidden" : ""}`}
+              >
+                {totalItems}
+              </div>
+            )}
+          </div>
+          <Link
+            to="about"
+            onClick={(e) =>
+              isActivePath("/navigate/about") && e.preventDefault()
+            }
+          >
+            О нас
+          </Link>
+        </nav>
+        <Logout />
+      </header>
+
+      <SwitchTransition>
+        <CSSTransition
+          nodeRef={transitionRef}
+          key={location.key}
+          timeout={530}
+          classNames="main"
+          unmountOnExit
+        >
+          <div ref={transitionRef}>
+            <Routes location={location}>
+              {routes.map(({ path, Component }) => (
+                <Route key={path} path={path} element={<Component />} />
+              ))}
+            </Routes>
+          </div>
+        </CSSTransition>
+      </SwitchTransition>
+    </>
   );
 }

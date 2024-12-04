@@ -1,6 +1,6 @@
 .student-wrapper{
     width: 40vw;
-    height: 20vh;
+    height: 15vh;
     background-color: rgb(150, 194, 168, 0.5);
     padding: 10px;
     display: flex;
@@ -14,7 +14,8 @@
 }
 
 .student-img {
-    height: 5vw;
+    position: absolute;
+    height: 140px;
     width: auto;
     transition: .5s all;
     filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.7));
@@ -29,10 +30,11 @@
 
 .description-fix-pos{
     position: relative;
+    font-size: 1.6vh;
 }
 
 .student-description{
-    margin-left: 20px;
+    margin-left: 16vh;
 }
 
 .student-img:hover {
