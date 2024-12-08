@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Link, Routes, Route, useNavigate } from "react-router-dom";
 import AuthForm from "../login/auth";
 import "../login/components/auth-style.css";
-import Alert from "../alert/Alert";
 import Instance from "../../api/instance";
+import {useNotification} from "../../context/NotificationContext";
 
 export default function RegisterForm() {
   const [login, setLogin] = useState("");
@@ -11,44 +11,42 @@ export default function RegisterForm() {
   const [phone, setPhone] = useState("");
   const [passwordFirst, setPasswordFirst] = useState("");
   const [passwordSecond, setPasswordSecond] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-
+  const {addNotification} = useNotification();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (passwordFirst !== passwordSecond) {
-      setErrorMessage("Passwords do not match");
-      setShowAlert(true);
+      addNotification("Passwords do not match", "warning");
       return;
     }
 
     try {
-      const response = await Instance.post("/register/", {
+      await Instance.post("/register/", {
         username: login,
         full_name: username,
         phone_number: phone,
         password: passwordFirst,
       });
 
-      localStorage.setItem("accessToken", response.data.access);
-      localStorage.setItem("refreshToken", response.data.refresh);
       navigate("/login");
-      //alert("Регистрация прошла успешно!");
     } catch (error) {
-      console.error("Register failed:", error);
-      setErrorMessage("Registration failed. Please try again.");
-      setShowAlert(true);
+      if (error.response && error.response.data) {
+        for (const err of Object.entries(error.response.data)) {
+          addNotification(`${err}`, "error");
+        }
+      } else {
+        addNotification("An error occurred. Please try again.", "error");
+      }
     }
   };
 
+
   const handleChange = (setter) => (event) => {
     setter(event.target.value);
-    setShowAlert(false);
   };
 
-  const [showAlert, setShowAlert] = useState(false);
 
   return (
     <div className="intro">
@@ -59,10 +57,6 @@ export default function RegisterForm() {
 
         <div className="main-wrapper">
           <div className="wrapper">
-            {showAlert && (
-              <Alert text={errorMessage} className={showAlert ? "" : "hide"} />
-            )}
-
             <form onSubmit={handleSubmit}>
               <h1>Register</h1>
               <div className="input-box">

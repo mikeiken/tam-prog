@@ -47,7 +47,7 @@ export default function Order({
           addNotification("Заказ создан", "success"); // Добавляем уведомление
         })
         .catch((err) => {
-          addNotification(err.message, "error"); // Показываем уведомление об ошибке
+          addNotification(err.response.data, "error"); // Показываем уведомление об ошибке
         });
   }
 
@@ -76,7 +76,10 @@ export default function Order({
       );
     }
   }, [selectedPlant, count]);
-
+  function removeFromBasketToThis(item){
+    addNotification(`Объект ${item.name} удален из корзины`, "warning")
+    removeFromBasket(item);
+  }
   return (
     <div className="order-wrapper">
       <div className="order">
@@ -163,7 +166,7 @@ export default function Order({
             </div>
             <div>
               Цена:{" "}
-              {item.price * Number(count) +
+              {item.price * Number(count) + 1000 +
                 (selectedPlant ? selectedPlant.price : 0)}{" "}
               ₽
             </div>
@@ -173,7 +176,7 @@ export default function Order({
               ) : (
                 ""
               )}
-              <button onClick={() => removeFromBasket(id)}>Отменить</button>
+              <button onClick={() => removeFromBasketToThis(item)}>Отменить</button>
             </div>
           </div>
         </div>
