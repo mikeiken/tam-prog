@@ -38,7 +38,7 @@ export default function Header() {
   const transitionRef = useRef(null);
 
   return (
-    <>
+    <div className="backgound-header-wrapper">
       <header className="header">
         <img
           className="logo"
@@ -108,6 +108,6 @@ export default function Header() {
           </div>
         </CSSTransition>
       </SwitchTransition>
-    </>
+    </div>
   );
 }

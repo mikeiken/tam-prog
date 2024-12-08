@@ -18,7 +18,6 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<AuthForm />} />
         <Route path="/register" element={<RegisterForm />} />
-
         <Route
           path="/navigate"
           element={

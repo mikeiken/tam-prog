@@ -7,7 +7,7 @@ import Header from "../../header/Header";
 export default function LandingPage() {
     const state = localStorage.getItem("accessToken");
     return (
-        <>
+        <div className="landing-page-ease">
             <header className="page-header">
                 <div className="modern">
                     <img
@@ -315,6 +315,6 @@ export default function LandingPage() {
             <Routes>
                 <Route path="/login" element={<Header/>}/>
             </Routes>
-        </>
+        </div>
     );
 }
