@@ -1,5 +1,5 @@
 import React from "react";
-import { useBasket } from "../../../basket-context/BasketContext";
+import { useBasket } from "../../../context/BasketContext";
 
 export default function SearchCard({ item, onClick }) {
   const { addToBasket } = useBasket();

@@ -320,7 +320,6 @@ html {
   padding: 2%;
   width: 30%;
   height: 50%;
-  /* background-color: #3498db; */
 }
 
 .not-found-container h1 {
@@ -557,11 +556,17 @@ html {
   .section1::before {
     transform: translateZ(-1px) scale(7.2);
   }
+
   .student-wrapper {
     height: 12vh !important;
   }
+
   .student-img {
     height: 14vh !important;
+  }
+
+  .description-fix-pos{
+    font-size: 1.2rem !important;
   }
 }
 

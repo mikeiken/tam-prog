@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Instance from "../../api/instance";
-import {useBasket} from "../../basket-context/BasketContext";
+import {useBasket} from "../../context/BasketContext";
 export default function Logout() {
   const navigate = useNavigate();
   const {clearBasket} = useBasket();

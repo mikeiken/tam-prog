@@ -3,10 +3,13 @@ import { Link, Routes, Route, useNavigate } from "react-router-dom";
 import RegisterForm from "../../register/RegisterForm";
 import Instance from "../../../api/instance";
 import Welcome from "./welocme/Welcome";
+import {useNotification} from "../../../context/NotificationContext";
+
 export default function Form() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { addNotification } = useNotification();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,8 +29,11 @@ export default function Form() {
       navigate("/navigate/garden");
       //alert("Приветствуем вас!");
     } catch (error) {
-      console.error("Login failed:", error);
-      // Handle error (e.g., display message to the user)
+      const errorMessage =
+          error.response?.data?.detail || // Попробуйте взять сообщение с сервера
+          error.message ||               // Если нет, используйте сообщение ошибки
+          "An unknown error occurred";   // Запасной вариант
+      addNotification(errorMessage, "error");
     }
   };
 

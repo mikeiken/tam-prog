@@ -4,6 +4,8 @@ import PlantArea from "./PlantArea/PlantArea";
 import { CounterContext } from "../../ui/counter/CounterContext";
 import Counter from "../../ui/counter/Counter";
 import Instance from "../../../api/instance";
+import {useNotification} from "../../../context/NotificationContext";
+
 function getDeclension(quantity, one, few, many) {
   if (quantity % 10 === 1 && quantity % 100 !== 11) {
     return one;
@@ -30,6 +32,7 @@ export default function Order({
   const [comment, setComment] = useState(" ");
   const [selectedPlant, setSelectedPlant] = useState(null); // Состояние для выбранного растения
   const [fertilize, setFertilization] = useState(false);
+  const {addNotification} = useNotification()
 
   function createOrder() {
     Instance.post("order/", {
@@ -38,8 +41,16 @@ export default function Order({
       plant: selectedPlant.id,
       comments: comment,
       fertilize: fertilize,
-    }).then(removeFromBasket(id));
+    })
+        .then(() => {
+          removeFromBasket(id); // Удаляем элемент из корзины
+          addNotification("Order created successfully", "success"); // Добавляем уведомление
+        })
+        .catch((err) => {
+          addNotification(err.message, "error"); // Показываем уведомление об ошибке
+        });
   }
+
 
   const handleSetFertilizeFalse = () => {
     setFertilization(false);
