@@ -3,7 +3,7 @@ import { Link, Routes, Route, useNavigate } from "react-router-dom";
 import RegisterForm from "../../register/RegisterForm";
 import Instance from "../../../api/instance";
 import Welcome from "./welocme/Welcome";
-import {useNotification} from "../../../context/NotificationContext";
+import { useNotification } from "../../../context/NotificationContext";
 
 export default function Form() {
   const [username, setUsername] = useState("");
@@ -53,7 +53,7 @@ export default function Form() {
             required
             onChange={handleChangeName}
           />
-          <label>Enter your name</label>
+          <label>Логин</label>
           <img
             className="user-icon-auth"
             src={process.env.PUBLIC_URL + "/user.png"}
@@ -68,7 +68,7 @@ export default function Form() {
             required
             onChange={handleChangePassword}
           />
-          <label>Enter your password</label>
+          <label>Пароль</label>
           <img
             className="user-icon-auth"
             src={process.env.PUBLIC_URL + "/key-chain.png"}
@@ -76,21 +76,12 @@ export default function Form() {
           ></img>
         </div>
 
-        <div className="remember">
-          <label htmlFor="">
-            {" "}
-            <input type="checkbox" /> Remember me
-          </label>
-          <a href="/">Forgot password?</a>
-        </div>
-
         <button type="submit" className="btn">
-          Login
+          Войти
         </button>
         <div className="register-link">
           <p>
-            Don't have an account?
-            <Link to="/register">Register</Link>
+            У Вас нет аккаунта? <Link to="/register">Регистрация</Link>
           </p>
         </div>
       </form>

@@ -56,7 +56,7 @@ export default function RegisterForm() {
         <div className="main-wrapper">
           <div className="wrapper">
             <form onSubmit={handleSubmit}>
-              <h1>Register</h1>
+              <h1>Регистрация</h1>
               <div className="input-box">
                 <input
                   className=""
@@ -64,7 +64,7 @@ export default function RegisterForm() {
                   required
                   onChange={handleChange(setUsername)}
                 />
-                <label>Enter your name</label>
+                <label>Введите имя</label>
                 <img
                   className="user-icon-auth"
                   src={process.env.PUBLIC_URL + "/user.png"}
@@ -79,7 +79,7 @@ export default function RegisterForm() {
                   required
                   onChange={handleChange(setLogin)}
                 />
-                <label>Enter your login</label>
+                <label>Введите никнейм</label>
                 <img
                   className="user-icon-auth"
                   src={process.env.PUBLIC_URL + "/user.png"}
@@ -94,7 +94,7 @@ export default function RegisterForm() {
                   required
                   onChange={handleChange(setPhone)}
                 />
-                <label>Enter your phone</label>
+                <label>Введите номер телефна</label>
                 <img
                   className="user-icon-auth"
                   src={process.env.PUBLIC_URL + "/phone.png"}
@@ -109,7 +109,7 @@ export default function RegisterForm() {
                   required
                   onChange={handleChange(setPasswordFirst)}
                 />
-                <label>Enter your password</label>
+                <label>Введите пароль</label>
                 <img
                   className="user-icon-auth"
                   src={process.env.PUBLIC_URL + "/key-chain.png"}
@@ -124,7 +124,7 @@ export default function RegisterForm() {
                   required
                   onChange={handleChange(setPasswordSecond)}
                 />
-                <label>Repeat your password</label>
+                <label>Повторите пароль</label>
                 <img
                   className="user-icon-auth"
                   src={process.env.PUBLIC_URL + "/key-chain.png"}
@@ -133,10 +133,10 @@ export default function RegisterForm() {
               </div>
 
               <button type="submit" className="btn">
-                Register
+                Зарегистрироваться
               </button>
               <div className="register-link">
-                <Link to="/">← Go back</Link>
+                <Link to="/">← Вернуться назад</Link>
               </div>
             </form>
 
