@@ -44,7 +44,7 @@ export default function Order({
     })
         .then(() => {
           removeFromBasket(id); // Удаляем элемент из корзины
-          addNotification("Order created successfully", "success"); // Добавляем уведомление
+          addNotification("Заказ создан", "success"); // Добавляем уведомление
         })
         .catch((err) => {
           addNotification(err.message, "error"); // Показываем уведомление об ошибке

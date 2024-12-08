@@ -27,13 +27,8 @@ export default function Form() {
       localStorage.setItem("wallet_balance", response.data.wallet_balance);
       localStorage.setItem("user_id", response.data.id);
       navigate("/navigate/garden");
-      //alert("Приветствуем вас!");
     } catch (error) {
-      const errorMessage =
-          error.response?.data?.detail || // Попробуйте взять сообщение с сервера
-          error.message ||               // Если нет, используйте сообщение ошибки
-          "An unknown error occurred";   // Запасной вариант
-      addNotification(errorMessage, "error");
+      addNotification("Неверный логин или пароль", "error");
     }
   };
 
