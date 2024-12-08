@@ -3,7 +3,7 @@ import { Link, Routes, Route, useNavigate } from "react-router-dom";
 import AuthForm from "../login/auth";
 import "../login/components/auth-style.css";
 import Instance from "../../api/instance";
-import {useNotification} from "../../context/NotificationContext";
+import { useNotification } from "../../context/NotificationContext";
 
 export default function RegisterForm() {
   const [login, setLogin] = useState("");
@@ -11,7 +11,7 @@ export default function RegisterForm() {
   const [phone, setPhone] = useState("");
   const [passwordFirst, setPasswordFirst] = useState("");
   const [passwordSecond, setPasswordSecond] = useState("");
-  const {addNotification} = useNotification();
+  const { addNotification } = useNotification();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -33,8 +33,8 @@ export default function RegisterForm() {
       navigate("/login");
     } catch (error) {
       if (error.response && error.response.data) {
-        for (const err of Object.entries(error.response.data)) {
-          addNotification(`${err}`, "error");
+        for (const [key, value] of Object.entries(error.response.data)) {
+          addNotification(`${value}`, "error");
         }
       } else {
         addNotification("An error occurred. Please try again.", "error");
@@ -42,11 +42,9 @@ export default function RegisterForm() {
     }
   };
 
-
   const handleChange = (setter) => (event) => {
     setter(event.target.value);
   };
-
 
   return (
     <div className="intro">
