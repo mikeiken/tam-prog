@@ -6,7 +6,7 @@ export default function RegisterBtn() {
     <>
       <Link className="landing-link" to="/register">
         <div className="landing-login-btn">
-          <p>Sing Up</p>
+          <p>Регистрация</p>
           <img
             className="user-interface-login"
             src={process.env.PUBLIC_URL + "/arrow-left-svgrepo-com.svg"}

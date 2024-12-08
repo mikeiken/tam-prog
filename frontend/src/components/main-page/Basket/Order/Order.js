@@ -4,6 +4,8 @@ import PlantArea from "./PlantArea/PlantArea";
 import { CounterContext } from "../../ui/counter/CounterContext";
 import Counter from "../../ui/counter/Counter";
 import Instance from "../../../api/instance";
+import {useNotification} from "../../../context/NotificationContext";
+
 function getDeclension(quantity, one, few, many) {
   if (quantity % 10 === 1 && quantity % 100 !== 11) {
     return one;
@@ -30,6 +32,7 @@ export default function Order({
   const [comment, setComment] = useState(" ");
   const [selectedPlant, setSelectedPlant] = useState(null); // Состояние для выбранного растения
   const [fertilize, setFertilization] = useState(false);
+  const {addNotification} = useNotification()
 
   function createOrder() {
     Instance.post("order/", {
@@ -38,8 +41,16 @@ export default function Order({
       plant: selectedPlant.id,
       comments: comment,
       fertilize: fertilize,
-    }).then(removeFromBasket(id));
+    })
+        .then(() => {
+          removeFromBasket(id); // Удаляем элемент из корзины
+          addNotification("Заказ создан", "success"); // Добавляем уведомление
+        })
+        .catch((err) => {
+          addNotification(err.response.data, "error"); // Показываем уведомление об ошибке
+        });
   }
+
 
   const handleSetFertilizeFalse = () => {
     setFertilization(false);
@@ -65,7 +76,10 @@ export default function Order({
       );
     }
   }, [selectedPlant, count]);
-
+  function removeFromBasketToThis(item){
+    addNotification(`Объект ${item.name} удален из корзины`, "warning")
+    removeFromBasket(item);
+  }
   return (
     <div className="order-wrapper">
       <div className="order">
@@ -73,10 +87,10 @@ export default function Order({
           <div
             className="order-info-wrapper"
             style={{
-              backgroundImage: `url(${item.url})`, // Устанавливаем фон
-              backgroundSize: "cover", // Масштабируем фон для заполнения
-              backgroundPosition: "center", // Центрируем фон
-              backgroundRepeat: "no-repeat", // Избегаем повторения изображения
+              backgroundImage: `url(${item.url})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
               borderRadius: "20px",
             }}
           >
@@ -152,7 +166,7 @@ export default function Order({
             </div>
             <div>
               Цена:{" "}
-              {item.price * Number(count) +
+              {item.price * Number(count) + 1000 +
                 (selectedPlant ? selectedPlant.price : 0)}{" "}
               ₽
             </div>
@@ -162,7 +176,7 @@ export default function Order({
               ) : (
                 ""
               )}
-              <button onClick={() => removeFromBasket(id)}>Отменить</button>
+              <button onClick={() => removeFromBasketToThis(item)}>Отменить</button>
             </div>
           </div>
         </div>

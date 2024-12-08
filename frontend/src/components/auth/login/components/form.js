@@ -3,10 +3,13 @@ import { Link, Routes, Route, useNavigate } from "react-router-dom";
 import RegisterForm from "../../register/RegisterForm";
 import Instance from "../../../api/instance";
 import Welcome from "./welocme/Welcome";
+import { useNotification } from "../../../context/NotificationContext";
+
 export default function Form() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { addNotification } = useNotification();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,10 +27,8 @@ export default function Form() {
       localStorage.setItem("wallet_balance", response.data.wallet_balance);
       localStorage.setItem("user_id", response.data.id);
       navigate("/navigate/garden");
-      //alert("Приветствуем вас!");
     } catch (error) {
-      console.error("Login failed:", error);
-      // Handle error (e.g., display message to the user)
+      addNotification("Неверный логин или пароль", "error");
     }
   };
 
@@ -52,7 +53,7 @@ export default function Form() {
             required
             onChange={handleChangeName}
           />
-          <label>Enter your name</label>
+          <label>Логин</label>
           <img
             className="user-icon-auth"
             src={process.env.PUBLIC_URL + "/user.png"}
@@ -67,7 +68,7 @@ export default function Form() {
             required
             onChange={handleChangePassword}
           />
-          <label>Enter your password</label>
+          <label>Пароль</label>
           <img
             className="user-icon-auth"
             src={process.env.PUBLIC_URL + "/key-chain.png"}
@@ -75,21 +76,12 @@ export default function Form() {
           ></img>
         </div>
 
-        <div className="remember">
-          <label htmlFor="">
-            {" "}
-            <input type="checkbox" /> Remember me
-          </label>
-          <a href="/">Forgot password?</a>
-        </div>
-
         <button type="submit" className="btn">
-          Login
+          Войти
         </button>
         <div className="register-link">
           <p>
-            Don't have an account?
-            <Link to="/register">Register</Link>
+            У Вас нет аккаунта? <Link to="/register">Регистрация</Link>
           </p>
         </div>
       </form>

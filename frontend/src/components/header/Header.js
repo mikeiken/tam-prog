@@ -4,7 +4,7 @@ import Garden from "../main-page/Garden/Garden";
 import About from "../main-page/About/about";
 import Basket from "../main-page/Basket/Basket";
 import Contractor from "../main-page/Contractor/Contractor";
-import { useBasket } from "../basket-context/BasketContext";
+import { useBasket } from "../context/BasketContext";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
 import "../main-page/style.css";
 import Logout from "../auth/logout/Logout";
@@ -38,7 +38,7 @@ export default function Header() {
   const transitionRef = useRef(null);
 
   return (
-    <>
+    <div className="backgound-header-wrapper">
       <header className="header">
         <img
           className="logo"
@@ -108,6 +108,6 @@ export default function Header() {
           </div>
         </CSSTransition>
       </SwitchTransition>
-    </>
+    </div>
   );
 }

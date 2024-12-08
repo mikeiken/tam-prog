@@ -1,5 +1,5 @@
 import React from "react";
-import { useBasket } from "../../basket-context/BasketContext";
+import { useBasket } from "../../context/BasketContext";
 import Order from "./Order/Order";
 import "./basket.css";
 import { Context } from "../ui/counter/CounterContext";

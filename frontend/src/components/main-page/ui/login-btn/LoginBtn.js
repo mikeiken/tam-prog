@@ -11,7 +11,7 @@ export default function LoginBtn() {
             src={process.env.PUBLIC_URL + "/arrow-right-svgrepo-com.svg"}
             alt="user-icon"
           ></img>
-          <p>Sing In</p>
+          <p>Войти</p>
         </div>
       </Link>
       <Routes>

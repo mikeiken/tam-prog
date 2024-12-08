@@ -186,7 +186,7 @@ export default function Contractor() {
             </div>
             <div className="lk-user-text-wrapper">
               <div>
-                <h1>Полное имя: {user?.full_name}</h1>
+                <h1>Имя: {user?.full_name}</h1>
                 <p>Номер телефона: {user?.phone_number}</p>
               </div>
               <div className="lk-user-balance">
@@ -212,8 +212,8 @@ export default function Contractor() {
             {orders.map((order) => (
               <div key={order.id} className="user-order">
                 <div className="user-order-numbers">
-                  <div>Заказ # {order.id}</div>
-                  <div>Поле # {order.field}</div>
+                  <div>Заказ #{order.id}</div>
+                  <div>Поле #{order.field}</div>
                 </div>
                 <div
                   style={{
@@ -295,14 +295,14 @@ export default function Contractor() {
                     flexDirection: "column",
                     height: "100%",
                     justifyContent: "space-between",
-                    width: "320px",
+                    width: "400px",
                     backgroundColor: "rgb(72, 128, 120, 0.4)",
                     borderRadius: "5px",
                     padding: "10px",
                   }}
                 >
                   <div>Создан: {correctDate(order.created_at)}</div>
-                  <div>Выполнен: {correctDate(order.completed_at)} </div>
+                  <div>Срок Выполнения: {correctDate(order.completed_at)} </div>
                 </div>
               </div>
             ))}
