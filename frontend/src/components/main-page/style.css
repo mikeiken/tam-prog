@@ -554,7 +554,7 @@ html {
   }
 
   .section1::before {
-    transform: translateZ(-1px) scale(7.2);
+    transform: translateZ(-1px) scale(7.1);
   }
 
   .student-wrapper {
