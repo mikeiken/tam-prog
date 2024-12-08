@@ -186,7 +186,7 @@ export default function Contractor() {
             </div>
             <div className="lk-user-text-wrapper">
               <div>
-                <h1>Полное имя: {user?.full_name}</h1>
+                <h1>Имя: {user?.full_name}</h1>
                 <p>Номер телефона: {user?.phone_number}</p>
               </div>
               <div className="lk-user-balance">
