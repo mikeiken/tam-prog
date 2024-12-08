@@ -87,10 +87,10 @@ export default function Order({
           <div
             className="order-info-wrapper"
             style={{
-              backgroundImage: `url(${item.url})`, // Устанавливаем фон
-              backgroundSize: "cover", // Масштабируем фон для заполнения
-              backgroundPosition: "center", // Центрируем фон
-              backgroundRepeat: "no-repeat", // Избегаем повторения изображения
+              backgroundImage: `url(${item.url})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
               borderRadius: "20px",
             }}
           >
