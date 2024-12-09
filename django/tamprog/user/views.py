@@ -7,7 +7,7 @@ from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated, IsAuthenticatedOrReadOnly
 from .services import *
 from django.contrib.auth import get_user_model
 from logging import getLogger
@@ -241,7 +241,7 @@ def PersonParameters(required=False):
 class PersonViewSet(viewsets.ModelViewSet):
     queryset = Person.objects.all()
     serializer_class = PersonSerializer
-    permission_classes = [IsAdminUser, NoPostAllowed]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     @extend_schema(
         summary='Get all users', 
