@@ -163,7 +163,7 @@ jobs:
       - name: Build and run containers
         run: |
           docker compose -f docker-compose-build.yml up -d
-          sleep 60  # Wait for containers to be ready
+          sleep 20  # Wait for containers to be ready
           
       - name: Run tests
         run: docker compose -f docker-compose-build.yml exec -T django pytest
