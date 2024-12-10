@@ -1,133 +1,151 @@
-import React, { useState } from 'react';
-import { Link, Routes, Route, useNavigate } from 'react-router-dom';
-import AuthForm from '../login/auth';
-import '../login/components/auth-style.css'
-import axios from '../../api/instance';
-import Alert from '../alert/Alert';
+import React, { useState } from "react";
+import { Link, Routes, Route, useNavigate } from "react-router-dom";
+import AuthForm from "../login/auth";
+import "../login/components/auth-style.css";
+import Instance from "../../api/instance";
+import { useNotification } from "../../context/NotificationContext";
 
 export default function RegisterForm() {
-    const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
-    const [passwordFirst, setPasswordFirst] = useState('');
-    const [passwordSecond, setPasswordSecond] = useState('');
-    const [errorMessage, setErrorMessage] = useState('');
+  const [login, setLogin] = useState("");
+  const [username, setUsername] = useState("");
+  const [phone, setPhone] = useState("");
+  const [passwordFirst, setPasswordFirst] = useState("");
+  const [passwordSecond, setPasswordSecond] = useState("");
+  const { addNotification } = useNotification();
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    if (passwordFirst !== passwordSecond) {
+      addNotification("Passwords do not match", "warning");
+      return;
+    }
 
-        if (passwordFirst !== passwordSecond) {
-            setErrorMessage('Passwords do not match');
-            setShowAlert(true);
-            return;
+    try {
+      await Instance.post("/register/", {
+        username: login,
+        full_name: username,
+        phone_number: phone,
+        password: passwordFirst,
+      });
+
+      navigate("/login");
+    } catch (error) {
+      if (error.response && error.response.data) {
+        for (const [key, value] of Object.entries(error.response.data)) {
+          addNotification(`${value}`, "error");
         }
+      } else {
+        addNotification("An error occurred. Please try again.", "error");
+      }
+    }
+  };
 
-        try {
-            const response = await axios.post('/register/', {
-                username,
-                passwordFirst,
-                email,
-            });
-            localStorage.setItem('accessToken', response.data.access);
-            localStorage.setItem('refreshToken', response.data.refresh);
-            navigate('/login');
-        } catch (error) {
-            console.error('Register failed:', error);
-            setErrorMessage('Registration failed. Please try again.');
-            setShowAlert(true);
-        }
-    };
+  const handleChange = (setter) => (event) => {
+    setter(event.target.value);
+  };
 
-    const handleChange = (setter) => (event) => {
-        setter(event.target.value);
-        setShowAlert(false);
-    };
+  return (
+    <div className="intro">
+      <div className="auth-page-wrapper">
+        <div className="waves"></div>
+        <div className="waves"></div>
+        <div className="waves"></div>
 
-    const [showAlert, setShowAlert] = useState(false);
-
-
-    return (
-        <div className='intro'>
-            <div className='video'>
-                <img
-                    src={process.env.PUBLIC_URL + '/tenor.gif'}
-                    alt="Background GIF"
-                    className="background-video"
+        <div className="main-wrapper">
+          <div className="wrapper">
+            <form onSubmit={handleSubmit}>
+              <h1>Регистрация</h1>
+              <div className="input-box">
+                <input
+                  className=""
+                  type="text"
+                  required
+                  onChange={handleChange(setUsername)}
                 />
-            </div>
+                <label>Введите имя</label>
+                <img
+                  className="user-icon-auth"
+                  src={process.env.PUBLIC_URL + "/user.png"}
+                  alt="text"
+                ></img>
+              </div>
 
-            <div className='main-wrapper'>
+              <div className="input-box">
+                <input
+                  className=""
+                  type="text"
+                  required
+                  onChange={handleChange(setLogin)}
+                />
+                <label>Введите никнейм</label>
+                <img
+                  className="user-icon-auth"
+                  src={process.env.PUBLIC_URL + "/user.png"}
+                  alt="text"
+                ></img>
+              </div>
 
-                <div className='wrapper'>
-                    {showAlert && <Alert text={errorMessage} className={showAlert ? '' : 'hide'} />}
+              <div className="input-box">
+                <input
+                  className=""
+                  type="phone"
+                  required
+                  onChange={handleChange(setPhone)}
+                />
+                <label>Введите номер телефна</label>
+                <img
+                  className="user-icon-auth"
+                  src={process.env.PUBLIC_URL + "/phone.png"}
+                  alt="text"
+                ></img>
+              </div>
 
+              <div className="input-box">
+                <input
+                  className=""
+                  type="password"
+                  required
+                  onChange={handleChange(setPasswordFirst)}
+                />
+                <label>Введите пароль</label>
+                <img
+                  className="user-icon-auth"
+                  src={process.env.PUBLIC_URL + "/key-chain.png"}
+                  alt="text"
+                ></img>
+              </div>
 
-                    <form onSubmit={handleSubmit}>
-                        <h1>Register</h1>
-                        <div className='input-box'>
-                            <input className='' type='text' required onChange={handleChange(setUsername)} />
-                            <label>Enter your name</label>
-                            <img style={{
-                                position: 'absolute', left: '10px', top: '50%',
-                                transform: 'translateY(-50%)',
-                                width: '24px',
-                                height: '24px'
-                            }}
-                                src={process.env.PUBLIC_URL + '/user.png'} alt='text'></img>
-                        </div>
+              <div className="input-box">
+                <input
+                  className=""
+                  type="password"
+                  required
+                  onChange={handleChange(setPasswordSecond)}
+                />
+                <label>Повторите пароль</label>
+                <img
+                  className="user-icon-auth"
+                  src={process.env.PUBLIC_URL + "/key-chain.png"}
+                  alt="text"
+                ></img>
+              </div>
 
-                        <div className='input-box'>
-                            <input className='' type='email' required onChange={handleChange(setEmail)} />
-                            <label>Enter your email</label>
-                            <img style={{
-                                position: 'absolute', left: '10px', top: '50%',
-                                transform: 'translateY(-50%)',
-                                width: '24px',
-                                height: '24px'
-                            }}
-                                src={process.env.PUBLIC_URL + '/email.png'} alt='text'></img>
-                        </div>
+              <button type="submit" className="btn">
+                Зарегистрироваться
+              </button>
+              <div className="register-link">
+                <Link to="/">← Вернуться назад</Link>
+              </div>
+            </form>
 
-                        <div className='input-box'>
-                            <input className='' type='password' required onChange={handleChange(setPasswordFirst)} />
-                            <label>Enter your password</label>
-                            <img
-                                style={{
-                                    position: 'absolute', left: '10px', top: '50%',
-                                    transform: 'translateY(-50%)',
-                                    width: '24px',
-                                    height: '24px'
-                                }}
-                                src={process.env.PUBLIC_URL + '/key-chain.png'} alt='text'>
-                            </img>
-                        </div>
-
-                        <div className='input-box'>
-                            <input className='' type='password' required onChange={handleChange(setPasswordSecond)} />
-                            <label>Repeat your password</label>
-                            <img
-                                style={{
-                                    position: 'absolute', left: '10px', top: '50%',
-                                    transform: 'translateY(-50%)',
-                                    width: '24px',
-                                    height: '24px'
-                                }}
-                                src={process.env.PUBLIC_URL + '/key-chain.png'} alt='text'>
-                            </img>
-                        </div>
-
-                        <button type='submit' className='btn'>Register</button>
-                        <div className='register-link'>
-                            <Link to='/'>← Go back</Link>
-                        </div>
-                    </form>
-
-                    <Routes>
-                        <Route path='/login' element={<AuthForm />} />
-                    </Routes>
-                </div>
-            </div >
-        </div >
-    );
+            <Routes>
+              <Route path="/login" element={<AuthForm />} />
+            </Routes>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

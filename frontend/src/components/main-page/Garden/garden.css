@@ -1,124 +1,192 @@
 .search-block {
-    display: flex;
-    align-items: center;
-    position: sticky;
-    z-index: 10;
-    padding: 10px;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  z-index: 10;
+  padding: 10px;
 }
 
 .container-plot-wrapper {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    flex-direction: column;
-    justify-content: space-between;
-    opacity: 0;
-    /* Начальная прозрачность */
-    transition: opacity 0.3s ease, height 0.3s ease;
-    /* Плавный переход для opacity и height */
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  opacity: 0;
+  /* Начальная прозрачность */
+  transition: opacity 0.3s ease, height 0.3s ease;
+  /* Плавный переход для opacity и height */
 }
 
 .container-plot-wrapper.visible {
-    opacity: 1;
-    /* Полная видимость */
-    /* height: auto; Если хотите анимировать высоту, убедитесь, что элемент имеет фиксированную высоту в начале */
+  opacity: 1;
 }
-
 
 .container-plot-info {
-    padding: 20px;
-    border-radius: 20px;
-    margin: 0 auto;
-    width: 60%;
-    height: 64%;
-    background-color: #3498db;
+  padding: 20px;
+  border-radius: 20px;
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(150, 194, 168, 0.5);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  gap: 10px;
 }
 
-
 .container-plot-products {
-    margin: 0 auto;
-    padding: 20px;
-    width: 80%;
-    height: 35%;
-    border-radius: 20px;
-    background-color: #96c2a8;
+  margin: 0 auto;
+  padding: 20px;
+  width: 80%;
+  height: 35%;
+  border-radius: 20px;
+  background-color: rgba(150, 194, 168, 0.7);
 }
 
 .scrolled-content {
-    height: 92%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    border-radius: 20px;
+  height: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border-radius: 20px;
 }
 
 .search-input {
-    width: 100%;
-    height: 4vh;
-    border-radius: 20px;
-    padding: 20px;
-    padding-right: 50px;
-    outline: none;
-    border: none;
-    box-sizing: border-box;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
+  width: 100%;
+  height: 4vh;
+  border-radius: 20px;
+  padding: 20px;
+  padding-right: 50px;
+  outline: none;
+  border: none;
+  box-sizing: border-box;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .search-icon {
-    position: absolute;
-    right: 15px;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    opacity: 0.6;
-    transition: .3s all;
-    z-index: 1001;
+  position: absolute;
+  right: 15px;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: 0.3s all;
+  z-index: 1001;
 }
 
 .search-icon:hover {
-    transform: scale(1.1);
+  transform: scale(1.1);
 }
 
 .loading-container,
 .error-container,
 .empty-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-    height: 100vh;
-    max-height: 72vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  height: 100vh;
+  max-height: 72vh;
 }
 
 .select-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto;
-    height: 100vh;
-    max-height: 84vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  height: auto;
+  max-height: 84vh;
 }
 
 .search-card-img {
-    border-radius: 10px;
-    width: 100px;
-    height: 100px;
-    margin-right: 10px;
+  border-radius: 10px;
+  width: 100px;
+  height: 100px;
+  margin-right: 10px;
+  object-fit: cover;
+  object-position: center;
 }
 
 .search-card-wrapper {
-    display: flex;
-    padding: 15px;
-    margin: 2vh 1vh;
-    border-radius: 20px;
-    width: 95%;
-    height: auto !important;
-    background-color: darkgray;
-    transition: .3s all;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  margin: 2vh 1vh;
+  border-radius: 20px;
+  width: 95%;
+  height: auto;
+  background-color: rgba(236, 228, 211, 0.5);
+  transition: 0.3s all;
+}
+
+.search-card-wrapper-v2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.add-to-basket {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  background-color: rgba(29, 16, 3, 0.5);
+  border-radius: 50%;
+  transition: 0.3s ease;
+}
+
+.add-to-basket:hover {
+  transform: scale(0.95);
+}
+
+.add-to-basket-img {
+  width: 40px;
 }
 
 .search-card-wrapper:hover {
-    transform: scale(1.03);
-    cursor: pointer;
+  transform: scale(1.03);
+  cursor: pointer;
+}
+
+.plot-image-wrapper {
+  width: 60%;
+  height: 80%;
+  object-fit: cover;
+}
+
+@media (max-width: 1200px) and (max-height: 1080px) {
+}
+.container-wrapper-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  height: 44vh;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.container-for-text {
+  font-size: 18px !important;
+}
+
+.container-wrapper-info {
+  display: flex;
+  flex-direction: row;
+}
+
+.plot-card-img {
+  width: 100%;
+  transition: 0.5s ease;
+  height: 100%;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+.plot-card-img:hover {
+  transform: scale(1.01);
 }

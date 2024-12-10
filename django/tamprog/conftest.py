@@ -20,10 +20,28 @@ def api_client():
 
 @pytest.fixture
 def user():
-    user = mixer.blend(User, username='testuser')
+    user = mixer.blend(User, username='testuser', is_superuser=False, is_staff=False)
     user.set_password('testpassword')
     user.save()
     return user
+
+@pytest.fixture
+def superuser():
+    user = mixer.blend(User, username='agronom1', is_superuser=True, is_staff=True)
+    user.set_password('superpassword')
+    user.save()
+    return user
+
+
+@pytest.fixture
+def register_data():
+    return {
+        'username': 'newuser',
+        'phone_number': '+1234567890',
+        'full_name': 'New User',
+        'password': 'newpassword',
+        'wallet_balance': 100.00
+    }
 
 @pytest.fixture
 def person():
@@ -32,21 +50,31 @@ def person():
 @pytest.fixture
 def fields():
     # Создаем 5 участков, каждый из которых имеет уникальное имя и цену
-    return mixer.cycle(5).blend('garden.Field',
+    return mixer.cycle(10).blend('garden.Field',
                                 name=lambda: mixer.faker.city(),
                                 price=lambda: mixer.faker.random_number(digits=3) * 1.0,
-                                count_beds=10)
+                                count_free_beds=10)
 
 @pytest.fixture
 def beds(fields, person):
-    # Создаем 10 грядок, которые могут быть арендованы или не арендованы
-    # Для арендованных грядок будет назначен пользователь как арендатор
-    return mixer.cycle(10).blend(
+    # Создаем 9 грядок с произвольными параметрами
+    beds = mixer.cycle(9).blend(
         'garden.Bed',
-        field=lambda: mixer.faker.random_element(fields),  # связываем грядки с участками
-        is_rented=lambda: mixer.faker.boolean(),  # случайным образом определяем арендуемая ли грядка
-        rented_by=lambda: person if mixer.faker.boolean() else None  # если арендована, назначаем арендатора
+        field=lambda: mixer.faker.random_element(fields),
+        is_rented=lambda: mixer.faker.boolean(),
+        rented_by=lambda: person if mixer.faker.boolean() else None
     )
+
+    # Добавляем 1 гарантированно свободную грядку
+    free_bed = mixer.blend(
+        'garden.Bed',
+        field=mixer.faker.random_element(fields),
+        is_rented=False,
+        rented_by=None
+    )
+
+    return beds + [free_bed]
+
 
 @pytest.fixture
 def fertilizers():
@@ -78,16 +106,19 @@ def bed_plants(beds, plants):
 @pytest.fixture
 def bed_plant_fertilizers(bed_plants, fertilizers):
     # Применяем удобрения к посадкам
-    bed_plant_fertilizers = mixer.cycle(10).blend('fertilizer.BedPlantFertilizer',
-                                                  bed_plant=lambda: mixer.faker.random_element(bed_plants),
-                                                  fertilizer=lambda: mixer.faker.random_element(fertilizers))
+    bed_plant_fertilizers = mixer.cycle(10).blend(
+        'fertilizer.BedPlantFertilizer',
+        bed_plant=lambda: mixer.faker.random_element(bed_plants),
+        fertilizer=lambda: mixer.faker.random_element(fertilizers)
+    )
     return bed_plant_fertilizers
+
 
 
 @pytest.fixture
 def workers():
     # Создаем 10 рабочих с уникальными именами и стоимостью услуг
-    return mixer.cycle(10).blend('user.Worker',
+    return mixer.cycle(1).blend('user.Worker',
                                  name=lambda: mixer.faker.name(),
                                  price=lambda: mixer.faker.random_number(digits=2) * 1.0,
                                  description=lambda: mixer.faker.text(max_nb_chars=100))
@@ -100,7 +131,7 @@ def orders(user, workers, beds, plants):
                                  worker=lambda: mixer.faker.random_element(workers),
                                  bed=lambda: mixer.faker.random_element(beds),
                                  plant=lambda: mixer.faker.random_element(plants),
-                                 action=lambda: mixer.faker.word(),
+                                 comments=lambda: mixer.faker.word(),
                                  completed_at=lambda: None if mixer.faker.boolean() else timezone.now(),
                                  total_cost=lambda: mixer.faker.random_number(digits=3) * 1.0)
 

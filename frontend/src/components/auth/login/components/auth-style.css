@@ -1,35 +1,109 @@
 .intro {
-  position: fixed; 
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   height: 100vh;
   width: 100vw;
-  z-index: 9999; 
+  z-index: 9999;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(circle at center, #001C2C, #00070C);
+  background: radial-gradient(circle at center, #001c2c, #00070c);
 }
 
-/* Видео на заднем плане */
-.video {
-  overflow: hidden;
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  top: 0;
-  left: 0;
-  z-index: 1; /* Видео под содержимым */
-}
-
-/* Само видео */
-.background-video {
+.auth-page-wrapper {
+  background: linear-gradient(
+    315deg,
+    rgba(58, 80, 45, 1) 0%,
+    rgba(85, 110, 67, 1) 16%,
+    rgba(3, 106, 99, 1) 33%,
+    rgba(0, 48, 73, 1) 50%,
+    rgba(179, 57, 57, 1) 66%,
+    rgba(128, 0, 128, 1) 83%,
+    rgba(54, 69, 79, 1) 91%,
+    rgba(153, 92, 56, 1) 100%
+  );
+  background-size: 400% 400%; /* Увеличиваем размер градиента для эффекта переливания */
+  background-attachment: fixed;
+  animation: gradient 30s infinite ease; /* Анимация движения */
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+.waves {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 200%;
+  height: 12em;
+  opacity: 0.8;
+  background: rgb(255, 255, 255 / 25%);
+  border-radius: 1000% 1000% 0 0;
+  z-index: 1;
+  transform: translate3d(0, 0, 0);
+  animation: wave 10s -3s linear infinite;
+}
+
+.wave:nth-of-type(2) {
+  bottom: -1.25em;
+  animation: wave 18s linear reverse infinite;
+  opacity: 0.8;
+}
+
+.wave:nth-of-type(3) {
+  bottom: -2.5em;
+  animation: wave 20s linear reverse infinite;
+  opacity: 0.9;
+}
+
+@keyframes wave {
+  2% {
+    transform: translateX(1);
+  }
+  25% {
+    transform: translateX(-25%);
+  }
+  50% {
+    transform: translateX(-50%);
+  }
+  75% {
+    transform: translateX(-25%);
+  }
+  100% {
+    transform: translateX(1);
+  }
+}
+@keyframes gradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+.welcome-show {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+}
+
+.welcome-show h1 {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+}
+
+.welcome-show h1.show {
+  opacity: 1;
 }
 
 /* Обертка для содержимого внутри интро */
@@ -40,9 +114,7 @@
   justify-content: center;
   align-items: center;
   width: 400px;
-
 }
-
 
 /* Стиль для формы */
 .wrapper {
@@ -59,7 +131,7 @@
 .input-box {
   position: relative;
   margin-bottom: 20px;
-  width: 100%; 
+  width: 100%;
 }
 
 /* Поле ввода */
@@ -73,14 +145,14 @@
   background: transparent;
   z-index: 0;
   transition: background-color 0.3s ease; /* Плавный переход для затемнения */
-  outline: none; 
+  outline: none;
 }
 
 .input-box input:focus {
   background-color: rgba(0, 0, 0, 0.05); /* Легкое затемнение при фокусе */
 }
 
-.input-box label{
+.input-box label {
   position: absolute;
   top: 50%;
   left: 13%;
@@ -88,12 +160,12 @@
   color: #282528;
   font-size: 13px;
   pointer-events: none;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 input:focus ~ label,
-input:valid ~ label{
-  top:0;
+input:valid ~ label {
+  top: 0;
   font-size: 10px;
   padding: 0 10px;
   background-color: #dadcdd;
@@ -120,21 +192,21 @@ input:valid ~ label{
   border: none;
   border-radius: 5px;
   overflow: hidden;
-  background-color: #007BFF; /* Цвет фона */
+  background-color: #007bff; /* Цвет фона */
   cursor: pointer;
   transition: color 0.3s;
 
   &::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.3); 
-    transform: translateX(-100%); 
-    transition: transform 0.4s; 
-    z-index: 0; 
+    background-color: rgba(0, 0, 0, 0.3);
+    transform: translateX(-100%);
+    transition: transform 0.4s;
+    z-index: 0;
     border-radius: 5px;
   }
 
@@ -147,8 +219,8 @@ input:valid ~ label{
   }
 }
 
-
-.remember, .register-link {
+.remember,
+.register-link {
   font-size: 13px;
   display: flex;
   justify-content: space-between;
@@ -157,7 +229,7 @@ input:valid ~ label{
 }
 
 .register-link a {
-  color: #007BFF;
+  color: #007bff;
 }
 
 .register-link a:hover {
