@@ -23,7 +23,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       PGDATA: "/var/lib/postgresql/data/pgdata"
-      # POSTGRES_INITDB_ARGS: "--max-connections=1500"
+      POSTGRES_INITDB_ARGS: "--max-connections=1500"
       POSTGRES_MAX_CONNECTIONS: "1500"
     volumes:
       - db-data:/docker-entrypoint-initdb.d
